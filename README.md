@@ -169,7 +169,7 @@ core/       the building blocks, one idea per file
   embeddings.py  text and picture embeddings, on this computer
   documents.py   read the PDF into headings, sentences, table rows and figures
   chunking.py    fixed and semantic chunking
-  store.py       a vector store with metadata filters, small enough to read
+  store.py       the vector store: ChromaDB, with section and page filters
   keywords.py    BM25 keyword search
   search.py      vector, keyword and hybrid search, diversity, neighbours, figures
   query.py       self-query filters, multi-query, HyDE
@@ -194,8 +194,8 @@ tests/      fast checks with no model calls: python -m pytest
   Both run on the CPU.
 - Answers: `gemini-3.6-flash` on Vertex AI. To try another model, set `RAG_CHAT_MODEL` in `.env`.
 - A busy model is retried a few times, then the app shows the error instead of waiting.
-- The vector store is numpy and JSON on purpose, so you can read all of it. The same ideas run
-  unchanged on Vertex AI Vector Search, AlloyDB or pgvector.
+- The vector store is ChromaDB, running on your computer in `index/chroma`: no server to start.
+  The same calls run on Pinecone, Vertex AI Vector Search, AlloyDB or pgvector.
 - The paper is downloaded from arXiv rather than kept here. Google grants permission to reproduce
   its tables and figures for journalistic or scholarly works with attribution: Vaswani et al.,
   "Attention Is All You Need", NeurIPS 2017, https://arxiv.org/abs/1706.03762.

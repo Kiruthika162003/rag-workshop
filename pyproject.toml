@@ -8,6 +8,8 @@ dependencies = [
     "google-genai",
     "pymupdf>=1.26,<2",
     "numpy",
+    "chromadb>=1.5,<2",
+    "grpcio>=1.71,<1.72",  # newer builds are blocked by Windows Smart App Control
     "torch",
     "transformers>=4.45",
     "pillow",
