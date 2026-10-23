@@ -1,5 +1,10 @@
 """Send the original: answer from the description, then from the picture itself.
 
+Say: A description only has what it chose to copy. So we can also send the picture itself, and
+     the model reads whatever the question needs. It costs a bigger request.
+
+Code: prompt() and answer() in core/answer.py
+
 Run: python learn/4_multimodal_rag/05_send_the_original.py
      python learn/4_multimodal_rag/05_send_the_original.py "What does the multi-head attention diagram concatenate?"
 """

@@ -1,5 +1,11 @@
 """Vector search by hand: one matrix multiplication scores every chunk. ChromaDB does the same, at scale.
 
+Say: Vector search is one line: turn the question into numbers, compare with every chunk, keep the
+     closest. Then ChromaDB does the same search and gets the same five results. A vector database
+     is this, plus storage, filters and speed for millions of chunks.
+
+Code: core/store.py
+
 Run: python learn/1_foundations/03_vector_search.py
      python learn/1_foundations/03_vector_search.py "Why scale the dot products?"
 """

@@ -1,5 +1,11 @@
 """Embeddings: text becomes 384 numbers, so similar meanings land close. Similar is not the same as "answers it".
 
+Say: An embedding turns text into numbers, so similar meanings get similar numbers. This model runs
+     on the laptop: free and private. But watch the decoder sentence: it scores 0.70 for an encoder
+     question. Similar is not the same as "answers it". That gap is why the rest of today exists.
+
+Code: core/embeddings.py
+
 Run: python learn/1_foundations/02_embeddings.py
      python learn/1_foundations/02_embeddings.py "What hardware did they train on?"
 """

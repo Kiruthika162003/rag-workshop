@@ -1,5 +1,10 @@
 """Faithfulness: the share of the answer's claims that the sources support.
 
+Say: Is every claim in the answer backed by a source? A judge model checks each one. Add one
+     invented sentence, and the score drops from 1.00 to 0.80: it is caught.
+
+Code: faithfulness() in core/metrics.py, the prompt FAITHFUL in core/prompts.py
+
 Run: python learn/7_evaluation/02_faithfulness.py
      python learn/7_evaluation/02_faithfulness.py "What optimizer was used?"
 """

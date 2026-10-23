@@ -1,5 +1,11 @@
 """Query rewriting: multi-query searches other phrasings; HyDE searches with a made-up answer.
 
+Say: Users and papers use different words. Multi-query: the model writes other phrasings, each is
+     searched, the lists are merged. HyDE: the model writes a made-up answer and we search with
+     that, because an answer looks more like the passage than a question does.
+
+Code: rewrites(), multi_query(), hyde() in core/query.py, prompts REWRITE and HYPOTHETICAL
+
 Run: python learn/3_text_rag/07_query_rewriting.py
      python learn/3_text_rag/07_query_rewriting.py "does it work for things other than translation?"
 """

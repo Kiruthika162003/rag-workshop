@@ -1,5 +1,10 @@
 """All four judged metrics, for each kind of RAG, on one question.
 
+Say: All four metrics, every RAG, one question. Read them together: a RAG can be perfectly faithful
+     and still useless, if all it says is "could not find".
+
+Code: judge() in core/metrics.py
+
 Run: python learn/7_evaluation/05_compare_rags.py               the figure question
      python learn/7_evaluation/05_compare_rags.py chain         any question id from core/questions.py
 """

@@ -1,5 +1,10 @@
 """Retrieval metrics: hit@4, precision@4, recall@4, MRR and nDCG for each search. Free, on the laptop.
 
+Say: Measure the search before any answer: did the right chunk come back, and how high? Hit rate,
+     precision, recall, MRR, nDCG. It runs on the laptop in seconds and costs nothing.
+
+Code: core/metrics.py
+
 Run: python learn/7_evaluation/01_retrieval_metrics.py
      python learn/7_evaluation/01_retrieval_metrics.py --rerank
 """

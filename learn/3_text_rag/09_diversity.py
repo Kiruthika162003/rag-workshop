@@ -1,5 +1,10 @@
 """Diversity (MMR): relevant passages that do not repeat each other.
 
+Say: The paper says the same thing in the abstract, the results and the conclusion. Four copies
+     waste the prompt. MMR picks passages that are relevant and unlike the ones already picked.
+
+Code: diverse() in core/search.py
+
 Run: python learn/3_text_rag/09_diversity.py
      python learn/3_text_rag/09_diversity.py "Why use self-attention?"
 """

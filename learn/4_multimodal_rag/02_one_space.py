@@ -1,5 +1,10 @@
 """CLIP: pictures and words in one space, so words can find a figure.
 
+Say: CLIP was trained on pictures with their captions, so a picture and a sentence about it land
+     close together. Type words, get figures back. It runs on the laptop.
+
+Code: embed_picture() and embed_query_for_pictures() in core/embeddings.py
+
 Run: python learn/4_multimodal_rag/02_one_space.py
      python learn/4_multimodal_rag/02_one_space.py "lines connecting words in two rows"
 """

@@ -1,5 +1,10 @@
 """Graph RAG: find where to start, walk three hops, answer from the facts.
 
+Say: Find where to start, walk three hops, and answer from the facts and the chunks they came from.
+     This answers questions no single chunk can: the model that scored 28.4, its size, its training.
+
+Code: graph_rag() in core/rag.py
+
 Run: python learn/5_graph_rag/graph_rag.py
      python learn/5_graph_rag/graph_rag.py "What are the parts of each encoder layer?"
 """

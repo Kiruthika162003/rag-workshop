@@ -1,5 +1,10 @@
 """Figures in a PDF: images, vector drawings and tables, each saved as a picture in out/figures.
 
+Say: A "picture" in a PDF is three different things: an image, hundreds of vector lines, or a
+     table. We save all eight as pictures. Open out/figures and show them.
+
+Code: pieces() and drawn_figures() in core/documents.py
+
 Run: python learn/4_multimodal_rag/01_figures_in_a_pdf.py
 """
 

@@ -1,5 +1,10 @@
 """Agentic RAG: an agent picks its own tools, in its own order.
 
+Say: Nobody tells the agent which tool to use. It reads the question, picks tools, reads the results,
+     and decides when it has enough. Its steps are printed. It costs more calls and more time.
+
+Code: core/agent.py, built with the Agent Development Kit (ADK)
+
 Run: python learn/6_agentic_rag/03_agent.py
      python learn/6_agentic_rag/03_agent.py "In the attention plot for the word 'making', which two words get the strongest attention?"
 """

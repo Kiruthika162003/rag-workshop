@@ -1,5 +1,10 @@
 """Explore the graph: every fact about one thing, from every section.
 
+Say: Search sees one chunk at a time. The graph sees that Transformer (big) appears in three sections,
+     and that those facts are about the same model.
+
+Code: Graph.links in core/graph.py
+
 Run: python learn/5_graph_rag/03_explore_the_graph.py
      python learn/5_graph_rag/03_explore_the_graph.py "multi-head attention"
 """

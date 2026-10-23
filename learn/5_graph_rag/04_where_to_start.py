@@ -1,5 +1,10 @@
 """Where to start: names in the question, and names in the two best chunks.
 
+Say: Where does the walk begin? At the names in the question, and the names in the two best chunks.
+     We need both: the question rarely uses the graph's exact names.
+
+Code: named_in() and from_chunks() in core/graph.py, graph_facts() in core/rag.py
+
 Run: python learn/5_graph_rag/04_where_to_start.py
      python learn/5_graph_rag/04_where_to_start.py "What does the decoder add to each layer?"
 """

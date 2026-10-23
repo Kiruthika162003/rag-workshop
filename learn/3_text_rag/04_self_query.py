@@ -1,5 +1,10 @@
 """Self-query: the model reads the filters out of the question.
 
+Say: Nobody types --section 5. They ask "in the training part, what optimizer?". One small model
+     call turns that into a cleaner search plus the filter, then the search runs with it.
+
+Code: filters_from() in core/query.py, the prompt FILTERS in core/prompts.py
+
 Run: python learn/3_text_rag/04_self_query.py
      python learn/3_text_rag/04_self_query.py "What do pages 13 to 15 show?"
 """

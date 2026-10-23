@@ -1,5 +1,11 @@
 """Metadata filters: keep only chunks from a section or pages, before ranking.
 
+Say: Filter by where a chunk is, not by what it says. "Dropout" appears all over the paper;
+     filtered to section 5, only the training setup can answer. The filter runs before ranking,
+     so a ruled-out chunk can never win. Every vector database has this.
+
+Code: Store.passes() and Store.top() in core/store.py
+
 Run: python learn/3_text_rag/03_metadata_filters.py
      python learn/3_text_rag/03_metadata_filters.py "What does Table 3 vary?" --section "6.2"
      python learn/3_text_rag/03_metadata_filters.py "attention" --pages 13 15

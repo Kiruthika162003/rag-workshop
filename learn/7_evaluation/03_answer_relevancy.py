@@ -1,5 +1,10 @@
 """Answer relevancy: does the answer address the question that was asked?
 
+Say: Does the answer address the question? The judge writes the questions the answer would answer
+     and compares them with the real one. "Could not find" is honest, but it scores 0 here.
+
+Code: answer_relevancy() in core/metrics.py, the prompt ASKED in core/prompts.py
+
 Run: python learn/7_evaluation/03_answer_relevancy.py
 """
 

@@ -1,5 +1,11 @@
 """Text RAG, all steps together: hybrid search, filters, rerank, neighbours, answer.
 
+Say: All the steps together: hybrid search, rerank, neighbours, answer. Two model calls per
+     question, about 5 seconds. In code it is two lines in core/rag.py: RAG done right is small
+     steps, composed.
+
+Code: text() in core/rag.py
+
 Run: python learn/3_text_rag/text_rag.py
      python learn/3_text_rag/text_rag.py "What dropout rate is used?" --section 5
      python learn/3_text_rag/text_rag.py "What does Table 3 show?" --pages 9 9

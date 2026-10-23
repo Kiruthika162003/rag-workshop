@@ -1,5 +1,11 @@
 """What a program sees in a PDF: the naive reader gets only text; the careful one also finds figures and tables.
 
+Say: The same PDF, read two ways. Plain text extraction misses the images, scrambles the tables,
+     and keeps only the words of a diagram. The careful reader keeps all of it, each piece with its page.
+     You cannot retrieve what you never read: everything today starts here.
+
+Code: core/documents.py
+
 Run: python learn/1_foundations/01_read_the_files.py
 """
 

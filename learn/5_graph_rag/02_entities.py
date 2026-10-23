@@ -1,5 +1,10 @@
 """Entities: one spelling per name, names inside names, and hubs that are never walked through.
 
+Say: The model writes "Transformer (big)" one time and "transformer big" the next. We give each
+     name one spelling, link names inside names, and skip hubs like "we" that touch everything.
+
+Code: key(), is_proper(), Graph.part_of and Graph.hubs in core/graph.py
+
 Run: python learn/5_graph_rag/02_entities.py
 """
 

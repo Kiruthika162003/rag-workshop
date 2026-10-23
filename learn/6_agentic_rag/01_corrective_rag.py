@@ -1,5 +1,10 @@
 """Corrective RAG: grade the search and check the answer; if either is weak, search again wider.
 
+Say: Check before trusting the search. If the best passage scores under 7, or the answer says
+     "could not find", search again with other words and add the figures.
+
+Code: corrective() in core/rag.py
+
 Run: python learn/6_agentic_rag/01_corrective_rag.py
      python learn/6_agentic_rag/01_corrective_rag.py "How many warmup steps did the learning rate schedule use?"
 """

@@ -1,5 +1,11 @@
 """Chunking: fixed chunks cut anywhere; semantic chunks cut where the topic changes.
 
+Say: A chunk is what gets retrieved, so where you cut matters. Fixed chunks cut words in half.
+     Semantic chunks start at a heading, like 5.3 Optimizer, or where the topic changes: the number
+     between lines is how similar a sentence is to the one before it.
+
+Code: core/chunking.py
+
 Run: python learn/3_text_rag/01_chunking.py          page 7
      python learn/3_text_rag/01_chunking.py 3        any page
 """

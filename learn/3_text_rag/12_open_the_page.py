@@ -1,5 +1,10 @@
 """Open the page: a link to the cited page, and a picture of it with the passage highlighted.
 
+Say: A citation is only useful if you can check it. Every chunk knows its page and its sentences,
+     so we open the PDF at that page, and draw the page with the passage highlighted.
+
+Code: page_picture() in core/documents.py, /page/<ref> in app/app.py
+
 Run: python learn/3_text_rag/12_open_the_page.py
      python learn/3_text_rag/12_open_the_page.py "What is multi-head attention?"
 """

@@ -1,5 +1,10 @@
 """Context precision and recall: useful sources retrieved first, and holding the whole answer?
 
+Say: Judge what was retrieved. Precision: were the useful sources ranked first? Recall: is the whole
+     answer in them? For the colour question, text RAG's recall is 0: the colour is only in the figure.
+
+Code: context_precision() and context_recall() in core/metrics.py, prompts USEFUL and ATTRIBUTED
+
 Run: python learn/7_evaluation/04_context_precision_recall.py
 """
 

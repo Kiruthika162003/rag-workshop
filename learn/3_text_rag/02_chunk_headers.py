@@ -1,5 +1,10 @@
 """Chunk headers: each chunk starts with its section, so the section's words can find it.
 
+Say: "We used warmup_steps = 4000" never says it is about the optimizer. So every chunk starts
+     with its section. Same search, with and without headers: the right chunk moves up.
+
+Code: text_chunks() and with_sections() in build_index.py
+
 Run: python learn/3_text_rag/02_chunk_headers.py
      python learn/3_text_rag/02_chunk_headers.py "What regularization did they use?"
 """

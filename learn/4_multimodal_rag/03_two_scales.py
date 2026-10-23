@@ -1,5 +1,10 @@
 """Two scales: picture scores sit near 0.3, text near 0.7, so the two searches are merged by rank.
 
+Say: Each figure is found two ways: by how it looks, and by its description. But picture scores
+     sit near 0.3 and text scores near 0.75, so we cannot compare them. We merge by rank instead.
+
+Code: pictures() in core/search.py
+
 Run: python learn/4_multimodal_rag/03_two_scales.py
      python learn/4_multimodal_rag/03_two_scales.py "Which words does 'its' attend to?"
 """

@@ -1,5 +1,11 @@
 """Reranking: Gemini scores 12 candidates from 0 to 10 and keeps the best 4.
 
+Say: Search is fast and rough: 12 chunks that look like the question. The reranker is slow and
+     careful: Gemini reads all 12 and scores each 0 to 10 on "does this answer it?". We keep
+     the best 4. Similar is not the same as answers.
+
+Code: core/rerank.py, the prompt RERANK in core/prompts.py
+
 Run: python learn/3_text_rag/08_reranking.py
      python learn/3_text_rag/08_reranking.py "What beam size was used?"
 """

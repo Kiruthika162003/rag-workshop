@@ -1,5 +1,10 @@
 """Describe: Gemini writes a text description of every figure, once, when the index is built.
 
+Say: When the index is built, Gemini looks at each figure once and writes down every label and
+     number. That description is searchable text, and it is saved, so we never pay for it twice.
+
+Code: describe() in build_index.py, the prompt DESCRIBE in core/prompts.py
+
 Run: python learn/4_multimodal_rag/04_describe.py
      python learn/4_multimodal_rag/04_describe.py p2      one figure in full
 """

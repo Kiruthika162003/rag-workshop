@@ -1,5 +1,10 @@
 """Hybrid search: vector and keyword results, merged by rank.
 
+Say: So run both searches and merge them. Their scores are on different scales, so we merge by
+     rank: each list gives a chunk 1 / (60 + its place). A chunk high in both lists wins.
+
+Code: fuse() and hybrid() in core/search.py
+
 Run: python learn/3_text_rag/06_hybrid_search.py
      python learn/3_text_rag/06_hybrid_search.py "beam size and length penalty"
 """

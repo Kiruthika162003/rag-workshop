@@ -1,5 +1,10 @@
 """Walk: follow the links hop by hop until the answer is in reach.
 
+Say: From the start, follow the links one hop at a time. The answer's facts are in different
+     sections; the walk brings them together.
+
+Code: Graph.walk() in core/graph.py, graph_facts() in core/rag.py
+
 Run: python learn/5_graph_rag/05_walk.py
      python learn/5_graph_rag/05_walk.py "What are the parts of each encoder layer?"
 """

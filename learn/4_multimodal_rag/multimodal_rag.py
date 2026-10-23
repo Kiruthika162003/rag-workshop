@@ -1,5 +1,10 @@
 """Multimodal RAG: text passages plus the best figures, sent to Gemini as pictures.
 
+Say: Text RAG plus the best figures, sent to Gemini as pictures. Here it reads "Mask (opt.)",
+     then SoftMax, straight from Figure 2: a word that is nowhere in the text.
+
+Code: multimodal() in core/rag.py
+
 Run: python learn/4_multimodal_rag/multimodal_rag.py
      python learn/4_multimodal_rag/multimodal_rag.py "According to Table 3, how many parameters does the big model have?"
      python learn/4_multimodal_rag/multimodal_rag.py "In the attention plot for the word 'making', which two words get the strongest attention?"

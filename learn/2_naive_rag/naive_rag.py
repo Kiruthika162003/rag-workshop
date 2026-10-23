@@ -1,5 +1,11 @@
 """Naive RAG: 500-character chunks, top 3, pasted into a prompt. It cannot see the figure with the answer.
 
+Say: The tutorial version: cut every 500 characters, take the 3 closest, paste them into a prompt.
+     Look at the prompt: chunks cut mid-sentence. And the answer is in Figure 2, which it never sees,
+     so it says it could not find it. This is what we fix today.
+
+Code: naive() in core/rag.py, the prompt NAIVE in core/prompts.py
+
 Run: python learn/2_naive_rag/naive_rag.py
      python learn/2_naive_rag/naive_rag.py "According to Table 3, how many parameters does the big model have?"
 """

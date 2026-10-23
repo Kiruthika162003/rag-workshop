@@ -1,5 +1,10 @@
 """Tools: plain functions; the agent reads only their names and docstrings.
 
+Say: The agent's tools are plain Python functions. It never sees the code, only each name and its
+     docstring, so the docstring is the prompt. Then we call each tool by hand.
+
+Code: core/agent.py
+
 Run: python learn/6_agentic_rag/02_tools.py
 """
 

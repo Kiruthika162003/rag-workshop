@@ -1,5 +1,11 @@
 """Keyword search (BM25): exact words win where embeddings blur, like warmup_steps or 2048.
 
+Say: Embeddings blur exact words: to a vector, 2048 and 4096 look alike. Papers are full of symbols.
+     BM25 scores exact words and counts rare ones more. For warmup_steps, keywords win by 7.0,
+     vectors by only 0.07.
+
+Code: core/keywords.py
+
 Run: python learn/3_text_rag/05_keyword_search.py
      python learn/3_text_rag/05_keyword_search.py "P100"
 """
