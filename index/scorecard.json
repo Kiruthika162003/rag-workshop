@@ -1,0 +1,317 @@
+[
+ {
+  "kind": "naive",
+  "id": "refund",
+  "answer": "Based on the context, the time you have depends on the refund policy in force on the day of the incident:\n\n* **Under Version 2 (in force from 15 January 2026):** Within **60 minutes** of unlocking it.\n* **Under Version 1 (in force from 1 February 2024):** Within **30 minutes** of unlocking it.",
+  "right": true,
+  "seconds": 65.9
+ },
+ {
+  "kind": "text",
+  "id": "refund",
+  "answer": "You must report a faulty bike in the app within 60 minutes of unlocking it to receive a refund [1]. Once reported, the full cost of the ride is refunded to your original payment card within five business days, and a $5 ride credit will be added to your account [1].",
+  "right": true,
+  "seconds": 119.7
+ },
+ {
+  "kind": "multimodal",
+  "id": "refund",
+  "answer": "You must report a faulty bike in the app within 60 minutes of unlocking it to receive a full refund [1].",
+  "right": true,
+  "seconds": 71.3
+ },
+ {
+  "kind": "agent",
+  "id": "refund",
+  "answer": "According to the most recent Refund Policy from January 2026, you must report a faulty bike in the app within 60 minutes of unlocking it [t14]. The full ride will be refunded to your original payment card within 5 business days, along with a $5 ride credit [t14]. An older policy from February 2024 allowed only 30 minutes to report an issue, but the newer policy supersedes it [t10, t14].",
+  "right": true,
+  "seconds": 213.4
+ },
+ {
+  "kind": "naive",
+  "id": "lost-bike",
+  "answer": "Based on the current policy, the charge for a lost bike is **$950** (down from $1,200).",
+  "right": true,
+  "seconds": 52.6
+ },
+ {
+  "kind": "text",
+  "id": "lost-bike",
+  "answer": "The charge for a lost bike is $950 [1]. This fee was reduced from $1,200 because most lost bikes are now located using their GPS tracker [1].",
+  "right": true,
+  "seconds": 103.9
+ },
+ {
+  "kind": "multimodal",
+  "id": "lost-bike",
+  "answer": "A member is charged $950 for a bike that is not returned within 24 hours [1]. This fee was reduced from $1,200 because most lost bikes are now located using their GPS tracker [1].",
+  "right": true,
+  "seconds": 57.8
+ },
+ {
+  "kind": "agent",
+  "id": "lost-bike",
+  "answer": "A bike that is not returned within 24 hours is treated as lost [t16]. The member is charged $950 for a lost bike, which was reduced from the previous fee of $1,200 because most lost bikes are now located using their GPS tracker [t16].",
+  "right": true,
+  "seconds": 183.3
+ },
+ {
+  "kind": "naive",
+  "id": "busiest-month",
+  "answer": "Based on the provided context, the specific month with the most rides and its exact number of trips are not mentioned (the text refers to \"Figure 1 for the month by month numbers,\" but the figure itself is not included). The context only notes generally that \"The summer months carried the year.\"",
+  "right": false,
+  "seconds": 3.7
+ },
+ {
+  "kind": "text",
+  "id": "busiest-month",
+  "answer": "Based on the provided report, the summer months had the highest ridership, but specific month-by-month numbers are referenced in Figure 1, which is not included in the text [1]. Therefore, I could not find which specific month had the most rides in 2025 or how many rides occurred in that month.",
+  "right": false,
+  "seconds": 22.0
+ },
+ {
+  "kind": "multimodal",
+  "id": "busiest-month",
+  "answer": "In 2025, August had the most rides, with a total of 14,280 rides [2].",
+  "right": true,
+  "seconds": 112.1
+ },
+ {
+  "kind": "agent",
+  "id": "busiest-month",
+  "answer": "In 2025, August had the most rides of any month [m0]. There were 14,280 rides recorded during that month [m0].",
+  "right": true,
+  "seconds": 88.4
+ },
+ {
+  "kind": "naive",
+  "id": "most-docks",
+  "answer": "Based on the provided context, it is not possible to answer which station has the most docks. While the text mentions that \"Table 1 lists the six busiest, with the number of docks at each,\" Table 1 itself and the specific dock counts are not included in the excerpt.",
+  "right": false,
+  "seconds": 26.5
+ },
+ {
+  "kind": "text",
+  "id": "most-docks",
+  "answer": "I could not find the answer in the provided sources [1]. While Source [1] mentions that Table 1 lists stations and their number of docks, the contents of Table 1 are not included.",
+  "right": false,
+  "seconds": 29.9
+ },
+ {
+  "kind": "multimodal",
+  "id": "most-docks",
+  "answer": "Based on the report of the six busiest stations, the station with the most docks is RPI Student Union, which has 30 docks [2]. The sources do not provide dock counts for the remaining 16 stations [1].",
+  "right": true,
+  "seconds": 54.4
+ },
+ {
+  "kind": "agent",
+  "id": "most-docks",
+  "answer": "Among the stations reported in the 2025 Annual Ridership Report, the RPI Student Union station has the most docks, with a total of 30 docks [m1]. By comparison, the second largest listed station is Monument Square with 24 docks [m1].",
+  "right": true,
+  "seconds": 68.9
+ },
+ {
+  "kind": "naive",
+  "id": "truck",
+  "answer": "Based on the provided context, the exact order is not mentioned in the text (it notes that the loop is shown in **Figure 2**, which is not included).",
+  "right": false,
+  "seconds": 46.0
+ },
+ {
+  "kind": "text",
+  "id": "truck",
+  "answer": "I could not find the order in which the rebalancing truck visits the stations in the provided sources [1]. While the text notes that Figure 2 shows the loop the truck drives, the specific stations and their order are not detailed [1].",
+  "right": false,
+  "seconds": 76.4
+ },
+ {
+  "kind": "multimodal",
+  "id": "truck",
+  "answer": "Starting from the Depot, the rebalancing truck visits Monument Square first, followed by the RPI Student Union, then Lansingburgh, and finally Riverfront Park before returning to the Depot [2].",
+  "right": true,
+  "seconds": 29.1
+ },
+ {
+  "kind": "agent",
+  "id": "truck",
+  "answer": "Starting from the Depot at 5:30 am, the rebalancing truck visits Monument Square first, followed by RPI Student Union, Lansingburgh, and Riverfront Park before returning to the Depot [m2]. This route was established after an update in October 2025 [t2].",
+  "right": true,
+  "seconds": 39.0
+ },
+ {
+  "kind": "naive",
+  "id": "winter",
+  "answer": "Based on the provided context, the exact winter opening hours are not listed; they are stated to be on the flyer posted at every station.",
+  "right": false,
+  "seconds": 19.0
+ },
+ {
+  "kind": "text",
+  "id": "winter",
+  "answer": "I could not find the winter opening hours in the provided sources. Source [1] notes that the winter opening hours are on a flyer posted at every station, but it does not list the hours themselves [1].",
+  "right": false,
+  "seconds": 28.5
+ },
+ {
+  "kind": "multimodal",
+  "id": "winter",
+  "answer": "Winter opening hours run from 1 December to 28 February [2]. During this period, bikes can be unlocked from 6:00 am to 9:00 pm every day [2]. However, all stations close during a city snow emergency until the emergency is lifted [2].",
+  "right": true,
+  "seconds": 13.7
+ },
+ {
+  "kind": "agent",
+  "id": "winter",
+  "answer": "During the winter season from December 1 to February 28, bikes can be unlocked every day from 6:00 am to 9:00 pm [m5]. All stations close during a city snow emergency until the emergency is lifted [m5]. Additionally, e-bikes remain in the depot whenever the temperature falls below -10 \u00b0C [m5].",
+  "right": true,
+  "seconds": 16.3
+ },
+ {
+  "kind": "naive",
+  "id": "voicemail",
+  "answer": "Based on the provided context, there is no mention of a bike losing power on the Green Island Bridge or who reported it.",
+  "right": false,
+  "seconds": 30.7
+ },
+ {
+  "kind": "text",
+  "id": "voicemail",
+  "answer": "I could not find the answer in the provided sources [1]. The available text does not mention a bike losing power on the Green Island Bridge or who reported such an incident [1].",
+  "right": false,
+  "seconds": 75.3
+ },
+ {
+  "kind": "multimodal",
+  "id": "voicemail",
+  "answer": "The bike that lost power on the Green Island Bridge was e-bike number 9012 [2, 0:17]. It was reported by rider Sam Carter [2, 0:02].",
+  "right": true,
+  "seconds": 24.2
+ },
+ {
+  "kind": "agent",
+  "id": "voicemail",
+  "answer": "Bike number 9012 lost all power halfway across the Green Island Bridge [m4, 0:07, 0:16]. It was reported by rider Sam Carter (member number 20417) in a voicemail on April 6, 2026 [m4, 0:00].",
+  "right": true,
+  "seconds": 10.6
+ },
+ {
+  "kind": "naive",
+  "id": "stuck-dock",
+  "answer": "Based on the provided context, there are no instructions on how a rider can free a bike stuck in a dock. \n\nThe incident report notes that when a bike was stuck due to a worn locking pin, a technician (Jamal Ortiz) was dispatched to handle the repair, and the dock was taken out of service until a replacement pin could be fitted.",
+  "right": false,
+  "seconds": 3.4
+ },
+ {
+  "kind": "text",
+  "id": "stuck-dock",
+  "answer": "I could not find the answer in the provided sources.",
+  "right": false,
+  "seconds": 73.1
+ },
+ {
+  "kind": "multimodal",
+  "id": "stuck-dock",
+  "answer": "To free a bike stuck in a dock, hold the red reset button on the dock for 5 seconds [2, 0:06]. Next, wait up to 30 seconds for the dock light to turn green [2, 0:12]. If the light remains red, tag the dock \"OUT OF SERVICE\" and contact the technician on duty [2, 0:18].",
+  "right": true,
+  "seconds": 297.4
+ },
+ {
+  "kind": "agent",
+  "id": "stuck-dock",
+  "answer": "To free a bike stuck in a dock, first hold the red reset button on the dock for 5 seconds [m3, 0:06]. Next, wait up to 30 seconds for the dock light to turn green [m3, 0:12]. If the light stays red, tag the dock as \"OUT OF SERVICE\" and call the technician on duty [m3, 0:18].",
+  "right": true,
+  "seconds": 36.0
+ },
+ {
+  "kind": "naive",
+  "id": "sign-off",
+  "answer": "error: 499 CANCELLED. {'error': {'code': 499, 'message': 'The operation was cancelled.', 'status': 'CANCELLED'}}",
+  "right": false,
+  "seconds": 88.8
+ },
+ {
+  "kind": "text",
+  "id": "sign-off",
+  "answer": "The station manager must sign off the repaired dock before it returns to service [1, 2]. However, the sources do not state which station incident IR-2026-031 occurred at, so I could not find the specific person who has to sign it off or their phone number.",
+  "right": false,
+  "seconds": 10.5
+ },
+ {
+  "kind": "multimodal",
+  "id": "sign-off",
+  "answer": "A repaired dock must be signed off by the station manager before it goes back into service [1, 2]. However, the sources do not specify which station or which specific station manager is responsible for incident IR-2026-031, so I could not find their phone number.",
+  "right": false,
+  "seconds": 108.0
+ },
+ {
+  "kind": "agent",
+  "id": "sign-off",
+  "answer": "Incident IR-2026-031 occurred at dock 7 of the Monument Square station [t7], and repaired docks can only return to service once signed off by the station manager [t9]. Although an earlier operations memo listed Priya Raman as manager [t19], more recent board meeting minutes show Daniel Kim took over as station manager of Monument Square on May 1, 2026 [t5]. Daniel Kim must sign off on the repair, and his phone number is 518-555-0158 [t17].",
+  "right": true,
+  "seconds": 188.5
+ },
+ {
+  "kind": "graph",
+  "id": "refund",
+  "answer": "I could not find the answer in the provided sources.",
+  "right": false,
+  "seconds": 56.8
+ },
+ {
+  "kind": "graph",
+  "id": "lost-bike",
+  "answer": "The charge for a lost bike is $950, which was reduced from $1,200 [1]. A bike is treated as lost if it is not returned within 24 hours [1].",
+  "right": true,
+  "seconds": 66.1
+ },
+ {
+  "kind": "graph",
+  "id": "busiest-month",
+  "answer": "In 2025, the month with the most rides was August [2]. There were 14,280 rides during that month [2].",
+  "right": true,
+  "seconds": 63.4
+ },
+ {
+  "kind": "graph",
+  "id": "most-docks",
+  "answer": "I could not find the answer in the provided sources. While the sources mention that Table 1 lists the six busiest stations along with their number of docks, they do not provide the contents of the table or state which station has the most docks [2].",
+  "right": false,
+  "seconds": 138.7
+ },
+ {
+  "kind": "graph",
+  "id": "truck",
+  "answer": "Starting from the depot, the rebalancing truck visits Monument Square first, followed by RPI Student Union, Lansingburgh, and Riverfront Park, before returning to the depot [5].",
+  "right": true,
+  "seconds": 118.0
+ },
+ {
+  "kind": "graph",
+  "id": "winter",
+  "answer": "I could not find the specific winter opening hours in the sources. The provided text only states that winter opening hours are listed on a flyer posted at every station [1].",
+  "right": false,
+  "seconds": 59.3
+ },
+ {
+  "kind": "graph",
+  "id": "voicemail",
+  "answer": "Bike 9012 lost power on the Green Island Bridge [5, 0:11, 0:17]. It was reported by rider Sam Carter, member number 20417 [5, 0:02].",
+  "right": true,
+  "seconds": 8.8
+ },
+ {
+  "kind": "graph",
+  "id": "stuck-dock",
+  "answer": "I could not find the answer in the provided sources.",
+  "right": false,
+  "seconds": 13.5
+ },
+ {
+  "kind": "graph",
+  "id": "sign-off",
+  "answer": "A repaired dock can only go back into service after the station manager signs off the repair [3]. The incident occurred at Monument Square station [1], where Daniel Kim took over as station manager starting 1 May 2026 [4], superseding the earlier memo listing Priya Raman as the manager, which is out of date [6]. Therefore, Daniel Kim must sign off the repair, and his phone number is 518-555-0158 [9].",
+  "right": true,
+  "seconds": 7.0
+ }
+]

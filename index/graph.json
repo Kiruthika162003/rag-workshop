@@ -1,0 +1,1066 @@
+[
+ {
+  "subject": "2025 Annual Ridership Report",
+  "relation": "dated",
+  "object": "2026-03-10",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "2025",
+  "relation": "was",
+  "object": "our busiest year so far",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "riders",
+  "relation": "took",
+  "object": "close to 100,000 trips in 2025",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "riders",
+  "relation": "took",
+  "object": "71,000 trips in 2024",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "summer months",
+  "relation": "carried",
+  "object": "the year",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "Figure 1",
+  "relation": "shows",
+  "object": "month by month numbers",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "growth",
+  "relation": "came mostly from",
+  "object": "students",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "growth",
+  "relation": "came mostly from",
+  "object": "commuters crossing the river",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "campus",
+  "relation": "was",
+  "object": "busiest",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "downtown",
+  "relation": "was",
+  "object": "busiest",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "Table 1",
+  "relation": "shows",
+  "object": "the two stations near campus and downtown were the busiest",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "Lansingburgh",
+  "relation": "grew",
+  "object": "the fastest from a small base",
+  "since": "",
+  "source": "t0"
+ },
+ {
+  "subject": "We",
+  "relation": "ran",
+  "object": "22 stations at the end of 2025",
+  "since": "",
+  "source": "t1"
+ },
+ {
+  "subject": "Table 1",
+  "relation": "lists",
+  "object": "the six busiest stations",
+  "since": "",
+  "source": "t1"
+ },
+ {
+  "subject": "rebalancing truck",
+  "relation": "moves",
+  "object": "bikes",
+  "since": "",
+  "source": "t2"
+ },
+ {
+  "subject": "Figure 2",
+  "relation": "shows",
+  "object": "the loop it drives",
+  "since": "",
+  "source": "t2"
+ },
+ {
+  "subject": "the route",
+  "relation": "was changed in",
+  "object": "October 2025",
+  "since": "2025-10",
+  "source": "t2"
+ },
+ {
+  "subject": "Lansingburgh",
+  "relation": "was",
+  "object": "empty by 7 am",
+  "since": "",
+  "source": "t2"
+ },
+ {
+  "subject": "2025 Annual Ridership Report",
+  "relation": "dated",
+  "object": "2026-03-10",
+  "since": "",
+  "source": "t3"
+ },
+ {
+  "subject": "winter opening hours",
+  "relation": "posted on",
+  "object": "flyer",
+  "since": "",
+  "source": "t3"
+ },
+ {
+  "subject": "flyer",
+  "relation": "posted at",
+  "object": "every station",
+  "since": "",
+  "source": "t3"
+ },
+ {
+  "subject": "board",
+  "relation": "approved",
+  "object": "four stations in Albany",
+  "since": "2026-04-22",
+  "source": "t4"
+ },
+ {
+  "subject": "four stations in Albany",
+  "relation": "located in",
+  "object": "Albany",
+  "since": "",
+  "source": "t4"
+ },
+ {
+  "subject": "four stations in Albany",
+  "relation": "has opening date",
+  "object": "September 2026",
+  "since": "",
+  "source": "t4"
+ },
+ {
+  "subject": "four stations in Albany",
+  "relation": "has budget",
+  "object": "$310,000",
+  "since": "",
+  "source": "t4"
+ },
+ {
+  "subject": "Priya Raman",
+  "relation": "appointed as",
+  "object": "Head of Operations",
+  "since": "2026-05-01",
+  "source": "t5"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "station manager of",
+  "object": "Monument Square",
+  "since": "2026-05-01",
+  "source": "t5"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "station manager of",
+  "object": "Troy Atrium",
+  "since": "",
+  "source": "t5"
+ },
+ {
+  "subject": "sixty e-bikes",
+  "relation": "ordered for delivery in",
+  "object": "June",
+  "since": "",
+  "source": "t6"
+ },
+ {
+  "subject": "sixty e-bikes",
+  "relation": "will be placed first at",
+  "object": "Monument Square",
+  "since": "",
+  "source": "t6"
+ },
+ {
+  "subject": "sixty e-bikes",
+  "relation": "will be placed first at",
+  "object": "RPI Student Union",
+  "since": "",
+  "source": "t6"
+ },
+ {
+  "subject": "sixty e-bikes",
+  "relation": "will be placed first at",
+  "object": "Riverfront Park",
+  "since": "",
+  "source": "t6"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "dated",
+  "object": "2026-03-12",
+  "since": "2026-03-12",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "filed on",
+  "object": "12 March 2026",
+  "since": "2026-03-12",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "department",
+  "object": "Field operations",
+  "since": "",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "happened at",
+  "object": "Monument Square",
+  "since": "2026-03-12",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "dock",
+  "object": "dock 7",
+  "since": "",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "time",
+  "object": "12 March 2026, 08:40",
+  "since": "2026-03-12",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "reported by",
+  "object": "A rider",
+  "since": "",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "reported through",
+  "object": "the app",
+  "since": "",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "technician",
+  "object": "Jamal Ortiz",
+  "since": "",
+  "source": "t7"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "dated",
+  "object": "2026-03-12",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "dock",
+  "relation": "failed to release",
+  "object": "bike 4471",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "rider",
+  "relation": "was charged for",
+  "object": "ride",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "Jamal Ortiz",
+  "relation": "found",
+  "object": "worn locking pin",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "replacement pin",
+  "relation": "status",
+  "object": "on order",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "dock 7",
+  "relation": "status",
+  "object": "out of service",
+  "since": "",
+  "source": "t8"
+ },
+ {
+  "subject": "Incident report IR-2026-031",
+  "relation": "has status",
+  "object": "Open",
+  "since": "2026-03-12",
+  "source": "t9"
+ },
+ {
+  "subject": "Faulty bikes",
+  "relation": "include",
+  "object": "a flat tyre",
+  "since": "",
+  "source": "t10"
+ },
+ {
+  "subject": "Faulty bikes",
+  "relation": "include",
+  "object": "broken brakes",
+  "since": "",
+  "source": "t10"
+ },
+ {
+  "subject": "Faulty bikes",
+  "relation": "include",
+  "object": "a loose chain",
+  "since": "",
+  "source": "t10"
+ },
+ {
+  "subject": "Refunds for faulty bike rides",
+  "relation": "paid as",
+  "object": "account credit",
+  "since": "",
+  "source": "t10"
+ },
+ {
+  "subject": "Refunds for faulty bike rides",
+  "relation": "not paid to",
+  "object": "cards",
+  "since": "",
+  "source": "t10"
+ },
+ {
+  "subject": "Annual memberships",
+  "relation": "cost",
+  "object": "$90",
+  "since": "",
+  "source": "t11"
+ },
+ {
+  "subject": "Annual memberships",
+  "relation": "can be refunded within",
+  "object": "14 days of purchase",
+  "since": "",
+  "source": "t11"
+ },
+ {
+  "subject": "bike not returned within 24 hours",
+  "relation": "is treated as",
+  "object": "lost",
+  "since": "",
+  "source": "t12"
+ },
+ {
+  "subject": "member",
+  "relation": "is charged",
+  "object": "$1,200",
+  "since": "",
+  "source": "t12"
+ },
+ {
+  "subject": "Refund Policy (January 2026)",
+  "relation": "dated",
+  "object": "2026-01-15",
+  "since": "",
+  "source": "t13"
+ },
+ {
+  "subject": "Refund Policy (January 2026)",
+  "relation": "version",
+  "object": "Version 2",
+  "since": "",
+  "source": "t13"
+ },
+ {
+  "subject": "Refund Policy (January 2026)",
+  "relation": "in force",
+  "object": "true",
+  "since": "2026-01-15",
+  "source": "t13"
+ },
+ {
+  "subject": "Refund Policy (January 2026)",
+  "relation": "replaces",
+  "object": "policy of 1 February 2024",
+  "since": "2026-01-15",
+  "source": "t13"
+ },
+ {
+  "subject": "faulty bike",
+  "relation": "reported in",
+  "object": "app",
+  "since": "",
+  "source": "t14"
+ },
+ {
+  "subject": "faulty bike report",
+  "relation": "deadline",
+  "object": "within 60 minutes of unlocking it",
+  "since": "",
+  "source": "t14"
+ },
+ {
+  "subject": "full ride refund",
+  "relation": "refunded to",
+  "object": "original payment card",
+  "since": "",
+  "source": "t14"
+ },
+ {
+  "subject": "full ride refund",
+  "relation": "timeframe",
+  "object": "within 5 business days",
+  "since": "",
+  "source": "t14"
+ },
+ {
+  "subject": "ride credit",
+  "relation": "amount",
+  "object": "$5",
+  "since": "",
+  "source": "t14"
+ },
+ {
+  "subject": "Annual memberships",
+  "relation": "cost",
+  "object": "$95",
+  "since": "",
+  "source": "t15"
+ },
+ {
+  "subject": "Annual memberships",
+  "relation": "can be refunded within",
+  "object": "14 days of purchase if no rides were taken",
+  "since": "",
+  "source": "t15"
+ },
+ {
+  "subject": "A bike that is not returned within 24 hours",
+  "relation": "treated as",
+  "object": "lost",
+  "since": "",
+  "source": "t16"
+ },
+ {
+  "subject": "The member",
+  "relation": "is charged",
+  "object": "$950",
+  "since": "",
+  "source": "t16"
+ },
+ {
+  "subject": "The charge",
+  "relation": "was previously",
+  "object": "$1,200",
+  "since": "",
+  "source": "t16"
+ },
+ {
+  "subject": "most lost bikes",
+  "relation": "are found by",
+  "object": "their GPS tracker",
+  "since": "",
+  "source": "t16"
+ },
+ {
+  "subject": "Priya Raman",
+  "relation": "role",
+  "object": "Station manager",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Priya Raman",
+  "relation": "has phone",
+  "object": "518-555-0142",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Priya Raman",
+  "relation": "has email",
+  "object": "priya.raman@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Marcus Lee",
+  "relation": "role",
+  "object": "Station manager",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Marcus Lee",
+  "relation": "has phone",
+  "object": "518-555-0177",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Marcus Lee",
+  "relation": "has email",
+  "object": "marcus.lee@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Elena Petrova",
+  "relation": "role",
+  "object": "Station manager",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Elena Petrova",
+  "relation": "has phone",
+  "object": "518-555-0123",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Elena Petrova",
+  "relation": "has email",
+  "object": "elena.petrova@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "role",
+  "object": "Station manager",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "has phone",
+  "object": "518-555-0158",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "has email",
+  "object": "daniel.kim@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Jamal Ortiz",
+  "relation": "role",
+  "object": "Technician",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Jamal Ortiz",
+  "relation": "has phone",
+  "object": "518-555-0190",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Jamal Ortiz",
+  "relation": "has email",
+  "object": "jamal.ortiz@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Grace Okafor",
+  "relation": "role",
+  "object": "Customer care lead",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Grace Okafor",
+  "relation": "has phone",
+  "object": "518-555-0101",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "Grace Okafor",
+  "relation": "has email",
+  "object": "grace.okafor@collarcitybikes.example",
+  "since": "",
+  "source": "t17"
+ },
+ {
+  "subject": "station",
+  "relation": "has",
+  "object": "one station manager",
+  "since": "",
+  "source": "t18"
+ },
+ {
+  "subject": "station manager",
+  "relation": "signs off",
+  "object": "repaired dock before it goes back into service",
+  "since": "",
+  "source": "t18"
+ },
+ {
+  "subject": "technicians",
+  "relation": "report to",
+  "object": "station manager of the station they are working at",
+  "since": "",
+  "source": "t18"
+ },
+ {
+  "subject": "Priya Raman",
+  "relation": "manages",
+  "object": "Monument Square",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Marcus Lee",
+  "relation": "manages",
+  "object": "Riverfront Park",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Marcus Lee",
+  "relation": "manages",
+  "object": "Lansingburgh",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Elena Petrova",
+  "relation": "manages",
+  "object": "RPI Student Union",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Elena Petrova",
+  "relation": "manages",
+  "object": "Green Island Bridge",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Daniel Kim",
+  "relation": "manages",
+  "object": "Troy Atrium",
+  "since": "",
+  "source": "t19"
+ },
+ {
+  "subject": "Figure 1",
+  "relation": "title",
+  "object": "Rides per month, 2025",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "Figure 1",
+  "relation": "vertical axis label",
+  "object": "Rides",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "January 2025 rides",
+  "relation": "count",
+  "object": "3,120",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "February 2025 rides",
+  "relation": "count",
+  "object": "2,890",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "March 2025 rides",
+  "relation": "count",
+  "object": "4,410",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "April 2025 rides",
+  "relation": "count",
+  "object": "7,650",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "May 2025 rides",
+  "relation": "count",
+  "object": "10,980",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "June 2025 rides",
+  "relation": "count",
+  "object": "12,870",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "July 2025 rides",
+  "relation": "count",
+  "object": "13,950",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "August 2025 rides",
+  "relation": "count",
+  "object": "14,280",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "September 2025 rides",
+  "relation": "count",
+  "object": "11,630",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "October 2025 rides",
+  "relation": "count",
+  "object": "8,240",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "November 2025 rides",
+  "relation": "count",
+  "object": "4,970",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "December 2025 rides",
+  "relation": "count",
+  "object": "3,310",
+  "since": "",
+  "source": "m0"
+ },
+ {
+  "subject": "Monument Square",
+  "relation": "has docks",
+  "object": "24",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Monument Square",
+  "relation": "rides in 2025",
+  "object": "21,400",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "RPI Student Union",
+  "relation": "has docks",
+  "object": "30",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "RPI Student Union",
+  "relation": "rides in 2025",
+  "object": "19,800",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Riverfront Park",
+  "relation": "has docks",
+  "object": "18",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Riverfront Park",
+  "relation": "rides in 2025",
+  "object": "16,950",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Troy Atrium",
+  "relation": "has docks",
+  "object": "16",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Troy Atrium",
+  "relation": "rides in 2025",
+  "object": "11,200",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Green Island Bridge",
+  "relation": "has docks",
+  "object": "14",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Green Island Bridge",
+  "relation": "rides in 2025",
+  "object": "9,300",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Lansingburgh",
+  "relation": "has docks",
+  "object": "12",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "Lansingburgh",
+  "relation": "rides in 2025",
+  "object": "7,450",
+  "since": "",
+  "source": "m1"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "starts at",
+  "object": "5:30 am",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "first stop",
+  "object": "Depot",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "stop 1",
+  "object": "Monument Square",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "stop 2",
+  "object": "RPI Student Union",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "stop 3",
+  "object": "Lansingburgh",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "stop 4",
+  "object": "Riverfront Park",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "morning loop",
+  "relation": "final stop",
+  "object": "Depot",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "Monument Square",
+  "relation": "follows",
+  "object": "Depot",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "RPI Student Union",
+  "relation": "follows",
+  "object": "Monument Square",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "Lansingburgh",
+  "relation": "follows",
+  "object": "RPI Student Union",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "Riverfront Park",
+  "relation": "follows",
+  "object": "Lansingburgh",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "Depot",
+  "relation": "follows",
+  "object": "Riverfront Park",
+  "since": "",
+  "source": "m2"
+ },
+ {
+  "subject": "Dock training video",
+  "relation": "has date",
+  "object": "2026-02-10",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Slide at 0:00",
+  "relation": "has text",
+  "object": "Dock training",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Slide at 0:00",
+  "relation": "has text",
+  "object": "Freeing a bike that is stuck in a dock",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Step 1",
+  "relation": "instructs",
+  "object": "Hold the red reset button on the dock for 5 seconds",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Step 2",
+  "relation": "instructs",
+  "object": "Wait up to 30 seconds for the dock light to turn green",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Step 3",
+  "relation": "instructs",
+  "object": "Still red? Tag the dock OUT OF SERVICE and call the technician on duty",
+  "since": "",
+  "source": "m3"
+ },
+ {
+  "subject": "Sam Carter",
+  "relation": "has member number",
+  "object": "20417",
+  "since": "",
+  "source": "m4"
+ },
+ {
+  "subject": "Sam Carter",
+  "relation": "has phone number",
+  "object": "518-555-0199",
+  "since": "",
+  "source": "m4"
+ },
+ {
+  "subject": "Sam Carter",
+  "relation": "took bike from",
+  "object": "Riverfront Park",
+  "since": "2026-04-04",
+  "source": "m4"
+ },
+ {
+  "subject": "bike 9012",
+  "relation": "lost power at",
+  "object": "Green Island Bridge",
+  "since": "2026-04-04",
+  "source": "m4"
+ },
+ {
+  "subject": "Sam Carter",
+  "relation": "rode bike",
+  "object": "9012",
+  "since": "2026-04-04",
+  "source": "m4"
+ },
+ {
+  "subject": "Collar City Bikes",
+  "relation": "has winter hours",
+  "object": "1 December to 28 February",
+  "since": "",
+  "source": "m5"
+ },
+ {
+  "subject": "Bikes",
+  "relation": "can be unlocked",
+  "object": "6:00 am to 9:00 pm, every day",
+  "since": "",
+  "source": "m5"
+ },
+ {
+  "subject": "all stations",
+  "relation": "close during",
+  "object": "a city snow emergency until the emergency is lifted",
+  "since": "",
+  "source": "m5"
+ },
+ {
+  "subject": "E-bikes",
+  "relation": "stay in",
+  "object": "the depot when it is below -10 C",
+  "since": "",
+  "source": "m5"
+ }
+]
