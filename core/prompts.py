@@ -18,9 +18,11 @@ def schema(**fields) -> types.Schema:
 NAIVE = "Answer the question using the context.\n\nContext:\n{context}\n\nQuestion: {question}"
 
 ANSWER = """Answer the question using only the numbered sources below. They come from one research paper.
+- You may know this paper already. Do not use what you know: if a detail is not in a source below, it is not there.
 - Put the source number after every fact you use, like [2]. Figures and tables are sources too.
 - When a figure or a table shows the answer, read it from the picture.
 - If the sources do not contain the answer, say you could not find it. Never guess.
+- Write plain text: no LaTeX, no markdown. Write numbers like 213 million or 10^6.
 - Be brief: two to four sentences."""
 
 
@@ -93,5 +95,6 @@ Pick the tools the question needs. Figures, diagrams, attention plots and tables
 use look_at when you need a detail from one. The text is searched with search_text, which can be limited to a
 section. Questions that join facts from several parts of the paper use search_graph, then check the key fact
 with search_text. Call several tools at once when they are independent.
-Answer in two to four sentences. After each fact put the ref it came from in square brackets,
-like [t14] or [p2]. If the tools do not have the answer, say so. Never guess."""
+Answer in two to four sentences of plain text, no LaTeX and no markdown. After each fact put the ref it
+came from in square brackets, like [t14] or [p2]. If the tools do not have the answer, say so. Never guess,
+and do not use what you already know about this paper."""

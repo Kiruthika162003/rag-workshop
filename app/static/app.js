@@ -1,43 +1,64 @@
-// One question goes to all six kinds of RAG at once. Each card fills in when its answer is back.
+// Four tabs, one scenario each. Ask sends the question to every card in the tab at once;
+// each card fills in when its answer is back. Explain opens the side panel for the tab.
 
-const form = document.getElementById('ask');
-const input = document.getElementById('question');
-const cards = [...document.querySelectorAll('.card')];
 const viewer = {
   title: document.getElementById('viewer-title'),
   meta: document.getElementById('viewer-meta'),
   body: document.getElementById('viewer-body'),
 };
+const drawer = document.getElementById('drawer');
 
 const escape = text => String(text).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const each = (selector, work) => document.querySelectorAll(selector).forEach(work);
 
-form.addEventListener('submit', event => { event.preventDefault(); askAll(input.value.trim()); });
-document.querySelectorAll('#examples .chip').forEach(chip =>
-  chip.addEventListener('click', () => { input.value = chip.dataset.question; askAll(chip.dataset.question); }));
-
-function askAll(question) {
-  if (!question) return;
-  cards.forEach(card => ask(card, question));
+function choose(stage) {
+  each('.tab', tab => tab.setAttribute('aria-selected', tab.dataset.stage === stage));
+  each('.stage', section => { section.hidden = section.dataset.stage !== stage; });
+  each('.explained', part => { part.hidden = part.dataset.stage !== stage; });
 }
 
+each('.tab', tab => tab.addEventListener('click', () => choose(tab.dataset.stage)));
+each('.explain', button => button.addEventListener('click', () => { drawer.hidden = false; }));
+document.getElementById('close').addEventListener('click', () => { drawer.hidden = true; });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') drawer.hidden = true; });
+choose(document.querySelector('.tab').dataset.stage);
+
+each('.stage', section => {
+  const box = section.querySelector('textarea');
+  const askAll = () => box.value.trim() && section.querySelectorAll('.card').forEach(card => ask(card, box.value.trim()));
+  section.querySelector('.ask').addEventListener('submit', event => { event.preventDefault(); askAll(); });
+  box.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); askAll(); } });
+});
+each('.card', card => card.querySelector('.retry').addEventListener('click', () => ask(card, card.dataset.question)));
+
+const WAIT = 60_000;  // a card never spins longer than this; it offers Retry instead
+
 async function ask(card, question) {
+  const asked = String(Date.now() + Math.random());
+  Object.assign(card.dataset, { question, asked });
   const answer = card.querySelector('.answer');
   answer.className = 'answer working';
   answer.innerHTML = '';
+  card.querySelector('.retry').hidden = true;
   card.querySelector('.verdict').textContent = '';
   card.querySelector('.extra').innerHTML = '';
   card.querySelector('.sources').innerHTML = '';
   try {
     const reply = await fetch('/ask', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: card.dataset.kind, question }),
+      body: JSON.stringify({ kind: card.dataset.kind, question }), signal: AbortSignal.timeout(WAIT),
     });
     const result = await reply.json();
+    if (card.dataset.asked !== asked) return;  // a newer question was asked meanwhile
     if (!reply.ok) throw new Error(result.error);
     show(card, result);
   } catch (error) {
+    if (card.dataset.asked !== asked) return;
     answer.className = 'answer';
-    answer.textContent = 'This one did not answer: ' + error.message;
+    answer.textContent = error.name === 'TimeoutError'
+      ? `No answer after ${WAIT / 1000} seconds. The model may be busy: try again.`
+      : 'This one did not answer: ' + error.message;
+    card.querySelector('.retry').hidden = false;
   }
 }
 
@@ -51,6 +72,7 @@ function show(card, result) {
   const verdict = card.querySelector('.verdict');
   verdict.textContent = `${result.seconds}s` + (result.right === null ? '' : result.right ? '  ✓ right' : '  ✗ wrong');
   verdict.className = 'verdict ' + (result.right === null ? '' : result.right ? 'right' : 'wrong');
+  if (result.note) answer.insertAdjacentHTML('beforeend', `<p class="note">${escape(result.note)}</p>`);
 
   const extra = card.querySelector('.extra');
   if (result.steps) extra.innerHTML = result.steps.map(s => `<div class="step">${escape(s.tool)}(${escape(Object.values(s.args).join(', '))})</div>`).join('');
@@ -83,6 +105,7 @@ function open(source) {
   viewer.meta.textContent = source.section || '';
   viewer.body.innerHTML = `<img src="/page/${source.id}" alt="Page ${source.page}, with the passage highlighted">
     <a href="/files/${source.doc}#page=${source.page}" target="_blank">Open the PDF at page ${source.page}</a>`;
+  document.getElementById('viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // The facts the graph answer walked along, drawn as a little graph.

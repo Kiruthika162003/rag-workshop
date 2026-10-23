@@ -1,0 +1,70 @@
+"""The four tabs of the app: one scenario each, and what to say about it.
+
+flow is the architecture drawn in the side panel: one row per step, and a row with two boxes
+means two things happen side by side.
+"""
+
+STAGES = [
+    {
+        "id": "text", "name": "Text RAG", "question": "hardware",
+        "scenario": "The answer is written in the text",
+        "lesson": "When the answer is in the sentences, all three agree. Text RAG is enough, and it is the cheapest.",
+        "kinds": ["text", "multimodal", "graph"],
+        "what": "Find the passages that answer the question, and give only those to the model, numbered, with their pages.",
+        "choose": ["The answer is in sentences or numbers in the text", "Documents are mostly prose",
+                   "You need every fact cited to a page"],
+        "struggles": ["The answer is only in a figure or a picture of a table",
+                      "The answer joins facts from far-apart sections"],
+        "flow": [[("Question", "")],
+                 [("Vector search", "bge-small, on this laptop"), ("Keyword search", "BM25, exact words")],
+                 [("Rank fusion", "places, not scores")],
+                 [("Rerank", "Gemini scores each passage 0 to 10")],
+                 [("Neighbours", "the chunks beside it, same page")],
+                 [("Answer", "every fact cited [1] [2] with its page")]],
+    },
+    {
+        "id": "multimodal", "name": "Multimodal RAG", "question": "colour",
+        "scenario": "The answer is only in a figure",
+        "lesson": "No sentence in the paper names a colour. Only the RAG that looks at Figure 1 can answer. "
+                  "If Text RAG says blue anyway, it is remembering this famous paper, and the card says so.",
+        "kinds": ["text", "multimodal", "graph"],
+        "what": "Text RAG plus the figures and tables, found by how they look and what they show, and sent to the model as pictures.",
+        "choose": ["Answers live in diagrams, charts, tables or scans", "PDFs where a figure explains what the text skips"],
+        "struggles": ["A picture makes a bigger, slower request", "It still has to find the right figure first"],
+        "flow": [[("Question", "")],
+                 [("Text passages", "hybrid search and rerank"), ("Figures and tables", "CLIP look + description")],
+                 [("Answer", "passages as text, figures as pictures")]],
+    },
+    {
+        "id": "graph", "name": "Graph RAG", "question": "chain",
+        "scenario": "The answer joins three places in the paper",
+        "lesson": "28.4 BLEU is in the results, the size in Table 3, the training time in section 5.2. Text RAG finds two of the three; "
+                  "the graph links all three. Multimodal also gets there, by reading Table 3 as a picture.",
+        "kinds": ["text", "multimodal", "graph"],
+        "what": "Facts are read once into (subject, relation, object) links. Answering walks the links from what the question names.",
+        "choose": ["The answer connects facts from different sections or documents",
+                   "Questions like: the model that scored X, how big is it?"],
+        "struggles": ["Facts must be read well when the index is built", "A link never written down cannot be walked"],
+        "flow": [[("Once, when indexing", "Gemini reads facts from every chunk")],
+                 [("Question", "")],
+                 [("Names in the question", ""), ("Names in the best chunks", "")],
+                 [("Walk three hops", "never through hubs like \"we\"")],
+                 [("Answer", "the facts, and the chunks they came from")]],
+    },
+    {
+        "id": "agent", "name": "Agentic RAG", "question": "vague",
+        "scenario": "The question is not clear",
+        "lesson": "\"The optional bit in the attention picture\" means Figure 2. The agent decides to search the figures, looks at Figure 2, "
+                  "then answers why from the text; its steps are listed. Multimodal also gets there, because it always searches both.",
+        "kinds": ["agent", "text", "multimodal", "graph"],
+        "what": "An agent with search tools decides what to look up, in what order, and when it has enough to answer.",
+        "choose": ["The question is vague, or has several parts", "Different questions need different evidence",
+                   "A few extra seconds and model calls are fine"],
+        "struggles": ["Slower and costlier: several model calls", "Less predictable: it may take a different path each time"],
+        "flow": [[("Question", "")],
+                 [("Agent", "Gemini decides the next step")],
+                 [("search_text", ""), ("search_figures", "")],
+                 [("look_at", "reads one figure"), ("search_graph", "")],
+                 [("Answer", "when it has enough, citing refs")]],
+    },
+]

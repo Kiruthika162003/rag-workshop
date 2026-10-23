@@ -7,7 +7,18 @@ Both download once from Hugging Face (about 130 MB and 600 MB) and run on the CP
 """
 
 import io
+import os
 from functools import cache, lru_cache
+from pathlib import Path
+
+TEXT_MODEL = "BAAI/bge-small-en-v1.5"
+PICTURE_MODEL = "openai/clip-vit-base-patch32"
+
+# Once both models are on this computer, never ask Hugging Face again: the app starts the same way
+# with no internet, which is what a conference Wi-Fi sometimes gives you.
+CACHE = Path(os.getenv("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
+if all((CACHE / f"models--{name.replace('/', '--')}" / "snapshots").exists() for name in (TEXT_MODEL, PICTURE_MODEL)):
+    os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
 import numpy as np
 import torch
@@ -18,8 +29,6 @@ from transformers.utils import logging
 logging.set_verbosity_error()
 logging.disable_progress_bar()
 
-TEXT_MODEL = "BAAI/bge-small-en-v1.5"
-PICTURE_MODEL = "openai/clip-vit-base-patch32"
 # bge was trained with this in front of search questions, and nothing in front of the passages.
 QUERY = "Represent this sentence for searching relevant passages: "
 

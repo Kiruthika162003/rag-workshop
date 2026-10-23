@@ -88,5 +88,6 @@ async def run(question: str) -> dict:
     return {"answer": text, "steps": steps, "sources": [shown(rag.record(ref)) for ref in cited]}
 
 
-def ask_agent(question: str) -> dict:
-    return asyncio.run_coroutine_threadsafe(run(question), loop).result()
+def ask_agent(question: str, wait: float | None = None) -> dict:
+    """The agent's answer, or a TimeoutError after wait seconds, so a caller never hangs."""
+    return asyncio.run_coroutine_threadsafe(run(question), loop).result(timeout=wait)

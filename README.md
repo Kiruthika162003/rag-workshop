@@ -149,7 +149,10 @@ cloud calls at all.
 python app/app.py
 ```
 
-Open http://localhost:5050. One question goes to all six kinds at once. Click any citation to see
+Open http://localhost:5050. Four tabs, one scenario each: the answer is in the text, only in a figure,
+joined across three places, or the question is vague. Ask sends the question to every kind of RAG in
+the tab at once; Explain opens what the method is, when to choose it, and its architecture. Click any
+citation to see
 the page it came from, with the passage highlighted or the figure outlined.
 
 ## What is in the repository

@@ -14,44 +14,83 @@
   <div class="brand">
     <span class="dots"><i class="b"></i><i class="r"></i><i class="y"></i><i class="g"></i></span>
     <div>
-      <p class="kicker">RAG THAT READS TEXT, TABLES AND FIGURES</p>
-      <h1>Ask a research paper. Watch six kinds of RAG answer.</h1>
+      <p class="kicker">ATTENTION IS ALL YOU NEED · ONE PAPER, FOUR KINDS OF RAG</p>
+      <h1>Which RAG answers which question?</h1>
     </div>
   </div>
-  <form id="ask">
-    <input id="question" autocomplete="off" placeholder="Ask anything about Attention Is All You Need" value="{{ questions[0].ask }}">
-    <button type="submit">Ask all six</button>
-  </form>
-  <div class="chips" id="examples">
-    {% for q in questions %}
-    <button type="button" class="chip" data-question="{{ q.ask }}"><b>{{ q.needs }}</b> {{ q.ask }}</button>
+  <nav class="tabs">
+    {% for stage in stages %}
+    <button type="button" class="tab {{ stage.id }}" data-stage="{{ stage.id }}"{% if loop.first %} aria-selected="true"{% endif %}>
+      <b>{{ loop.index }}</b> {{ stage.name }}</button>
     {% endfor %}
-  </div>
+  </nav>
   <div class="strip"><i class="b"></i><i class="r"></i><i class="y"></i><i class="g"></i></div>
 </header>
 
 <main>
-  <section id="cards">
-    {% for kind in kinds %}
-    <article class="card {{ kind.id }}" data-kind="{{ kind.id }}">
-      <div class="top">
-        <div><h2>{{ kind.name }}</h2><p>{{ kind.about }}</p></div>
-        <span class="verdict"></span>
+  {% for stage in stages %}
+  <section class="stage" data-stage="{{ stage.id }}"{% if not loop.first %} hidden{% endif %}>
+    <div class="scenario {{ stage.id }}">
+      <div class="scenario-top">
+        <div>
+          <p class="kicker">SCENARIO {{ loop.index }}</p>
+          <h2>{{ stage.scenario }}</h2>
+        </div>
+        <button type="button" class="explain">Explain {{ stage.name }}</button>
       </div>
-      <div class="answer muted">Waiting for a question.</div>
-      <div class="extra"></div>
-      <div class="sources"></div>
-    </article>
-    {% endfor %}
+      <form class="ask">
+        <textarea rows="2" autocomplete="off">{{ stage.ask }}</textarea>
+        <button type="submit">Ask</button>
+      </form>
+      <p class="lesson">{{ stage.lesson }}</p>
+    </div>
+    <div class="cards" style="--count: {{ stage.cards | length }}">
+      {% for card in stage.cards %}
+      <article class="card {{ card.id }}" data-kind="{{ card.id }}">
+        <div class="top">
+          <div><h3>{{ card.name }}</h3><p>{{ card.about }}</p></div>
+          <span class="verdict"></span>
+          <button type="button" class="retry" hidden>Retry</button>
+        </div>
+        <div class="answer muted">Press Ask.</div>
+        <div class="extra"></div>
+        <div class="sources"></div>
+      </article>
+      {% endfor %}
+    </div>
   </section>
+  {% endfor %}
 
-  <aside id="viewer">
+  <section id="viewer">
     <p class="kicker">SOURCE</p>
     <h3 id="viewer-title">Click a citation to see where an answer came from</h3>
     <p id="viewer-meta" class="muted"></p>
     <div id="viewer-body"></div>
-  </aside>
+  </section>
 </main>
+
+<aside id="drawer" hidden>
+  <button type="button" id="close" aria-label="Close">×</button>
+  {% for stage in stages %}
+  <div class="explained" data-stage="{{ stage.id }}" hidden>
+    <p class="kicker">HOW IT WORKS</p>
+    <h2>{{ stage.name }}</h2>
+    <p class="what">{{ stage.what }}</p>
+    <h4>Choose it when</h4>
+    <ul>{% for line in stage.choose %}<li>{{ line }}</li>{% endfor %}</ul>
+    <h4>It struggles when</h4>
+    <ul class="struggles">{% for line in stage.struggles %}<li>{{ line }}</li>{% endfor %}</ul>
+    <h4>Architecture</h4>
+    <div class="flow {{ stage.id }}">
+      {% for row in stage.flow %}
+      <div class="row">
+        {% for title, note in row %}<div class="box"><b>{{ title }}</b>{% if note %}<span>{{ note }}</span>{% endif %}</div>{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</aside>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
 <script src="{{ url_for('static', filename='app.js') }}"></script>

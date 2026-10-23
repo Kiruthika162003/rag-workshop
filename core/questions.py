@@ -4,14 +4,15 @@ An expected phrase may list spellings separated by |, like "2048|2,048".
 """
 
 QUESTIONS = [
-    {"id": "warmup", "needs": "an exact number", "ask": "How many warmup steps did the learning rate schedule use?",
-     "expect": ["4000|4,000"]},
-    {"id": "hardware", "needs": "two passages", "ask": "On what hardware was the big model trained, and for how long?",
+    {"id": "hardware", "needs": "the text", "ask": "On what hardware was the big model trained, and for how long?",
      "expect": ["P100", "3.5 days"]},
-    {"id": "parameters", "needs": "a table", "ask": "According to Table 3, how many parameters does the big model have?",
-     "expect": ["213"]},
-    {"id": "mask", "needs": "a figure", "ask": "In the scaled dot-product attention diagram, which step is optional, and what comes right after it?",
-     "expect": ["mask", "softmax"], "in_order": True},
+    {"id": "colour", "needs": "a figure", "ask": "In the Transformer architecture diagram, what colour are the Feed Forward blocks?",
+     "expect": ["blue"], "from_picture": True},
+    {"id": "chain", "needs": "three places joined",
+     "ask": "How many parameters does the model that scored 28.4 BLEU on English-to-German have, and how long did it train?",
+     "expect": ["213", "3.5 days"]},
+    {"id": "vague", "needs": "a vague question", "ask": "what's the optional bit in the attention picture for?",
+     "expect": ["mask", "leftward|auto-regressive|autoregressive|future|subsequent|illegal"]},
 ]
 
 
@@ -37,6 +38,12 @@ FINDS = [
 
 
 GAVE_UP = ("could not find", "cannot determine", "unable to", "do not specify", "does not specify", "not mentioned")
+
+
+def from_memory(question: dict, sources: list[dict]) -> bool:
+    """A famous paper is in the model's training data. An answer that only a picture holds, given
+    with no picture among the sources, came from the model's memory, not from retrieval."""
+    return question.get("from_picture", False) and not any(s["type"] == "picture" for s in sources)
 
 
 def correct(question: dict, reply: str) -> bool:

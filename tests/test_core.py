@@ -79,7 +79,8 @@ def test_proper_names_for_entity_resolution():
 
 
 def test_answer_checker():
-    mask = next(q for q in QUESTIONS if q["id"] == "mask")
-    assert correct(mask, "Mask (opt.) is optional, then SoftMax.")
-    assert not correct(mask, "SoftMax comes after the Mask step.")
-    assert not correct(mask, "I could not find the mask or softmax.")
+    in_order = {"expect": ["mask", "softmax"], "in_order": True}
+    assert correct(in_order, "Mask (opt.) is optional, then SoftMax.")
+    assert not correct(in_order, "SoftMax comes after the Mask step.")
+    assert not correct(in_order, "I could not find the mask or softmax.")
+    assert all(q["expect"] for q in QUESTIONS)
