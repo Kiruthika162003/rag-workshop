@@ -19,7 +19,6 @@ INDEX = Path(__file__).parents[1] / "index"
 
 class Store:
     def __init__(self, name: str):
-        self.name = name
         self.records = json.loads((INDEX / f"{name}.json").read_text(encoding="utf-8"))
         self.vectors = np.load(INDEX / f"{name}.npy")
         self.row = {record["id"]: i for i, record in enumerate(self.records)}
