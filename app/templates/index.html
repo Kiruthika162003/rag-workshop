@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collar City Docs</title>
+<link rel="icon" href="{{ url_for('static', filename='dots.svg') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="dots"><i class="b"></i><i class="r"></i><i class="y"></i><i class="g"></i></span>
+    <div>
+      <p class="kicker">RAG THAT SEES CHARTS AND CONNECTS DOCUMENTS</p>
+      <h1>Ask ten messy files. Watch five kinds of RAG answer.</h1>
+    </div>
+  </div>
+  <form id="ask">
+    <input id="question" autocomplete="off" placeholder="Ask anything about Collar City Bikes" value="{{ questions[0].ask }}">
+    <button type="submit">Ask all five</button>
+  </form>
+  <div class="chips" id="examples">
+    {% for q in questions %}
+    <button type="button" class="chip" data-question="{{ q.ask }}"><b>{{ q.needs }}</b> {{ q.ask }}</button>
+    {% endfor %}
+  </div>
+  <div class="strip"><i class="b"></i><i class="r"></i><i class="y"></i><i class="g"></i></div>
+</header>
+
+<main>
+  <section id="cards">
+    {% for kind in kinds %}
+    <article class="card {{ kind.id }}" data-kind="{{ kind.id }}">
+      <div class="top">
+        <div><h2>{{ kind.name }}</h2><p>{{ kind.about }}</p></div>
+        <span class="verdict"></span>
+      </div>
+      <div class="answer muted">Waiting for a question.</div>
+      <div class="extra"></div>
+      <div class="sources"></div>
+    </article>
+    {% endfor %}
+  </section>
+
+  <aside id="viewer">
+    <p class="kicker">SOURCE</p>
+    <h3 id="viewer-title">Click a citation to see where an answer came from</h3>
+    <p id="viewer-meta" class="muted"></p>
+    <div id="viewer-body"></div>
+  </aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
