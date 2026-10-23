@@ -1,0 +1,167 @@
+
+
+    teach\rag-architecture.html     the slides: why each kind exists, and the tools to build it
+    http://localhost:5050           the app: four tabs, every RAG side by side
+    learn\                          the code, one idea per file
+
+
+──────────────────────────────────────────────────────────────────────────────────────
+    cd C:\Users\Admin\Downloads\rag
+    .venv\Scripts\Activate.ps1
+    python check.py                                     every line [ ok ]
+    python app/app.py                                   second terminal; leave it running
+
+
+ WHY RAG BREAKS 
+──────────────────────────────────────────────────────────────────────────────────────
+two halves, a choice at every step, today's paper.
+
+    python learn/1_foundations/01_read_the_files.py
+        → 39,498 characters of text, and 8 figures and tables the text layer never shows
+        → page 13: the attention plot is just loose words
+
+    python learn/2_naive_rag/naive_rag.py
+        → the whole prompt it sends, cut mid-sentence
+        → "no mention of an optional step": the answer is in Figure 2
+
+VECTORS, ON YOUR LAPTOP                                              10 min
+──────────────────────────────────────────────────────────────────────────────────────
+    python learn/1_foundations/02_embeddings.py
+        → 384 numbers per sentence, no cloud call
+        → the decoder sentence scores 0.70 for an encoder question: similar is not "answers it"
+
+    python learn/1_foundations/03_vector_search.py
+        → the whole search is one line: vectors @ question
+
+
+PART 3 · TEXT RAG                                                             25 min
+──────────────────────────────────────────────────────────────────────────────────────
+the architecture, the kinds, embedding models, vector databases, rerankers.
+
+    How the paper is cut
+    python learn/3_text_rag/01_chunking.py
+        → fixed chunks cut words in half; semantic chunks start at "5.3 Optimizer"
+
+    Where a chunk comes from
+    python learn/3_text_rag/03_metadata_filters.py
+        → "dropout" from anywhere, then only from section 5
+
+    Exact words
+    python learn/3_text_rag/05_keyword_search.py
+        → warmup_steps: BM25 wins by 7.0, vectors by 0.07
+
+    Both at once
+    python learn/3_text_rag/06_hybrid_search.py
+        → the "meaning" and "keywords" columns, and the fused order
+
+    A second, careful look
+    python learn/3_text_rag/08_reranking.py
+        → the prompt, then twelve candidates scored 0 to 10
+
+    The answer, and the page
+    python learn/3_text_rag/11_grounded_answer.py
+    python learn/3_text_rag/12_open_the_page.py
+        → open out\page.png: the passage highlighted
+
+    All of it together
+    python learn/3_text_rag/text_rag.py
+        → 8 NVIDIA P100 GPUs, 3.5 days, in about 5 seconds
+
+    Asking it your own way
+    python learn/3_text_rag/04_self_query.py
+    python learn/3_text_rag/07_query_rewriting.py
+
+    App · tab 1 "The answer is written in the text"  → all three agree
+
+
+PART 4 · MULTIMODAL RAG                                                       20 min
+──────────────────────────────────────────────────────────────────────────────────────
+Slides 12 to 14: three ways to make figures searchable, and what a "picture" is in a PDF.
+
+    python learn/4_multimodal_rag/01_figures_in_a_pdf.py
+        → open out\figures: images, drawings, tables, each as a picture
+
+    python learn/4_multimodal_rag/02_one_space.py
+        → CLIP: words in, figures out, on the laptop
+
+    python learn/4_multimodal_rag/03_two_scales.py
+        → pictures score about 0.3, descriptions about 0.75: fused by rank
+
+    python learn/4_multimodal_rag/multimodal_rag.py
+        → "Mask (opt.)", then SoftMax, read from Figure 2
+
+    App · tab 2 "The answer is only in a figure"     → only multimodal answers
+        If Text RAG says "blue": the card says it came from the model's memory
+
+
+PART 5 · GRAPH RAG                                                            20 min
+──────────────────────────────────────────────────────────────────────────────────────
+Slides 15 to 17: read facts once, then walk the links.
+
+    python learn/5_graph_rag/01_read_facts.py
+        → the prompt, and the facts that come back
+
+    python learn/5_graph_rag/02_entities.py
+        → one spelling, names inside names, and hubs like "we"
+
+    python learn/5_graph_rag/03_explore_the_graph.py
+        → every fact about Transformer (big), from three sections
+
+    python learn/5_graph_rag/graph_rag.py
+        → the path the answer walked
+
+    App · tab 3 "The answer joins three places"      → watch the graph drawing
+
+
+PART 6 · AGENTIC RAG                                                          15 min
+──────────────────────────────────────────────────────────────────────────────────────
+Slides 18 to 20: a model decides what to retrieve.
+
+    python learn/6_agentic_rag/01_corrective_rag.py
+        → the grade of each attempt, and whether it searched again
+
+    python learn/6_agentic_rag/02_tools.py
+        → the docstrings are what the agent reads
+
+    App · tab 4 "The question is not clear"          → the agent's steps are listed in its card
+
+
+PART 7 · EVALUATING RAG                                                       15 min
+──────────────────────────────────────────────────────────────────────────────────────
+Slides 21 to 24: measure the search and the answer separately.
+
+    The search, against labels: free, on the laptop
+    python learn/7_evaluation/01_retrieval_metrics.py
+        → hit@4, precision@4, recall@4, MRR and nDCG@4 for meaning, keywords and hybrid
+
+    Every claim backed by a source?
+    python learn/7_evaluation/02_faithfulness.py
+        → 1.00, then 0.80 with one invented sentence caught as UNSUPPORTED
+
+    Does it answer what was asked?
+    python learn/7_evaluation/03_answer_relevancy.py
+        → on point 0.87, off the point 0.62, "could not find" 0.00
+
+    Did the search hand over the evidence?
+    python learn/7_evaluation/04_context_precision_recall.py
+        → Text RAG recall 0.00, Multimodal RAG recall 1.00: the colour is only in the figure
+
+    All four, every RAG, one question
+    python learn/7_evaluation/05_compare_rags.py
+
+    App · tab 2 · Evaluate this answer, on every card  → open "Why these scores"
+
+
+PART 8 · CHOOSING                                                              5 min
+──────────────────────────────────────────────────────────────────────────────────────
+Slides 25 and 26: the simplest RAG your questions need, measured before you choose.
+
+    Your turn: any tab, your own question, then Explain, then Evaluate.
+
+
+IF SOMETHING GOES WRONG
+──────────────────────────────────────────────────────────────────────────────────────
+    A card says "no answer after 60 seconds"     press Retry
+    PERMISSION_DENIED                            gcloud auth application-default login
+    The app will not start                       close the other terminal running it, start again
+    Every lesson takes a question of its own     python learn/3_text_rag/text_rag.py "your question"
