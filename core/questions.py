@@ -1,8 +1,4 @@
-"""The questions every kind of RAG is tested on. Each one needs something a simple pipeline lacks.
-
-expect: phrases a right answer contains; one may list spellings separated by |, like "2048|2,048".
-reference: the right answer, written from the paper, for the metrics that compare against one.
-"""
+"""The test questions, their expected phrases and reference answers."""
 
 QUESTIONS = [
     {"id": "hardware", "needs": "the text", "ask": "On what hardware was the big model trained, and for how long?",
@@ -49,14 +45,12 @@ GAVE_UP = ("could not find", "cannot determine", "unable to", "do not specify", 
 
 
 def from_memory(question: dict, sources: list[dict]) -> bool:
-    """A famous paper is in the model's training data. An answer that only a picture holds, given
-    with no picture among the sources, came from the model's memory, not from retrieval."""
+    """A figure-only answer with no figure in its sources came from the model's memory."""
     return question.get("from_picture", False) and not any(s["type"] == "picture" for s in sources)
 
 
 def correct(question: dict, reply: str) -> bool:
-    """Every expected phrase is in the answer, in order when the order is the point,
-    and the answer does not say it gave up."""
+    """Every expected phrase is there, in order if needed, and the answer did not give up."""
     text = reply.replace("‑", "-").replace("**", "").lower()
     found = [min((i for i in (text.find(s.lower()) for s in phrase.split("|")) if i >= 0), default=-1)
              for phrase in question["expect"]]

@@ -1,8 +1,4 @@
-"""The four tabs of the app: one scenario each, and what to say about it.
-
-flow is the architecture drawn in the side panel: one row per step, and a row with two boxes
-means two things happen side by side.
-"""
+"""The four tabs: each one's question, what to say, and its architecture."""
 
 STAGES = [
     {

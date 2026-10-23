@@ -1,9 +1,4 @@
-"""Naive RAG: the version in most tutorials, and where it goes wrong.
-
-Chop the text into 500-character pieces, find the three most similar to the question, paste them
-into a prompt. No sections, no figures, no tables it can read.
-
-The code: naive() in core/rag.py, the prompt NAIVE in core/prompts.py
+"""Naive RAG: 500-character chunks, top 3, pasted into a prompt. It cannot see the figure with the answer.
 
 Run: python learn/2_naive_rag/naive_rag.py
      python learn/2_naive_rag/naive_rag.py "According to Table 3, how many parameters does the big model have?"

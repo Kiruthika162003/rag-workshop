@@ -1,11 +1,4 @@
-"""Reranking: read the candidates before trusting them.
-
-Search is fast and rough: it finds twelve chunks that look like the question. A reranker is slow
-and careful: it reads each candidate next to the question and scores whether it answers it. The
-best four are kept, and any that score under 3 out of 10 are dropped, so the answer step never
-sees passages that only sound relevant.
-
-The code: core/rerank.py, the prompt RERANK in core/prompts.py
+"""Reranking: Gemini scores 12 candidates from 0 to 10 and keeps the best 4.
 
 Run: python learn/3_text_rag/08_reranking.py
      python learn/3_text_rag/08_reranking.py "What beam size was used?"

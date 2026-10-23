@@ -1,9 +1,4 @@
-"""Reranking: similarity finds passages that look like the question; a reranker reads each one and asks
-whether it actually answers it. One Gemini call scores every candidate, and the weak ones are dropped.
-
-Search engines use a cross-encoder model for this, such as the Vertex AI ranking API. An LLM with a
-scoring prompt does the same job and shows you exactly what it is judging.
-"""
+"""Rerank: Gemini scores each candidate from 0 to 10 and keeps the best."""
 
 from core import prompts
 from core.gemini import ask

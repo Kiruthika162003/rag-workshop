@@ -1,9 +1,4 @@
-"""Work on the question before searching. People ask short, vague questions; papers use other words.
-
-    filters_from        self-query: read the filters (section, pages) out of the question itself
-    rewrites            multi-query: several phrasings, each searched, results fused
-    hypothetical_answer HyDE: search with a made-up answer, which looks more like the real passage
-"""
+"""Work on the question before searching: self-query filters, multi-query, HyDE."""
 
 from core import prompts
 from core.embeddings import embed_passages

@@ -1,11 +1,4 @@
-"""Send the original: let the model look at the figure, not at a summary of it.
-
-A description is only as good as what it chose to copy out; the picture always has everything.
-Here both can answer, because the description happened to copy "Mask (opt.)"; the picture is the
-safety net for the detail a description leaves out. The cost is a bigger request: tens of kilobytes
-of picture instead of a few lines of text. This lesson answers both ways and times both.
-
-The code: prompt() and answer() in core/answer.py
+"""Send the original: answer from the description, then from the picture itself.
 
 Run: python learn/4_multimodal_rag/05_send_the_original.py
      python learn/4_multimodal_rag/05_send_the_original.py "What does the multi-head attention diagram concatenate?"

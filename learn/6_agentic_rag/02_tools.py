@@ -1,10 +1,4 @@
-"""Tools: an agent's retrieval is plain Python functions with good docstrings.
-
-The agent never sees the code, only each function's name, arguments and docstring. That text is
-how it decides which tool fits a question, so the docstring is part of the prompt. This lesson
-prints what the model reads about each tool, then calls each one by hand.
-
-The code: core/agent.py
+"""Tools: plain functions; the agent reads only their names and docstrings.
 
 Run: python learn/6_agentic_rag/02_tools.py
 """

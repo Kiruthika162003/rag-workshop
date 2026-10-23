@@ -1,13 +1,4 @@
-"""Query rewriting: search with better words than the ones the user typed.
-
-Someone asks "how long did it take to train the big one?". The paper says "300,000 steps" and
-"3.5 days". Two ways to close that gap:
-
-    multi-query   the model writes three other phrasings; each is searched, and the lists are fused
-    HyDE          the model writes a made-up answer, and we search with that: an answer looks
-                  more like the passage we want than a question does (Hypothetical Document Embeddings)
-
-The code: rewrites(), multi_query(), hyde() in core/query.py, prompts REWRITE and HYPOTHETICAL
+"""Query rewriting: multi-query searches other phrasings; HyDE searches with a made-up answer.
 
 Run: python learn/3_text_rag/07_query_rewriting.py
      python learn/3_text_rag/07_query_rewriting.py "does it work for things other than translation?"

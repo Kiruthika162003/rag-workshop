@@ -1,11 +1,4 @@
-"""Contextual chunk headers: a chunk on its own often does not say what it is about.
-
-"We used warmup_steps = 4000" does not say that it is about training, or about the optimizer.
-When the index was built, every chunk got a first line naming the paper and the section path it
-sits in, like "5 Training / 5.3 Optimizer", and the header is embedded with the chunk. A question
-that uses the section's words can now find a chunk that never uses them itself.
-
-The code: text_chunks() and with_sections() in build_index.py
+"""Chunk headers: each chunk starts with its section, so the section's words can find it.
 
 Run: python learn/3_text_rag/02_chunk_headers.py
      python learn/3_text_rag/02_chunk_headers.py "What regularization did they use?"

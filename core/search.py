@@ -1,12 +1,4 @@
-"""Ways to find chunks, each one a single function you can try on its own.
-
-    by_meaning       embed the question, compare with every chunk (vector search)
-    by_keywords      BM25 on the exact words
-    fuse, hybrid     both, merged with reciprocal rank fusion
-    diverse          maximal marginal relevance: good matches that do not repeat each other
-    with_neighbours  hand the model the chunks around a match, not just the match
-    pictures         figures and tables, found by what they look like and by their descriptions
-"""
+"""Ways to find chunks: by meaning, by keywords, hybrid, diverse, with neighbours, and pictures."""
 
 import numpy as np
 
@@ -23,8 +15,7 @@ def by_keywords(question: str, k: int = 12, index: str = "text", **filters) -> l
 
 
 def fuse(*rankings: list[dict], k: int = 60) -> list[dict]:
-    """Reciprocal rank fusion. Scores from different searches are not comparable, ranks are:
-    each list gives a chunk 1 / (60 + its place), and the totals decide the new order."""
+    """Reciprocal rank fusion: each list gives a chunk 1 / (60 + its place)."""
     total, chunks = {}, {}
     for ranking in rankings:
         for place, chunk in enumerate(ranking):
@@ -38,8 +29,7 @@ def hybrid(question: str, k: int = 12, **filters) -> list[dict]:
 
 
 def diverse(question: str, candidates: list[dict], k: int = 4, balance: float = 0.7, index: str = "text") -> list[dict]:
-    """Pick, one at a time, the candidate most like the question and least like what is already picked.
-    balance 1.0 is plain similarity; lower values trade relevance for variety."""
+    """Maximal marginal relevance: like the question, unlike what is already picked."""
     vectors = store(index).vectors[[store(index).row[c["id"]] for c in candidates]]
     relevance = vectors @ embed_query(question)
     picked = []
@@ -52,8 +42,7 @@ def diverse(question: str, candidates: list[dict], k: int = 4, balance: float = 
 
 
 def with_neighbours(chunks: list[dict], index: str = "text") -> list[dict]:
-    """Small to big: search finds the precise chunk, the model reads it with the chunks beside it.
-    Only neighbours on the same page join, so the page number it cites stays right."""
+    """Each chunk with the chunks beside it on the same page."""
     records, row = store(index).records, store(index).row
     widened = []
     for chunk in chunks:
@@ -66,9 +55,7 @@ def with_neighbours(chunks: list[dict], index: str = "text") -> list[dict]:
 
 
 def pictures(question: str, k: int = 2) -> list[dict]:
-    """Two searches, fused by rank. CLIP compares the question with what each figure looks like;
-    the text model compares it with the figure's description. CLIP scores sit near 0.3 and text
-    scores near 0.7, so the scores cannot be mixed; their ranks can."""
+    """Figures by look (CLIP) and by description (text), fused by rank."""
     looks = store("pictures").search(embed_query_for_pictures(question), k=len(store("pictures").records))
     described = store("descriptions").search(embed_query(question), k=len(store("descriptions").records))
     return fuse(looks, described)[:k]

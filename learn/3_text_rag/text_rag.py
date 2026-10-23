@@ -1,12 +1,4 @@
-"""Text RAG done right: every step from this folder, in one pipeline.
-
-    1. hybrid search      meaning and exact words, fused                       06_hybrid_search.py
-    2. metadata filters   section and pages, before ranking                    03, 04
-    3. rerank             read the twelve candidates, keep the best four        08_reranking.py
-    4. expand             each chunk with its neighbours on the same page       10_context_expansion.py
-    5. answer             numbered sources, page numbers, no guessing           11_grounded_answer.py
-
-The code: text() in core/rag.py is these five lines.
+"""Text RAG, all steps together: hybrid search, filters, rerank, neighbours, answer.
 
 Run: python learn/3_text_rag/text_rag.py
      python learn/3_text_rag/text_rag.py "What dropout rate is used?" --section 5

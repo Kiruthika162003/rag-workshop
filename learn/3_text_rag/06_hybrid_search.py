@@ -1,10 +1,4 @@
-"""Hybrid search: run vector search and keyword search, then merge the two lists.
-
-Their scores cannot be added: a cosine of 0.7 and a BM25 of 7.2 are not on one scale. Reciprocal
-rank fusion uses only the places: each list gives a chunk 1 / (60 + its place), and the totals
-decide. A chunk near the top of both lists beats a chunk at the top of only one.
-
-The code: fuse() and hybrid() in core/search.py
+"""Hybrid search: vector and keyword results, merged by rank.
 
 Run: python learn/3_text_rag/06_hybrid_search.py
      python learn/3_text_rag/06_hybrid_search.py "beam size and length penalty"

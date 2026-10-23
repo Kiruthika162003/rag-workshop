@@ -1,12 +1,4 @@
-"""Chunking: the piece of a document that gets retrieved, and why the cut matters.
-
-Fixed chunks cut every N characters, wherever that lands, so sentences break in half and the
-end of one topic is glued to the start of the next. Semantic chunks keep neighbouring sentences
-together while they talk about the same thing. Two sentences "talk about the same thing" when
-their embeddings are close; a new chunk starts at a heading, a page break, a table row, or where
-the similarity drops into the lowest quarter for this document.
-
-The code: core/chunking.py
+"""Chunking: fixed chunks cut anywhere; semantic chunks cut where the topic changes.
 
 Run: python learn/3_text_rag/01_chunking.py          page 7
      python learn/3_text_rag/01_chunking.py 3        any page

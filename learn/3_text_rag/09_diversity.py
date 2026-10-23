@@ -1,12 +1,4 @@
-"""Diversity: four passages that say the same thing waste three places in the prompt.
-
-The paper says that the Transformer beats earlier models in the abstract, the introduction, the
-results and the conclusion, in nearly the same words. Maximal marginal relevance picks one passage
-at a time: the one most like the question and least like the passages already picked. "repeats" is
-how close each pick is to the closest one picked before it. Balance is a dial: turn it too far
-towards variety and weaker passages come in.
-
-The code: diverse() in core/search.py
+"""Diversity (MMR): relevant passages that do not repeat each other.
 
 Run: python learn/3_text_rag/09_diversity.py
      python learn/3_text_rag/09_diversity.py "Why use self-attention?"

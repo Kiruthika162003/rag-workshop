@@ -1,10 +1,4 @@
-"""Read facts: turn each chunk into (subject, relation, object) links.
-
-When the index is built, Gemini reads every chunk and every figure description once and writes down
-the facts it states, each one pointing back to the chunk it came from. This lesson reads one chunk
-again, live, so you can see the prompt and what comes back.
-
-The code: read_facts() in core/graph.py, the prompt READ_FACTS in core/prompts.py
+"""Read facts: Gemini turns a chunk into (subject, relation, object) links.
 
 Run: python learn/5_graph_rag/01_read_facts.py
      python learn/5_graph_rag/01_read_facts.py t48      any chunk id, from 1_foundations/03_vector_search.py

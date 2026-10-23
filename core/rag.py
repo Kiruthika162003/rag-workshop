@@ -1,12 +1,4 @@
-"""Every kind of RAG in this workshop, each one a few lines put together from the steps in
-search.py, query.py, rerank.py and answer.py.
-
-    naive        fixed chunks, top 3 by similarity, answer
-    text         hybrid search, metadata filters, reranking, neighbours, answers that cite pages
-    multimodal   text plus figures and tables, shown to Gemini as pictures
-    graph        a search finds where to start, the knowledge graph connects the rest
-    corrective   grade what came back; if it is weak, ask again in other words and look wider
-"""
+"""Every kind of RAG, a few lines each, built from the other files."""
 
 from core import prompts
 from core.answer import answer, shown
@@ -57,10 +49,7 @@ GOOD_ENOUGH = 7
 
 
 def corrective(question: str) -> dict:
-    """Corrective RAG: check twice before trusting a search. First the grade: the best passage must
-    score at least 7 out of 10. Then the answer: it must not say it could not find the answer, because
-    a grader can be fooled by a passage that only looks right. If either check fails, search again with
-    other phrasings, adding figures and tables, and answer from that."""
+    """Grade the search and check the answer; if either fails, search again wider, figures included."""
     best = rerank(question, hybrid(question))
     attempts = [{"search": [question], "best": best[0]["rerank"]}]
     result = answer(question, best) if best[0]["rerank"] >= GOOD_ENOUGH else None

@@ -1,12 +1,4 @@
-"""Embeddings: text turned into a list of numbers, so that similar meanings end up close together.
-
-Closeness is the cosine similarity: 1.0 is the same meaning, near 0 is unrelated. The model here,
-bge-small, runs on your own computer: no cloud call, no cost, about 20 milliseconds a sentence.
-Watch the sentence about the decoder: it does not answer a question about the encoder, yet it
-scores almost as high. Similar is not the same as "answers the question", and that is why
-retrieval needs more than similarity: filters, keywords and a reranker, all in 3_text_rag.
-
-The code: core/embeddings.py
+"""Embeddings: text becomes 384 numbers, so similar meanings land close. Similar is not the same as "answers it".
 
 Run: python learn/1_foundations/02_embeddings.py
      python learn/1_foundations/02_embeddings.py "What hardware did they train on?"

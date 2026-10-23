@@ -1,13 +1,4 @@
-"""Metadata filters: rule chunks out by where they are, not by what they say.
-
-Every chunk carries metadata: its page and its section path, like "6 Results / 6.2 Model
-Variations". The filter runs before ranking, so a ruled-out chunk can never win, however similar it
-sounds. Every vector database has this: a WHERE clause next to the similarity search.
-
-"dropout" is in the training section, the results tables and the parsing experiment. Filtered to
-section 5, only the training setup can answer.
-
-The code: Store.passes() and Store.top() in core/store.py
+"""Metadata filters: keep only chunks from a section or pages, before ranking.
 
 Run: python learn/3_text_rag/03_metadata_filters.py
      python learn/3_text_rag/03_metadata_filters.py "What does Table 3 vary?" --section "6.2"

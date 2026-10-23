@@ -8,8 +8,7 @@ from core.store import INDEX
 
 
 def prompt(question: str, sources: list[dict], facts=(), originals: bool = True) -> list:
-    """The exact message the model gets: the rules, each source with its number, page and section,
-    any graph facts, then the question. Figures and tables go in as pictures."""
+    """The message the model gets: rules, numbered sources, graph facts, the question."""
     parts = [prompts.ANSWER]
     for n, source in enumerate(sources, start=1):
         label = f"[{n}] page {source['page']}, section {source['section']}"

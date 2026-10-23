@@ -1,12 +1,4 @@
-"""What a program actually sees in a PDF.
-
-A text-only pipeline reads the text layer of each page. The paper's architecture diagrams are
-images, its attention plots are vector drawings, and its tables are text laid out in a grid: to a
-text layer, a diagram is nothing, a plot is a scatter of loose words, and a table is a jumble of
-numbers. A careful reader keeps headings, sentences, table rows and figures apart, and drops the
-page numbers and the arXiv stamp.
-
-The code: core/documents.py
+"""What a program sees in a PDF: the naive reader gets only text; the careful one also finds figures and tables.
 
 Run: python learn/1_foundations/01_read_the_files.py
 """

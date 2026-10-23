@@ -1,10 +1,4 @@
-"""Self-query: let the model read the filters out of the question.
-
-People do not type --section 5.3. They ask "in the training part, what optimizer did they use?".
-One small Gemini call turns the question into a cleaner search and the filters it implies, then
-the search runs with them.
-
-The code: filters_from() in core/query.py, the prompt FILTERS in core/prompts.py
+"""Self-query: the model reads the filters out of the question.
 
 Run: python learn/3_text_rag/04_self_query.py
      python learn/3_text_rag/04_self_query.py "What do pages 13 to 15 show?"

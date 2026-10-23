@@ -1,9 +1,4 @@
-"""A knowledge graph: facts as (subject, relation, object) links, each one pointing back to its chunk.
-
-Building it: Gemini reads every chunk and writes down the facts it states.
-Using it: find where to start, then walk the links. Three hops go from the incident,
-to its station, to the station's manager, to the manager's phone number.
-"""
+"""The knowledge graph: facts as links, one spelling per name, and a walk across them."""
 
 import json
 import re
@@ -73,8 +68,7 @@ class Graph:
 
     @cached_property
     def hubs(self) -> set[str]:
-        """Nodes linked to almost everything, like "we" or "transformer". Walking through one reaches
-        every fact in the paper, so the walk may start at a hub but never passes through one."""
+        """Nodes linked to almost everything, like "we": the walk never passes through them."""
         return {node for node, facts in self.links.items() if len(facts) > HUB}
 
     def walk(self, start: set[str], hops: int = 3, limit: int = 60) -> list[dict]:

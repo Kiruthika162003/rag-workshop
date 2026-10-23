@@ -1,10 +1,4 @@
-"""Take the reader to the page: a link that opens the PDF at the cited page, and the passage highlighted.
-
-Every chunk remembers its file, its page and the exact sentences it was made from. A link with
-#page=N opens most PDF viewers at that page. To show the passage, the page is drawn as a picture
-and each of those sentences is found on it and highlighted, the way the app's source viewer does.
-
-The code: page_picture() in core/documents.py, /page/<ref> in app/app.py
+"""Open the page: a link to the cited page, and a picture of it with the passage highlighted.
 
 Run: python learn/3_text_rag/12_open_the_page.py
      python learn/3_text_rag/12_open_the_page.py "What is multi-head attention?"

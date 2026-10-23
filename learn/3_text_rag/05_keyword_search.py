@@ -1,11 +1,4 @@
-"""Keyword search: when the exact word matters more than the meaning.
-
-To an embedding, "2048" and "4096" mean nearly the same thing: a big power of two. Papers are full
-of exact symbols and numbers: dff, warmup_steps, P100, 28.4. BM25 scores exact words, weighing each
-one by how rare it is across all chunks: "model" is in dozens of chunks and counts for little,
-"warmup" is in one or two and counts for a lot. Stop words like "what" and "the" are dropped first.
-
-The code: core/keywords.py
+"""Keyword search (BM25): exact words win where embeddings blur, like warmup_steps or 2048.
 
 Run: python learn/3_text_rag/05_keyword_search.py
      python learn/3_text_rag/05_keyword_search.py "P100"

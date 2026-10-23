@@ -1,8 +1,4 @@
-"""Download the paper this workshop searches.
-
-"Attention Is All You Need", Vaswani et al., Google Brain and Google Research, 2017: fifteen pages of
-text, tables, two architecture diagrams that are pictures, and attention plots drawn as vector graphics.
-It is downloaded from arXiv rather than kept in the repository; the index of it is in index/.
+"""Download the paper from arXiv.
 
 Run: python data/get_paper.py
 """

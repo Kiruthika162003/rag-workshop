@@ -1,12 +1,4 @@
-"""Two scales: why picture scores and text scores cannot simply be compared.
-
-Each figure is found two ways: by what it looks like (CLIP, picture against question) and by its
-description (the text model, description against question). CLIP scores sit around 0.2 to 0.3,
-text scores around 0.6 to 0.8: the gap between modalities. Taking the larger number would mean
-the text score always wins. Ranks do not have that problem, so the two lists are fused by rank,
-the same reciprocal rank fusion as hybrid search.
-
-The code: pictures() in core/search.py
+"""Two scales: picture scores sit near 0.3, text near 0.7, so the two searches are merged by rank.
 
 Run: python learn/4_multimodal_rag/03_two_scales.py
      python learn/4_multimodal_rag/03_two_scales.py "Which words does 'its' attend to?"

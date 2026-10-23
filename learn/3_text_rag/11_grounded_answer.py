@@ -1,9 +1,4 @@
-"""The grounded answer: what the model is told, and how it cites.
-
-Every source goes in numbered, with its page and section. The rules say: cite a number after every
-fact, read figures and tables from the picture, and say "I could not find it" rather than guess.
-
-The code: prompt() and answer() in core/answer.py, the rules ANSWER in core/prompts.py
+"""The grounded answer: the exact prompt, numbered sources with pages, and the cited answer.
 
 Run: python learn/3_text_rag/11_grounded_answer.py
      python learn/3_text_rag/11_grounded_answer.py "How many GPUs did they use?"

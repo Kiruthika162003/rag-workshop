@@ -1,16 +1,5 @@
 """Answer relevancy: does the answer address the question that was asked?
 
-An answer can be faithful to its sources and still miss the point. The trick Ragas uses: a model
-writes the questions the answer would be a good answer to, and those are compared with the real
-question by embedding similarity, on your computer. An answer that only says "could not find" is
-honest, so it can be faithful, but it scores 0 here: it does not answer.
-
-    answer relevancy = average similarity between the question and the questions the answer answers
-
-Three answers to the same question, one judge call each.
-
-The code: answer_relevancy() in core/metrics.py, the prompt ASKED in core/prompts.py
-
 Run: python learn/7_evaluation/03_answer_relevancy.py
 """
 

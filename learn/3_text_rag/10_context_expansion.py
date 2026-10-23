@@ -1,10 +1,4 @@
-"""Context expansion, or small to big: search with small chunks, answer with bigger ones.
-
-Small chunks are easy to find, because each one is about one thing. But the sentence that answers
-the question often needs the sentence before it. So the answer step gets each chunk together with
-its neighbours on the same page; the page number it cites stays right.
-
-The code: with_neighbours() in core/search.py
+"""Context expansion: find a small chunk, answer with it and its neighbours on the same page.
 
 Run: python learn/3_text_rag/10_context_expansion.py
      python learn/3_text_rag/10_context_expansion.py "How was the big model trained?"

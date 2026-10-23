@@ -1,4 +1,4 @@
-"""Check your setup one thing at a time. It stops at the first problem and says how to fix it.
+"""Check the setup one step at a time; it stops at the first problem and says how to fix it.
 
 Run: python check.py
 """

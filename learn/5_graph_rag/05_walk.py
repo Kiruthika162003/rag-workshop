@@ -1,15 +1,4 @@
-"""Walk: follow the links one hop at a time, and watch the answer come within reach.
-
-A walk is only as good as its links. The paper never states "the bottom line of Table 3 is the
-Transformer (big)" as one fact: the chunk says "the big transformer model ... the configuration of
-this model is listed in the bottom line of Table 3". So a walk that starts only at "the bottom line
-of Table 3" never reaches the model. Graph RAG starts from both ways in (04_where_to_start.py):
-the names in the question, and the names in the best chunks, which include "transformer big".
-
-Each hop below prints only the new facts that share a word with the question.
-Hubs like "we" are never walked through (02_entities.py).
-
-The code: Graph.walk() in core/graph.py, graph_facts() in core/rag.py
+"""Walk: follow the links hop by hop until the answer is in reach.
 
 Run: python learn/5_graph_rag/05_walk.py
      python learn/5_graph_rag/05_walk.py "What are the parts of each encoder layer?"

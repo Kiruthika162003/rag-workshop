@@ -1,9 +1,4 @@
-"""Explore the graph: every fact that touches one thing, from every part of the paper it appears in.
-
-A vector search sees chunks one at a time. The graph sees that "Transformer (big)" is in the training
-section, the results table, Table 3 and the conclusion, and that those facts are about the same model.
-
-The code: Graph.links in core/graph.py
+"""Explore the graph: every fact about one thing, from every section.
 
 Run: python learn/5_graph_rag/03_explore_the_graph.py
      python learn/5_graph_rag/03_explore_the_graph.py "multi-head attention"

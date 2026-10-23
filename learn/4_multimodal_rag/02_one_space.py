@@ -1,11 +1,4 @@
-"""One space for pictures and words: CLIP.
-
-CLIP was trained on hundreds of millions of pictures with their captions, so that a picture and a
-sentence describing it end up close together. It runs on your computer. A typed question can now
-find a figure by what it looks like, and a figure can be the query: here Figure 1 itself is
-compared with a few descriptions, and with the other figures.
-
-The code: embed_picture() and embed_query_for_pictures() in core/embeddings.py
+"""CLIP: pictures and words in one space, so words can find a figure.
 
 Run: python learn/4_multimodal_rag/02_one_space.py
      python learn/4_multimodal_rag/02_one_space.py "lines connecting words in two rows"

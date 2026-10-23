@@ -1,9 +1,4 @@
-"""A vector store small enough to read in one sitting: vectors in a numpy file, records in JSON.
-
-Production systems use Vertex AI Vector Search, AlloyDB, pgvector or similar, but they all do
-what this file does: score every stored chunk, drop the ones the metadata filter rules out, and
-return the best of what is left.
-"""
+"""The vector store: a numpy matrix and a JSON list, with metadata filters."""
 
 import json
 import re
@@ -35,8 +30,7 @@ class Store:
 
     @staticmethod
     def passes(record: dict, section=None, pages=None) -> bool:
-        """The metadata filter. section: a number or a name, like "5.2" or "Training", which also
-        matches everything inside it. pages: (first, last)."""
+        """The metadata filter: section, like "5.2" or "Training", and pages (first, last)."""
         in_section = not section or re.search(rf"(^|/ )(\d+(\.\d+)*\s)?{re.escape(section)}", record["section"], re.I)
         on_pages = not pages or pages[0] <= record["page"] <= pages[1]
         return bool(in_section and on_pages)

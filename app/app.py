@@ -1,5 +1,4 @@
-"""The web app: four tabs, one scenario each. A question goes to every kind of RAG in the tab at once,
-side by side, with every source one click away and the architecture of each one in a side panel.
+"""The web app: four tabs, every RAG side by side, with sources and metrics.
 
 Run: python app/app.py   then open http://localhost:5050
 """
@@ -30,8 +29,7 @@ KINDS = {
 
 
 def warm_up():
-    """Load both embedding models, every index and the graph, and open the connection to Gemini,
-    before the first question rather than during it."""
+    """Load the models, the indexes and the Gemini connection before the first question."""
     gemini.ask("Reply with one word: ready")
     embed_query("warm up")
     embed_query_for_pictures("warm up")

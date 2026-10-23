@@ -1,23 +1,4 @@
-"""Retrieval metrics: measure the search on its own, before any answer is written.
-
-If the right chunk is not retrieved, no prompt can fix the answer. So retrieval gets its own test:
-sixteen questions, each with words that only the chunks answering it contain (FINDS in
-core/questions.py). A chunk is relevant if it contains those words. Every way of searching runs on all:
-
-    hit@4         was any relevant chunk in the top 4, the number the answer step sees?
-    precision@4   what share of the top 4 is relevant?
-    recall@4      what share of all the relevant chunks made the top 4?
-    MRR           1 / the place of the first relevant chunk, averaged: 1 is always first
-    nDCG@4        like recall, but a relevant chunk at place 1 counts more than one at place 4
-
-Precision@4 stays low here, and that is not a failure: most questions have only one or two relevant
-chunks, so even a perfect search cannot fill four places with them. That is why a single number is
-never enough.
-
-Cost: the searches run on your computer and cost nothing. Add --rerank for a row that asks Gemini
-to rerank once per question: sixteen small calls.
-
-The code: core/metrics.py
+"""Retrieval metrics: hit@4, precision@4, recall@4, MRR and nDCG for each search. Free, on the laptop.
 
 Run: python learn/7_evaluation/01_retrieval_metrics.py
      python learn/7_evaluation/01_retrieval_metrics.py --rerank

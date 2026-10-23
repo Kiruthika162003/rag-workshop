@@ -1,10 +1,4 @@
-"""Embeddings that run on your own computer: no cloud calls, no cost per search.
-
-    text      BAAI/bge-small-en-v1.5         384 numbers per passage; small, fast, and good
-    pictures  openai/clip-vit-base-patch32   pictures and short texts in one 512-number space
-
-Both download once from Hugging Face (about 130 MB and 600 MB) and run on the CPU.
-"""
+"""Embeddings on this computer: bge-small for text, CLIP for pictures. No cloud calls."""
 
 import io
 import os

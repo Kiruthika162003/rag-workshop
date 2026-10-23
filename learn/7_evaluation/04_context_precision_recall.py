@@ -1,15 +1,4 @@
-"""Context precision and context recall: judge what was retrieved, not what was written.
-
-    context precision   of the sources retrieved, how many are useful, and are the useful ones first?
-                        For every useful source: the share of useful sources at or above its place,
-                        averaged. 1.0 means every useful source came before every useless one.
-    context recall      of the statements in the reference answer, how many can be found in the sources?
-                        It needs a reference answer, written by a person.
-
-The question is about a colour in Figure 1. Text RAG retrieves passages, so its recall is near 0: the
-colour is not in any of them. Multimodal RAG retrieves the figure too, so it can reach 1.
-
-The code: context_precision() and context_recall() in core/metrics.py, prompts USEFUL and ATTRIBUTED
+"""Context precision and recall: useful sources retrieved first, and holding the whole answer?
 
 Run: python learn/7_evaluation/04_context_precision_recall.py
 """

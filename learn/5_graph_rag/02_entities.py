@@ -1,15 +1,4 @@
-"""Entities: decide when two names are the same thing, and which names are useless.
-
-The model writes "Transformer (big)" in one fact, "transformer big" in another and "the bottom line of
-Table 3" in a third. Unless they meet in one node, the graph has islands and no path between them.
-
-    1. one spelling   lower case, no punctuation:  key()
-    2. names inside   a node whose name contains a proper name, like "the bottom line of Table 3",
-                      is linked to that name too:  Graph.part_of
-    3. hubs           "we" and "transformer" touch dozens of facts. A walk through them reaches
-                      everything, so it never passes through one:  Graph.hubs
-
-The code: key(), is_proper(), Graph.part_of and Graph.hubs in core/graph.py
+"""Entities: one spelling per name, names inside names, and hubs that are never walked through.
 
 Run: python learn/5_graph_rag/02_entities.py
 """

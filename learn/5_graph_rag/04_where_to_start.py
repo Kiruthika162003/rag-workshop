@@ -1,11 +1,4 @@
-"""Where to start: find the nodes the question is about.
-
-Two ways in, used together:
-    1. names in the question     any node whose whole name appears in the question, like "Table 3"
-    2. names in the best chunks  search finds the two closest chunks, and the names in their facts
-                                 are the way in when the question's words are not node names
-
-The code: named_in() and from_chunks() in core/graph.py, graph_facts() in core/rag.py
+"""Where to start: names in the question, and names in the two best chunks.
 
 Run: python learn/5_graph_rag/04_where_to_start.py
      python learn/5_graph_rag/04_where_to_start.py "What does the decoder add to each layer?"

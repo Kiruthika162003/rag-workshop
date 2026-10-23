@@ -1,12 +1,4 @@
-"""Read the paper into pieces a search index can use, and remember where each piece came from.
-
-Three kinds of thing are on its pages:
-    text       headings, sentences, and table rows that keep their column names
-    pictures   figures stored as images (the architecture diagrams)
-    drawings   figures drawn as vector lines (the attention plots): no image to extract,
-               so the area is rendered into a picture
-    tables     kept twice: as rows of text, and as a picture of the table
-"""
+"""Read the PDF into pieces: headings, sentences, table rows and figures, each with its page."""
 
 import json
 import re

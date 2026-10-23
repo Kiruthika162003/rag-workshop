@@ -1,10 +1,4 @@
-"""Multimodal RAG: text RAG, plus the figures and tables, found by meaning and shown to Gemini.
-
-    1. text      hybrid search and reranking from 3_text_rag, the best three kept
-    2. figures   the two best figures or tables, by look and by description    03_two_scales.py
-    3. answer    passages as text, figures as pictures, all numbered            05_send_the_original.py
-
-The code: multimodal() in core/rag.py
+"""Multimodal RAG: text passages plus the best figures, sent to Gemini as pictures.
 
 Run: python learn/4_multimodal_rag/multimodal_rag.py
      python learn/4_multimodal_rag/multimodal_rag.py "According to Table 3, how many parameters does the big model have?"

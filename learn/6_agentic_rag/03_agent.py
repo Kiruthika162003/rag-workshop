@@ -1,10 +1,4 @@
-"""Agentic RAG: an agent picks the retrieval, the filters and the order, then checks its work.
-
-The agent has the four tools from 02_tools.py and the instruction AGENT in core/prompts.py. Nothing
-tells it which tool to use for which question. It reads the question and decides, sometimes calling
-several tools at once, sometimes one after another when the first answer raises a new question.
-
-The code: core/agent.py, built with the Agent Development Kit (ADK)
+"""Agentic RAG: an agent picks its own tools, in its own order.
 
 Run: python learn/6_agentic_rag/03_agent.py
      python learn/6_agentic_rag/03_agent.py "In the attention plot for the word 'making', which two words get the strongest attention?"

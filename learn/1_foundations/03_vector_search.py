@@ -1,10 +1,4 @@
-"""Vector search, by hand: compare the question with every chunk and keep the closest.
-
-An index is two things side by side: a matrix with one row of numbers per chunk, and the chunks
-themselves with their metadata. One matrix multiplication scores every chunk at once. Vector
-databases do exactly this, plus tricks to skip most rows when there are millions of them.
-
-The code: core/store.py
+"""Vector search by hand: score every chunk with one matrix multiplication, keep the best.
 
 Run: python learn/1_foundations/03_vector_search.py
      python learn/1_foundations/03_vector_search.py "Why scale the dot products?"

@@ -1,14 +1,4 @@
-"""Read the paper once and build the indexes the lessons and the app search.
-
-    index/naive.*         fixed 500-character chunks of the raw text, the tutorial way
-    index/text.*          semantic chunks, each with a header naming the paper and its section
-    index/pictures.*      every figure and table, embedded as a picture with CLIP
-    index/descriptions.*  the same figures and tables, embedded by their descriptions
-    index/graph.json      facts read from all of the above, each pointing back to where it came from
-
-Embeddings run on this computer. Gemini is called once per figure, to describe it, and once per
-chunk, to read its facts: about a hundred small calls, a few cents. Every Gemini answer is kept in
-index/gemini-cache.json, keyed by exactly what was sent, so building again only pays for what changed.
+"""Read the paper once and build index/: chunks, vectors, figures and the graph.
 
 Run: python build_index.py
 """

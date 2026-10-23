@@ -1,4 +1,4 @@
-"""The scorecard: every kind of RAG answers every test question, and we count who got it right.
+"""The scorecard: every kind of RAG answers every test question.
 
 Run: python evaluate.py                       all kinds, all questions (about two minutes)
      python evaluate.py --kinds naive text    only some kinds

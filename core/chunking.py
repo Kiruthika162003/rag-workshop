@@ -1,10 +1,4 @@
-"""Two ways to cut documents into chunks.
-
-fixed_chunks: every 500 characters, wherever that lands. Quick, and it splits sentences in half.
-semantic_chunks: keep neighbouring sentences together while they talk about the same thing,
-and start a new chunk where the topic changes. A chunk never crosses a page, so every chunk
-has exactly one page number to cite.
-"""
+"""Cut pieces into chunks: fixed every N characters, or semantic, where the topic changes."""
 
 import numpy as np
 
@@ -14,9 +8,7 @@ def fixed_chunks(text: str, size: int = 500) -> list[str]:
 
 
 def semantic_chunks(pieces: list[dict], vectors: list[np.ndarray], max_chars: int = 900) -> list[list[dict]]:
-    """A new chunk starts at a heading, at a page break, when a chunk gets too long, or where two
-    neighbouring pieces stop being similar, once the chunk has enough to stand on its own.
-    A table row is a record, like one model in a results table: it is always a chunk of its own."""
+    """Start a new chunk at a heading, a row, a new page, a topic change, or when too long."""
     gaps = [float(a @ b) for a, b in zip(vectors, vectors[1:])]
     # "Not similar" is relative to this document: the lowest quarter of its neighbour similarities.
     cut_below = np.percentile(gaps, 25) if gaps else 0

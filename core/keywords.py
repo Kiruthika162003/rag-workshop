@@ -1,9 +1,4 @@
-"""Keyword search with BM25, the scoring behind Elasticsearch, OpenSearch and most search boxes.
-
-Embeddings match meaning, so "dff = 2048" and "dff = 4096" look almost the same to them.
-Keyword search matches the exact words, and BM25 weighs each word by how rare it is:
-a word in every chunk, like "model", counts for little; a word in one chunk, like "warmup", counts a lot.
-"""
+"""Keyword search with BM25: exact words, and rare words count for more."""
 
 import math
 import re

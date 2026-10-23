@@ -1,19 +1,5 @@
-"""How good is a RAG? Measure the search and the answer separately.
-
-Retrieval, before any answer is written. Needs labels: which chunks are relevant. No model calls.
-    hit@k          was any relevant chunk in the top k?
-    precision@k    what share of the top k is relevant?
-    recall@k       what share of all the relevant chunks made the top k?
-    MRR            1 / the place of the first relevant chunk
-    nDCG@k         relevant chunks count for more the higher they are ranked
-
-The answer, judged by a model, the way Ragas, DeepEval and the Vertex AI evaluation service do it:
-    faithfulness       claims in the answer that the sources support             answer   vs sources
-    answer relevancy   does the answer address the question that was asked       answer   vs question
-    context precision  retrieved sources that are useful, and ranked first       sources  vs question
-    context recall     statements of the reference answer found in the sources   sources  vs reference
-Every score is between 0 and 1. Context recall needs a reference answer; the other three do not.
-"""
+"""RAG metrics: retrieval (hit@k, precision@k, recall@k, MRR, nDCG) and judged (faithfulness,
+answer relevancy, context precision, context recall)."""
 
 import math
 from concurrent.futures import ThreadPoolExecutor
@@ -68,8 +54,7 @@ def faithfulness(answer: str, sources: list[dict]) -> dict:
 
 
 def answer_relevancy(question: str, answer: str, n: int = 3) -> dict:
-    """Write the questions the answer responds to, and compare them with the question asked.
-    An answer that only says "could not find" scores 0: it is honest, but it does not answer."""
+    """Questions the answer would answer, compared with the real one. "Could not find" scores 0."""
     reply = ask([prompts.ASKED.format(n=n), f"Answer: {answer}"], schema=prompts.ASKED_REPLY)
     if reply["noncommittal"] or not reply["questions"]:
         return {"score": 0.0, "questions": reply["questions"]}
@@ -78,8 +63,7 @@ def answer_relevancy(question: str, answer: str, n: int = 3) -> dict:
 
 
 def context_precision(question: str, sources: list[dict], reference: str | None = None) -> dict:
-    """Average precision: for every useful source, the share of useful ones at or above its place.
-    Useful sources ranked first score 1; useful sources buried under useless ones score less."""
+    """Average precision: useful sources ranked first score 1."""
     task = f"Question: {question}" + (f"\nReference answer: {reference}" if reference else "")
     verdicts = {v["n"]: v["useful"] for v in ask([prompts.USEFUL, "Sources:", *evidence(sources), task], schema=prompts.USEFUL_REPLY)}
     useful = [bool(verdicts.get(n)) for n in range(1, len(sources) + 1)]

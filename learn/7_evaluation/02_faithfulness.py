@@ -1,14 +1,4 @@
-"""Faithfulness: is every claim in the answer backed by a source?
-
-A fluent answer can still add things the sources never said. A judge model splits the answer into
-claims and checks each one against the sources it was written from, figures included as pictures.
-
-    faithfulness = supported claims / all claims
-
-To show what a failure looks like, the same check then runs on the answer with one invented
-sentence added to it. Two judge calls, plus the answer.
-
-The code: faithfulness() in core/metrics.py, the prompt FAITHFUL in core/prompts.py
+"""Faithfulness: the share of the answer's claims that the sources support.
 
 Run: python learn/7_evaluation/02_faithfulness.py
      python learn/7_evaluation/02_faithfulness.py "What optimizer was used?"

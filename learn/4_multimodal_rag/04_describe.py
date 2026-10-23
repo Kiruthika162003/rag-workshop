@@ -1,11 +1,4 @@
-"""Describe: give every figure and table a text twin, once.
-
-When the index is built, Gemini looks at each figure once and writes down every label, number and
-connection in it. The description is searched by meaning and by keywords, it is what corrective RAG
-and the agent read first, and it is the fallback answer if sending the picture fails. Every answer is
-kept in index/gemini-cache.json, so building the index again does not pay for the same picture twice.
-
-The code: describe() in build_index.py, the prompt DESCRIBE in core/prompts.py
+"""Describe: Gemini writes a text description of every figure, once, when the index is built.
 
 Run: python learn/4_multimodal_rag/04_describe.py
      python learn/4_multimodal_rag/04_describe.py p2      one figure in full

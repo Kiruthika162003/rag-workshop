@@ -1,8 +1,4 @@
-"""The only file that calls Google: Gemini reads what was retrieved and writes the answer.
-
-Embeddings run on your own computer (core/embeddings.py), so searching costs nothing. Gemini is
-called only to read: answers, reranking, describing a figure once, and reading facts once.
-"""
+"""The only file that calls Google: Gemini reads and answers; it never searches."""
 
 import json
 import os

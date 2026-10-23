@@ -1,10 +1,4 @@
-"""Graph RAG: a search finds where to start, the knowledge graph connects the rest.
-
-    1. start     names in the question, and in the two best chunks          04_where_to_start.py
-    2. walk      three hops along the links, never through a hub             05_walk.py
-    3. answer    the facts, and the chunks they came from, numbered          core/answer.py
-
-The code: graph_rag() in core/rag.py
+"""Graph RAG: find where to start, walk three hops, answer from the facts.
 
 Run: python learn/5_graph_rag/graph_rag.py
      python learn/5_graph_rag/graph_rag.py "What are the parts of each encoder layer?"
