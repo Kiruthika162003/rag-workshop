@@ -140,8 +140,11 @@ cloud calls at all.
 
 | file | the idea |
 |---|---|
-| `01_retrieval_metrics.py` | hit@1, hit@4 and MRR for every way of searching *(local; --rerank adds Gemini)* |
+| `01_retrieval_metrics.py` | hit@k, precision@k, recall@k, MRR and nDCG for every way of searching *(local; --rerank adds Gemini)* |
 | `02_faithfulness.py` | is every claim in the answer backed by a source? |
+| `03_answer_relevancy.py` | does the answer address the question that was asked? |
+| `04_context_precision_recall.py` | did the search hand over useful sources, ranked first, holding the whole answer? |
+| `05_compare_rags.py` | all four judged metrics, for every kind of RAG, on one question |
 
 ## The app
 
@@ -153,7 +156,8 @@ Open http://localhost:5050. Four tabs, one scenario each: the answer is in the t
 joined across three places, or the question is vague. Ask sends the question to every kind of RAG in
 the tab at once; Explain opens what the method is, when to choose it, and its architecture. Click any
 citation to see
-the page it came from, with the passage highlighted or the figure outlined.
+the page it came from, with the passage highlighted or the figure outlined. **Evaluate this answer** on any
+card scores it on faithfulness, answer relevancy, context precision and context recall, with the reasons.
 
 ## What is in the repository
 
@@ -170,7 +174,8 @@ core/       the building blocks, one idea per file
   search.py      vector, keyword and hybrid search, diversity, neighbours, figures
   query.py       self-query filters, multi-query, HyDE
   rerank.py      the reranker
-  answer.py      answers that cite their sources, and the faithfulness check
+  answer.py      answers that cite their sources
+  metrics.py     retrieval metrics, and the four judged RAG metrics
   graph.py       facts as links, entity resolution, hubs, and the walk
   rag.py         naive, text, multimodal, graph and corrective RAG, each a few lines
   agent.py       the agent, with four tools

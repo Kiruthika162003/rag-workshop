@@ -60,15 +60,25 @@ Question: {question}
 {passages}"""
 RERANK_REPLY = types.Schema(type="ARRAY", items=schema(n="INTEGER", score="INTEGER"))
 
-GROUNDED = """Check an answer against the sources it was written from.
-Split the answer into its separate claims. For each claim, say whether the sources support it.
-A claim is supported only if a source states it; sounding right is not enough.
+# ---------------------------------------------------------------- evaluating: a model as the judge
+# Each judge gets its instruction, then the numbered sources (figures as pictures), then what it judges.
 
-Sources:
-{sources}
+FAITHFUL = """You check an answer against the sources it was written from.
+Split the answer into its separate factual claims; leave out citations like [1]. For each claim, say whether
+the sources support it. A claim is supported only if a source states or shows it; sounding right is not enough."""
+FAITHFUL_REPLY = types.Schema(type="ARRAY", items=schema(claim="STRING", supported="BOOLEAN"))
 
-Answer: {answer}"""
-GROUNDED_REPLY = types.Schema(type="ARRAY", items=schema(claim="STRING", supported="BOOLEAN"))
+USEFUL = """You judge retrieved sources. For each numbered source, say whether it is useful for answering the
+question: it contains part of the answer, or something the answer needs. Being on the same topic is not enough."""
+USEFUL_REPLY = types.Schema(type="ARRAY", items=schema(n="INTEGER", useful="BOOLEAN"))
+
+ATTRIBUTED = """You check whether retrieved sources contain a reference answer.
+Split the reference answer into its separate statements. For each one, say whether the sources state or show it."""
+ATTRIBUTED_REPLY = types.Schema(type="ARRAY", items=schema(statement="STRING", found="BOOLEAN"))
+
+ASKED = """Here is an answer. Write the {n} questions it most directly answers, as a person would ask them.
+If the answer only says it could not find the answer, set noncommittal to true."""
+ASKED_REPLY = schema(questions=["STRING"], noncommittal="BOOLEAN")
 
 
 # ---------------------------------------------------------------- building the index, once

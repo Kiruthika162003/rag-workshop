@@ -15,6 +15,7 @@ from core.agent import ask_agent
 from core.documents import DOCS, page_picture
 from core.embeddings import embed_query, embed_query_for_pictures
 from core.graph import graph, key
+from core.metrics import judge
 from core.questions import QUESTIONS, correct, from_memory
 from core.store import store
 
@@ -62,6 +63,15 @@ def ask():
         said = "" if "could not find" in result["answer"].lower() else key(result["answer"])
         result["graph"]["path"] = [f for f in result["graph"]["facts"] if key(f["subject"]) in said and key(f["object"]) in said]
     return jsonify(result)
+
+
+@app.post("/evaluate")
+def evaluate():
+    """The four RAG metrics for one answer: four judge calls, only when Evaluate is pressed."""
+    body = request.get_json()
+    test = next((q for q in QUESTIONS if q["ask"] == body["question"]), {})
+    scores = judge(body["question"], body["answer"], body["sources"], test.get("reference"))
+    return jsonify({**scores, "reference": test.get("reference")})
 
 
 @app.errorhandler(Exception)

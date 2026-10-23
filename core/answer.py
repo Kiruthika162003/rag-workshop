@@ -1,4 +1,4 @@
-"""The last step of every RAG: turn what was retrieved into an answer that cites it, then check it."""
+"""The last step of every RAG: turn what was retrieved into an answer that cites it."""
 
 from google.genai import errors
 
@@ -38,14 +38,7 @@ def answer(question: str, sources: list[dict], facts=()) -> dict:
     return {"answer": reply, "sources": [shown(s) for s in sources]}
 
 
-def grounded(reply: str, sources: list[dict]) -> list[dict]:
-    """Faithfulness: split the answer into claims and check each against the sources, the way RAG
-    evaluation tools such as Ragas and the Vertex AI evaluation service do."""
-    listed = "\n\n".join(f"[{n}] {s['text']}" for n, s in enumerate(sources, start=1))
-    return ask(prompts.GROUNDED.format(sources=listed, answer=reply), schema=prompts.GROUNDED_REPLY)
-
-
 def shown(source: dict) -> dict:
     """What the terminal and the page need to show a source."""
-    keep = ("id", "doc", "title", "section", "page", "type", "text", "score", "rerank", "find", "box", "media")
+    keep = ("id", "doc", "title", "section", "page", "type", "text", "score", "rerank", "find", "box", "media", "mime")
     return {k: source[k] for k in keep if k in source}

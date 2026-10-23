@@ -6,6 +6,7 @@ from core.chunking import fixed_chunks, semantic_chunks
 from core.documents import library, pieces
 from core.graph import is_proper, key
 from core.keywords import Keywords, words
+from core.metrics import hit_at, ndcg_at, precision_at, recall_at, reciprocal_rank
 from core.questions import QUESTIONS, correct
 from core.search import fuse, with_neighbours
 from core.store import Store
@@ -84,3 +85,11 @@ def test_answer_checker():
     assert not correct(in_order, "SoftMax comes after the Mask step.")
     assert not correct(in_order, "I could not find the mask or softmax.")
     assert all(q["expect"] for q in QUESTIONS)
+
+
+def test_retrieval_metrics():
+    ranked = [False, True, False, True]      # relevant chunks at places 2 and 4, out of 2 in all
+    assert hit_at(ranked, 1) == 0 and hit_at(ranked, 2) == 1
+    assert precision_at(ranked, 4) == 0.5 and recall_at(ranked, 4, total=2) == 1.0
+    assert reciprocal_rank(ranked) == 0.5
+    assert ndcg_at([True, True], 2, total=2) == 1.0 and 0 < ndcg_at(ranked, 4, total=2) < 1
