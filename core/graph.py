@@ -8,33 +8,13 @@ to its station, to the station's manager, to the manager's phone number.
 import json
 import re
 from collections import defaultdict
-from pathlib import Path
+from functools import cache, cached_property
 
-from google.genai import types
-
+from core import prompts
 from core.gemini import ask
+from core.store import INDEX
 
-INDEX = Path(__file__).parents[1] / "index"
-
-FACTS = types.Schema(type="ARRAY", items=types.Schema(
-    type="OBJECT",
-    properties={
-        "subject": types.Schema(type="STRING"),
-        "relation": types.Schema(type="STRING"),
-        "object": types.Schema(type="STRING"),
-        "since": types.Schema(type="STRING", description="YYYY-MM-DD the fact starts being true, if the text says so, else empty"),
-    },
-    required=["subject", "relation", "object", "since"],
-))
-
-READ_FACTS = """Write down every fact this passage states, as subject, relation, object.
-- Use people's full names, and station names without the word "station".
-- Relations are short and lower case, like "manages", "has phone", "happened at", "replaces".
-- Put a date in "since" only when the passage says when the fact starts.
-- Only facts the passage states. Nothing you know from elsewhere.
-
-Passage, from "{title}" dated {date}:
-{text}"""
+HUB = 20  # a node with more facts than this is a hub
 
 
 def key(name: str) -> str:
@@ -43,8 +23,19 @@ def key(name: str) -> str:
     return " ".join(re.sub(r"[^\w\s-]", " ", name).split())
 
 
+def is_name(text: str) -> bool:
+    """Names like "Daniel Kim" or "Monument Square", not words like "dock" or "manager" that link to everything."""
+    return len(text) > 4 and text[0].isupper() and not text[:4].isdigit()
+
+
+def is_proper(text: str) -> bool:
+    """Proper names of two words or more, every word capitalised: "Monument Square", "Daniel Kim"."""
+    words = text.split()
+    return len(words) > 1 and all(word[0].isupper() or word[0].isdigit() for word in words)
+
+
 def read_facts(chunk: dict) -> list[dict]:
-    facts = ask(READ_FACTS.format(**chunk), schema=FACTS)
+    facts = ask(prompts.READ_FACTS.format(**chunk), schema=prompts.READ_FACTS_REPLY)
     return [{**fact, "source": chunk["id"]} for fact in facts if fact["subject"] and fact["object"]]
 
 
@@ -55,6 +46,11 @@ class Graph:
         for fact in self.facts:
             self.links[key(fact["subject"])].append(fact)
             self.links[key(fact["object"])].append(fact)
+        # Entity resolution: the model may write "Monument Square, dock 7" in one fact and "Monument Square"
+        # in another. A node whose name contains a proper name is linked to that name as well.
+        names = {key(n) for f in self.facts for n in (f["subject"], f["object"]) if is_proper(n)}
+        self.part_of = {node: {n for n in names if n != node and re.search(rf"\b{re.escape(n)}\b", node)}
+                        for node in self.links}
 
     @staticmethod
     def save(facts: list[dict]):
@@ -68,24 +64,37 @@ class Graph:
     def from_chunks(self, chunk_ids: set[str]) -> set[str]:
         """Nodes mentioned in the chunks a vector search found: the way in when a question names nothing."""
         names = {f[side] for f in self.facts if f["source"] in chunk_ids for side in ("subject", "object")}
-        # Start from names, not from words like "dock" or "manager" that link to everything.
-        return {key(name) for name in names if len(name) > 4 and name[0].isupper() and not name[:4].isdigit()}
+        return {key(name) for name in names if is_name(name)}
 
-    def walk(self, start: set[str], hops: int = 3, limit: int = 40) -> list[dict]:
+    def ends(self, fact: dict) -> set[str]:
+        """The two nodes a fact links, and the known names inside them."""
+        ends = {key(fact["subject"]), key(fact["object"])}
+        return ends.union(*(self.part_of[end] for end in ends))
+
+    @cached_property
+    def hubs(self) -> set[str]:
+        """Nodes linked to almost everything, like "we" or "transformer". Walking through one reaches
+        every fact in the paper, so the walk may start at a hub but never passes through one."""
+        return {node for node, facts in self.links.items() if len(facts) > HUB}
+
+    def walk(self, start: set[str], hops: int = 3, limit: int = 60) -> list[dict]:
         """Every fact within a few links of the starting nodes, nearest first."""
         seen_nodes, seen_facts, found, frontier = set(start), set(), [], set(start)
-        for _ in range(hops):
+        for hop in range(hops):
             next_frontier = set()
-            for node in frontier:
+            for node in frontier if hop == 0 else frontier - self.hubs:
                 for fact in self.links.get(node, []):
                     marker = (fact["subject"], fact["relation"], fact["object"], fact["source"])
                     if marker in seen_facts:
                         continue
                     seen_facts.add(marker)
                     found.append(fact)
-                    for side in (key(fact["subject"]), key(fact["object"])):
-                        if side not in seen_nodes:
-                            seen_nodes.add(side)
-                            next_frontier.add(side)
+                    next_frontier |= self.ends(fact) - seen_nodes
+                    seen_nodes |= self.ends(fact)
             frontier = next_frontier
         return found[:limit]
+
+
+@cache
+def graph() -> Graph:
+    return Graph()

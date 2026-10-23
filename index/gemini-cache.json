@@ -1,0 +1,5848 @@
+{
+ "fa1c2776c5357e7daa28adac820606d815fbb53b19906d5f81f90673fc6abca3": "This is an architectural diagram showing the Transformer model structure from the paper Attention Is All You Need.\n\nText labels, numbers, and words in the diagram:\nInputs\nInput Embedding\nPositional Encoding\nNx\nAdd & Norm\nMulti-Head Attention\nFeed Forward\nOutputs (shifted right)\nOutput Embedding\nMasked Multi-Head Attention\nLinear\nSoftmax\nOutput Probabilities\n\nConnections and data flow in the diagram:\n\n1. Encoder Stack (Left Side):\n- Inputs enter at the bottom and flow into Input Embedding.\n- Input Embedding combines via element-wise addition (+) with Positional Encoding.\n- This combined vector flows into the Encoder block, which is repeated N times (Nx).\n- Inside the Encoder block, the input splits into three paths entering Multi-Head Attention (representing Query, Key, and Value vectors).\n- The input also bypasses Multi-Head Attention via a residual shortcut connection.\n- Multi-Head Attention output and the residual shortcut connect into Add & Norm.\n- The output from the first Add & Norm splits into two paths: one enters the Feed Forward layer, and the other bypasses it as a residual shortcut connection.\n- Feed Forward output and the residual shortcut connect into the second Add & Norm layer.\n- The output of the top Add & Norm in the Encoder stack flows out to the Decoder stack.\n\n2. Decoder Stack (Right Side):\n- Outputs (shifted right) enter at the bottom and flow into Output Embedding.\n- Output Embedding combines via element-wise addition (+) with Positional Encoding.\n- This combined vector flows into the Decoder block, which is repeated N times (Nx).\n- Inside the Decoder block, the input splits into three paths entering Masked Multi-Head Attention.\n- The input also bypasses Masked Multi-Head Attention via a residual shortcut connection.\n- Masked Multi-Head Attention output and the residual shortcut connect into the first Add & Norm layer.\n- Output from the first Add & Norm splits: one path goes upward to form the Query input for the middle Multi-Head Attention layer, while another path bypasses this attention layer via a residual shortcut connection.\n- The output from the Encoder stack on the left splits into two paths to provide the Key and Value inputs to the middle Multi-Head Attention layer in the Decoder.\n- The output from the middle Multi-Head Attention and its residual shortcut connect into the second Add & Norm layer.\n- Output from the second Add & Norm splits into two paths: one enters the Feed Forward layer, and the other bypasses it as a residual shortcut connection.\n- Feed Forward output and the residual shortcut connect into the third Add & Norm layer.\n\n3. Final Output Stack (Top):\n- Output from the top Add & Norm layer of the Decoder stack flows into the Linear layer.\n- Linear layer output flows into the Softmax layer.\n- Softmax layer outputs the final Output Probabilities at the top.",
+ "24135cfbe28c7a61eaf57832555629e857313ef888e12a11ef4ff4d21c74c4ef": "This is a schematic diagram illustrating the Multi-Head Attention mechanism from the paper \"Attention Is All You Need\".\n\nLabels, words, and letter designations present in the diagram:\n- V\n- K\n- Q\n- Linear\n- Scaled Dot-Product Attention\n- h\n- Concat\n\nHow the parts connect from bottom to top:\n1. Inputs at the bottom: The mechanism receives three main inputs labeled V (Values), K (Keys), and Q (Queries).\n2. Projections: Each of the three inputs (V, K, Q) passes through its own separate set of parallel Linear projection layers. There are multiple stacked boxes representing \"h\" parallel linear projections for each input.\n3. Attention Calculation: The projected outputs for V, K, and Q enter the Scaled Dot-Product Attention layer. This layer is also shown stacked to indicate \"h\" parallel attention heads running concurrently.\n4. Concatenation: The output vectors from all \"h\" attention heads are fed into a single Concat (Concatenation) layer, which combines them into a single tensor.\n5. Final Projection: The concatenated output passes through a final Linear layer at the top, which produces the final output vector of the Multi-Head Attention block.",
+ "b287a975d3edf3ec87b25c2d2f78eee15d1860cb1835736d1c6f78066d6eff2c": "This image is a schematic diagram illustrating the Scaled Dot-Product Attention mechanism.\n\nThe labels and text in the diagram, reading from bottom to top and left to right, are:\n\nQ\nK\nV\nMatMul\nScale\nMask (opt.)\nSoftMax\nMatMul\n\nThe structural connections flow as follows:\n\nThe inputs Q (Query) and K (Key) enter the first MatMul block from below. The output of this MatMul block goes upward into the Scale block. The output of the Scale block goes upward into the Mask (opt.) block. The output of the Mask (opt.) block goes upward into the SoftMax block. The output of the SoftMax block enters the left side of the second MatMul block at the top. The input V (Value) bypasses the intermediate stages and goes straight up to enter the right side of the second MatMul block. An arrow points upward out of the second MatMul block, representing the final output.",
+ "53b59c26776d2126f742ad8440ce67253f7fe1cc39b18423bde8981766d11dc1": "This image is a table presenting variations of the Transformer model architecture and their corresponding performance metrics, taken from the paper \"Attention Is All You Need\".\n\nThe main header row lists ten column titles from left to right:\nN, d_model, d_ff, h, d_k, d_v, P_drop, epsilon_ls, train steps, PPL (dev), BLEU (dev), params x 10^6.\nNote that the last three column headers are grouped under a combined rightmost section: PPL (dev), BLEU (dev), and params x 10^6.\n\nBelow the header row, the table is divided into rows representing different model configurations:\n\nFirst row (base model configuration):\nRow label: base\nN: 6\nd_model: 512\nd_ff: 2048\nh: 8\nd_k: 64\nd_v: 64\nP_drop: 0.1\nepsilon_ls: 0.1\ntrain steps: 100K\nPPL (dev): 4.92\nBLEU (dev): 25.8\nparams x 10^6: 65\n\nSection (A) explores variations in the number of attention heads h, d_k, and d_v while keeping other parameters fixed to the base model:\nRow 1: h: 1, d_k: 512, d_v: 512, PPL (dev): 5.29, BLEU (dev): 24.9\nRow 2: h: 4, d_k: 128, d_v: 128, PPL (dev): 5.00, BLEU (dev): 25.5\nRow 3: h: 16, d_k: 32, d_v: 32, PPL (dev): 4.91, BLEU (dev): 25.8\nRow 4: h: 32, d_k: 16, d_v: 16, PPL (dev): 5.01, BLEU (dev): 25.4\n\nSection (B) explores reducing the key dimension d_k:\nRow 1: d_k: 16, PPL (dev): 5.16, BLEU (dev): 25.1, params x 10^6: 58\nRow 2: d_k: 32, PPL (dev): 5.01, BLEU (dev): 25.4, params x 10^6: 60\n\nSection (C) explores variations in the number of layers N, d_model, d_k, d_v, and d_ff:\nRow 1: N: 2, PPL (dev): 6.11, BLEU (dev): 23.7, params x 10^6: 36\nRow 2: N: 4, PPL (dev): 5.19, BLEU (dev): 25.3, params x 10^6: 50\nRow 3: N: 8, PPL (dev): 4.88, BLEU (dev): 25.5, params x 10^6: 80\nRow 4: d_model: 256, d_k: 32, d_v: 32, PPL (dev): 5.75, BLEU (dev): 24.5, params x 10^6: 28\nRow 5: d_model: 1024, d_k: 128, d_v: 128, PPL (dev): 4.66, BLEU (dev): 26.0, params x 10^6: 168\nRow 6: d_ff: 1024, PPL (dev): 5.12, BLEU (dev): 25.4, params x 10^6: 53\nRow 7: d_ff: 4096, PPL (dev): 4.75, BLEU (dev): 26.2, params x 10^6: 90\n\nSection (D) explores variations in dropout rate P_drop and label smoothing epsilon_ls:\nRow 1: P_drop: 0.0, PPL (dev): 5.77, BLEU (dev): 24.6\nRow 2: P_drop: 0.2, PPL (dev): 4.95, BLEU (dev): 25.5\nRow 3: epsilon_ls: 0.0, PPL (dev): 4.67, BLEU (dev): 25.3\nRow 4: epsilon_ls: 0.2, PPL (dev): 5.47, BLEU (dev): 25.7\n\nSection (E) tests using learned positional embeddings:\nDescription spanning main columns: positional embedding instead of sinusoids\nPPL (dev): 4.92\nBLEU (dev): 25.7\n\nFinal row (big model configuration):\nRow label: big\nN: 6\nd_model: 1024\nd_ff: 4096\nh: 16\nP_drop: 0.3\ntrain steps: 300K\nPPL (dev): 4.33 (bolded)\nBLEU (dev): 26.4 (bolded)\nparams x 10^6: 213",
+ "c1a7a2c4851fd59852f832879e2ec8ce02d75c7b1b4b270f738de4eeab7e4ae4": "This is a performance table from the paper \"Attention Is All You Need\" comparing different constituency parsers on the Wall Street Journal section 23 test set.\n\nThe table contains three columns labeled from left to right: Parser, Training, and WSJ 23 F1.\n\nUnder the column header Parser, the rows list the following text:\nVinyals & Kaiser el al. (2014) [37]\nPetrov et al. (2006) [29]\nZhu et al. (2013) [40]\nDyer et al. (2016) [8]\nTransformer (4 layers)\nZhu et al. (2013) [40]\nHuang & Harper (2009) [14]\nMcClosky et al. (2006) [26]\nVinyals & Kaiser el al. (2014) [37]\nTransformer (4 layers)\nLuong et al. (2015) [23]\nDyer et al. (2016) [8]\n\nUnder the column header Training, the corresponding rows contain:\nWSJ only, discriminative\nWSJ only, discriminative\nWSJ only, discriminative\nWSJ only, discriminative\nWSJ only, discriminative\nsemi-supervised\nsemi-supervised\nsemi-supervised\nsemi-supervised\nsemi-supervised\nmulti-task\ngenerative\n\nUnder the column header WSJ 23 F1, the corresponding values for each row are:\n88.3\n90.4\n90.4\n91.7\n91.3\n91.3\n91.3\n92.1\n92.1\n92.7\n93.0\n93.3\n\nThe rows are organized into four sections separated by horizontal line dividers. The first section contains the first four parsers under WSJ only, discriminative training: Vinyals & Kaiser el al. (2014) [37] with 88.3, Petrov et al. (2006) [29] with 90.4, Zhu et al. (2013) [40] with 90.4, and Dyer et al. (2016) [8] with 91.7. The second section contains Transformer (4 layers) under WSJ only, discriminative training with 91.3. The third section contains semi-supervised models: Zhu et al. (2013) [40] with 91.3, Huang & Harper (2009) [14] with 91.3, McClosky et al. (2006) [26] with 92.1, Vinyals & Kaiser el al. (2014) [37] with 92.1, followed by Transformer (4 layers) under semi-supervised training with 92.7. The final section contains Luong et al. (2015) [23] under multi-task training with 93.0 and Dyer et al. (2016) [8] under generative training with 93.3.",
+ "002593e99735e37e2468f48ee435d9de86a2d5a147539dff1a489cd5e71761b7": "This is an attention visualization diagram showing self-attention connections between words in an example sentence.\n\nThe words shown along the top sequence are:\nIt, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>\n\nThe words shown along the bottom sequence are:\nIt, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>\n\nThe word \"making\" in the top sequence is highlighted with a grey bar and connects via several colored lines to words in the bottom sequence.\n\nThe connections from the top word \"making\" lead to the following words in the bottom sequence:\n- A light pink line connects to \"2009\".\n- A pink line connects to \"making\".\n- A dark grey line connects to \"more\".\n- A dark brown line connects to \"difficult\".\n- A light purple line connects to \"<EOS>\".\n\nBelow the bottom text sequence, there are several colored heat map blocks arranged under specific tokens, including colored squares under \"making\", \"more\", \"difficult\", and \"<EOS>\".",
+ "05291f70c5239aab2fc1dbda32b04035736e7371fea8b734f8bc00c0b20b1616": "This image is a composite diagram featuring two attention visualization plots and a partial text caption at the bottom, illustrating anaphora resolution in a Transformer model.\n\nList of labels, words, and text contained in the image:\n\nTop sequence of words (top plot, repeated along top and bottom rows):\nThe\nLaw\nwill\nnever\nbe\nperfect\n,\nbut\nits\napplication\nshould\nbe\njust\n-\nthis\nis\nwhat\nwe\nare\nmissing\n,\nin\nmy\nopinion\n.\n<EOS>\n<pad>\n\nBottom sequence of words (bottom plot, repeated along top and bottom rows):\nThe\nLaw\nwill\nnever\nbe\nperfect\n,\nbut\nits\napplication\nshould\nbe\njust\n-\nthis\nis\nwhat\nwe\nare\nmissing\n,\nin\nmy\nopinion\n.\n<EOS>\n<pad>\n\nHighlighted/Selected words and visual elements in the bottom plot:\nThe word \"its\" in the upper row is highlighted with a grey rectangular box.\nThe word \"Law\" in the lower row is highlighted with a purple rectangular box at the top and a light brown box below it.\nThe word \"application\" in the lower row is highlighted with a light brown rectangular box.\nA purple line connects the upper word \"its\" to the lower word \"Law\".\nA light brown line connects the upper word \"its\" to the lower word \"application\".\n\nCaption text at the very bottom:\nure 4: Two attention heads, also in layer 5 of 6, apparently involved in anaphora resolution. Top:\nl attentions for head 5. Bottom: Isolated attentions from just the word 'its' for attention heads 5\n6. Note that the attentions are very sharp for this word.\n\nHow the parts connect:\nThe top plot shows all pairwise attention connections between the tokens of the sentence listed on top and the sentence listed below, depicted as a dense web of semi-transparent purple lines. The bottom plot isolates the attention from the specific token \"its\" in the top sentence, drawing two clear directional lines downward: a purple line pointing to \"Law\" (resolving the pronoun \"its\" to its antecedent) and a light brown line pointing to \"application\" (connecting the possessive pronoun to the noun it modifies).",
+ "20bd9189d7c187abd51246e6f19058b053f6994319673a61ad0635fcf1577f2d": "This is an attention visualization diagram consisting of two bipartite graphs showing token-to-token attention weights for two different attention heads.\n\nFigure 5: Many of the attention heads exhibit behaviour that seems related to the structure of the sentence. We give two such examples above, from two different heads from the encoder self_attention\n\nTop diagram words printed twice vertically in two aligned rows from left to right:\nThe\nLaw\nwill\nnever\nbe\nperfect\n,\nbut\nits\napplication\nshould\nbe\njust\n-\nthis\nis\nwhat\nwe\nare\nmissing\n,\nin\nmy\nopinion\n.\n<EOS>\n<pad>\n\nBottom diagram words printed twice vertically in two aligned rows from left to right:\nThe\nLaw\nwill\nnever\nbe\nperfect\n,\nbut\nits\napplication\nshould\nbe\njust\n-\nthis\nis\nwhat\nwe\nare\nmissing\n,\nin\nmy\nopinion\n.\n<EOS>\n<pad>\n\nIn the top green diagram:\nThe top word The connects to the bottom word Law.\nThe top word Law connects to the bottom word Law.\nThe top word will connects to the bottom word Law.\nThe top word never connects to the bottom word Law.\nThe top word be connects to the bottom word Law.\nThe top word perfect connects to the bottom word Law.\nThe top word comma connects to the bottom word Law.\nThe top word but connects to the bottom word application.\nThe top word its connects to the bottom word application.\nThe top word application connects to the bottom word application.\nThe top word should connects to the bottom word application.\nThe top word be connects to the bottom word application.\nThe top word just connects to the bottom word application.\nThe top word hyphen connects to the bottom word missing.\nThe top word this connects to the bottom word missing.\nThe top word is connects to the bottom word missing.\nThe top word what connects to the bottom word missing.\nThe top word we connects to the bottom word missing.\nThe top word are connects to the bottom word missing.\nThe top word missing connects to the bottom word missing.\nThe top word comma connects to the bottom word opinion.\nThe top word in connects to the bottom word opinion.\nThe top word my connects to the bottom word opinion.\nThe top word opinion connects to the bottom word opinion.\nThe top word period connects to the bottom word <EOS>.\nThe top word <EOS> connects to the bottom word <EOS>.\nThe top word <pad> connects to the bottom word <pad>.\n\nIn the bottom red diagram:\nThe top word The connects to the bottom word Law.\nThe top word Law connects to the bottom word Law.\nThe top word will connects to the bottom word never.\nThe top word never connects to the bottom word be.\nThe top word be connects to the bottom word perfect.\nThe top word perfect connects to the bottom word perfect.\nThe top word comma connects to the bottom word but.\nThe top word but connects to the bottom word application.\nThe top word its connects to the bottom word application.\nThe top word application connects to the bottom word application.\nThe top word should connects to the bottom word just.\nThe top word be connects to the bottom word just.\nThe top word just connects to the bottom word just.\nThe top word hyphen connects to the bottom word what.\nThe top word this connects to the bottom word what.\nThe top word is connects to the bottom word what.\nThe top word what connects to the bottom word what.\nThe top word we connects to the bottom word missing.\nThe top word are connects to the bottom word missing.\nThe top word missing connects to the bottom word missing.\nThe top word comma connects to the bottom word my.\nThe top word in connects to the bottom word my.\nThe top word my connects to the bottom word my.\nThe top word opinion connects to the bottom word my.\nThe top word period connects to the bottom word <EOS>.\nThe top word <EOS> connects to the bottom word <EOS>.\nThe top word <pad> connects to the bottom word <pad>.",
+ "575c96189a727a03f39c6a6671c5dc0c6174816a311189f3ec448651fe864731": [
+  {
+   "subject": "Google",
+   "relation": "grants",
+   "object": "permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works",
+   "since": ""
+  },
+  {
+   "subject": "permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works",
+   "relation": "requires",
+   "object": "proper attribution is provided",
+   "since": ""
+  }
+ ],
+ "ce55219c906dcfe32d6d3fea9f5f27f4cbb59ff922eeeb1e8f55157f565deb20": [
+  {
+   "subject": "Ashish Vaswani",
+   "relation": "affiliated with",
+   "object": "Google Brain",
+   "since": ""
+  },
+  {
+   "subject": "Ashish Vaswani",
+   "relation": "has email",
+   "object": "avaswani@google.com",
+   "since": ""
+  },
+  {
+   "subject": "Noam Shazeer",
+   "relation": "affiliated with",
+   "object": "Google Brain",
+   "since": ""
+  },
+  {
+   "subject": "Noam Shazeer",
+   "relation": "has email",
+   "object": "noam@google.com",
+   "since": ""
+  },
+  {
+   "subject": "Niki Parmar",
+   "relation": "affiliated with",
+   "object": "Google Research",
+   "since": ""
+  },
+  {
+   "subject": "Niki Parmar",
+   "relation": "has email",
+   "object": "nikip@google.com",
+   "since": ""
+  },
+  {
+   "subject": "Jakob Uszkoreit",
+   "relation": "affiliated with",
+   "object": "Google Research",
+   "since": ""
+  },
+  {
+   "subject": "Jakob Uszkoreit",
+   "relation": "has email",
+   "object": "usz@google.com",
+   "since": ""
+  },
+  {
+   "subject": "Llion Jones",
+   "relation": "affiliated with",
+   "object": "Google Research",
+   "since": ""
+  },
+  {
+   "subject": "Llion Jones",
+   "relation": "has email",
+   "object": "llion@google.com",
+   "since": ""
+  }
+ ],
+ "798d0c613b8ad641a64ae5b8c4bfeebba8b73caad9b7521ffbfcce02fbaf6853": [
+  {
+   "subject": "Aidan N. Gomez",
+   "relation": "affiliated with",
+   "object": "University of Toronto",
+   "since": ""
+  },
+  {
+   "subject": "Aidan N. Gomez",
+   "relation": "has email",
+   "object": "aidan@cs.toronto.edu",
+   "since": ""
+  },
+  {
+   "subject": "\u0141ukasz Kaiser",
+   "relation": "affiliated with",
+   "object": "Google Brain",
+   "since": ""
+  },
+  {
+   "subject": "\u0141ukasz Kaiser",
+   "relation": "has email",
+   "object": "lukaszkaiser@google.com",
+   "since": ""
+  },
+  {
+   "subject": "Illia Polosukhin",
+   "relation": "has email",
+   "object": "illia.polosukhin@gmail.com",
+   "since": ""
+  }
+ ],
+ "10e51a68b52e2b9c5624e08cc911546e90a12a8159143bed618d95d4c046d692": [
+  {
+   "subject": "dominant sequence transduction models",
+   "relation": "are based on",
+   "object": "complex recurrent or convolutional neural networks",
+   "since": ""
+  },
+  {
+   "subject": "complex recurrent or convolutional neural networks",
+   "relation": "include",
+   "object": "an encoder",
+   "since": ""
+  },
+  {
+   "subject": "complex recurrent or convolutional neural networks",
+   "relation": "include",
+   "object": "a decoder",
+   "since": ""
+  },
+  {
+   "subject": "best performing models",
+   "relation": "connect",
+   "object": "the encoder and decoder through an attention mechanism",
+   "since": ""
+  },
+  {
+   "subject": "the Transformer",
+   "relation": "is",
+   "object": "a new simple network architecture",
+   "since": ""
+  },
+  {
+   "subject": "the Transformer",
+   "relation": "is based solely on",
+   "object": "attention mechanisms",
+   "since": ""
+  },
+  {
+   "subject": "the Transformer",
+   "relation": "dispenses with",
+   "object": "recurrence",
+   "since": ""
+  },
+  {
+   "subject": "the Transformer",
+   "relation": "dispenses with",
+   "object": "convolutions",
+   "since": ""
+  },
+  {
+   "subject": "these models",
+   "relation": "are",
+   "object": "superior in quality",
+   "since": ""
+  },
+  {
+   "subject": "these models",
+   "relation": "are",
+   "object": "more parallelizable",
+   "since": ""
+  },
+  {
+   "subject": "these models",
+   "relation": "require",
+   "object": "significantly less time to train",
+   "since": ""
+  },
+  {
+   "subject": "Our model",
+   "relation": "achieves",
+   "object": "28.4 BLEU on the WMT 2014 English- to-German translation task",
+   "since": ""
+  },
+  {
+   "subject": "Our model",
+   "relation": "improves over",
+   "object": "existing best results, including ensembles, by over 2 BLEU",
+   "since": ""
+  }
+ ],
+ "45bde94fd1af7e2f998442a0a4f11dd4522831368c173f1eafc5cdf820d50990": [
+  {
+   "subject": "our model",
+   "relation": "establishes",
+   "object": "a new single-model state-of-the-art BLEU score of 41.8",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "evaluated on",
+   "object": "WMT 2014 English-to-French translation task",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "trained for",
+   "object": "3.5 days",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "trained on",
+   "object": "eight GPUs",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "generalizes well to",
+   "object": "other tasks",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "applied to",
+   "object": "English constituency parsing",
+   "since": ""
+  },
+  {
+   "subject": "English constituency parsing",
+   "relation": "has",
+   "object": "large and limited training data",
+   "since": ""
+  }
+ ],
+ "cad7a4eabe2b3459190c227fd3bb44a326239452ef89cb161b8a0333939df699": [
+  {
+   "subject": "Jakob",
+   "relation": "proposed replacing",
+   "object": "RNNs with self-attention",
+   "since": ""
+  },
+  {
+   "subject": "Jakob",
+   "relation": "started",
+   "object": "the effort to evaluate this idea",
+   "since": ""
+  },
+  {
+   "subject": "Ashish",
+   "relation": "designed and implemented",
+   "object": "the first Transformer models",
+   "since": ""
+  },
+  {
+   "subject": "Ashish",
+   "relation": "designed and implemented the first Transformer models with",
+   "object": "Illia",
+   "since": ""
+  },
+  {
+   "subject": "Ashish",
+   "relation": "has been crucially involved in",
+   "object": "every aspect of this work",
+   "since": ""
+  }
+ ],
+ "321d000479b5e06d1ac53b117a1184c36defb351838d4bd949c37c1731de4c86": [
+  {
+   "subject": "Noam",
+   "relation": "proposed",
+   "object": "scaled dot-product attention",
+   "since": ""
+  },
+  {
+   "subject": "Noam",
+   "relation": "proposed",
+   "object": "multi-head attention",
+   "since": ""
+  },
+  {
+   "subject": "Noam",
+   "relation": "proposed",
+   "object": "parameter-free position representation",
+   "since": ""
+  },
+  {
+   "subject": "Noam",
+   "relation": "became",
+   "object": "the other person involved in nearly every detail",
+   "since": ""
+  },
+  {
+   "subject": "Niki",
+   "relation": "designed",
+   "object": "countless model variants",
+   "since": ""
+  },
+  {
+   "subject": "Niki",
+   "relation": "implemented",
+   "object": "countless model variants",
+   "since": ""
+  },
+  {
+   "subject": "Niki",
+   "relation": "tuned",
+   "object": "countless model variants",
+   "since": ""
+  },
+  {
+   "subject": "Niki",
+   "relation": "evaluated",
+   "object": "countless model variants",
+   "since": ""
+  },
+  {
+   "subject": "countless model variants",
+   "relation": "is in",
+   "object": "our original codebase",
+   "since": ""
+  },
+  {
+   "subject": "countless model variants",
+   "relation": "is in",
+   "object": "tensor2tensor",
+   "since": ""
+  },
+  {
+   "subject": "Llion",
+   "relation": "experimented with",
+   "object": "novel model variants",
+   "since": ""
+  },
+  {
+   "subject": "Llion",
+   "relation": "was responsible for",
+   "object": "our initial codebase",
+   "since": ""
+  },
+  {
+   "subject": "Llion",
+   "relation": "was responsible for",
+   "object": "efficient inference",
+   "since": ""
+  },
+  {
+   "subject": "Llion",
+   "relation": "was responsible for",
+   "object": "visualizations",
+   "since": ""
+  },
+  {
+   "subject": "Lukasz and Aidan",
+   "relation": "spent",
+   "object": "countless long days",
+   "since": ""
+  },
+  {
+   "subject": "Lukasz and Aidan",
+   "relation": "designed",
+   "object": "various parts of tensor2tensor",
+   "since": ""
+  },
+  {
+   "subject": "Lukasz and Aidan",
+   "relation": "implemented",
+   "object": "tensor2tensor",
+   "since": ""
+  },
+  {
+   "subject": "tensor2tensor",
+   "relation": "replaced",
+   "object": "our earlier codebase",
+   "since": ""
+  },
+  {
+   "subject": "tensor2tensor",
+   "relation": "greatly improving",
+   "object": "results",
+   "since": ""
+  },
+  {
+   "subject": "tensor2tensor",
+   "relation": "massively accelerating",
+   "object": "our research",
+   "since": ""
+  }
+ ],
+ "160df47e2ae3e65d710c0aa1fe9b0144d1e03545cb259e3e383d22adf2c36bc3": [
+  {
+   "subject": "Attention Is All You Need",
+   "relation": "has section",
+   "object": "Abstract",
+   "since": ""
+  },
+  {
+   "subject": "\u2020Work",
+   "relation": "performed while at",
+   "object": "Google Brain",
+   "since": ""
+  },
+  {
+   "subject": "\u2021Work",
+   "relation": "performed while at",
+   "object": "Google Research",
+   "since": ""
+  }
+ ],
+ "d939007d3e35dc3b9dc16ecd2e6a596149d67404302f1ab7617f5f31cb4c89d1": [
+  {
+   "subject": "Recurrent neural networks",
+   "relation": "have been firmly established as",
+   "object": "state of the art approaches in sequence modeling and transduction problems",
+   "since": ""
+  },
+  {
+   "subject": "long short-term memory [13]",
+   "relation": "is a type of",
+   "object": "Recurrent neural networks",
+   "since": ""
+  },
+  {
+   "subject": "gated recurrent [7] neural networks",
+   "relation": "is a type of",
+   "object": "Recurrent neural networks",
+   "since": ""
+  },
+  {
+   "subject": "language modeling",
+   "relation": "is an example of",
+   "object": "sequence modeling and transduction problems",
+   "since": ""
+  },
+  {
+   "subject": "machine translation [35, 2, 5]",
+   "relation": "is an example of",
+   "object": "sequence modeling and transduction problems",
+   "since": ""
+  },
+  {
+   "subject": "Numerous efforts",
+   "relation": "pushed the boundaries of",
+   "object": "recurrent language models and encoder-decoder architectures [38, 24, 15]",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent models",
+   "relation": "factor computation along",
+   "object": "symbol positions of the input and output sequences",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent models",
+   "relation": "align",
+   "object": "positions to steps in computation time",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent models",
+   "relation": "generate",
+   "object": "sequence of hidden states ht",
+   "since": ""
+  },
+  {
+   "subject": "sequence of hidden states ht",
+   "relation": "is a function of",
+   "object": "previous hidden state ht\u22121 and the input for position t",
+   "since": ""
+  }
+ ],
+ "a78112b317a5f26e8e40226fa5e4e5d68f6b84c013b22c65ad2b44cb53433273": [
+  {
+   "subject": "inherently sequential nature",
+   "relation": "precludes",
+   "object": "parallelization within training examples",
+   "since": ""
+  },
+  {
+   "subject": "recent work",
+   "relation": "achieved",
+   "object": "significant improvements in computational efficiency",
+   "since": ""
+  },
+  {
+   "subject": "recent work",
+   "relation": "achieved significant improvements in computational efficiency through",
+   "object": "factorization tricks",
+   "since": ""
+  },
+  {
+   "subject": "recent work",
+   "relation": "achieved significant improvements in computational efficiency through",
+   "object": "conditional computation",
+   "since": ""
+  },
+  {
+   "subject": "conditional computation",
+   "relation": "improving",
+   "object": "model performance",
+   "since": ""
+  },
+  {
+   "subject": "fundamental constraint of sequential computation",
+   "relation": "remains",
+   "object": "true",
+   "since": ""
+  },
+  {
+   "subject": "attention mechanisms",
+   "relation": "have become an integral part of",
+   "object": "compelling sequence modeling and transduction models in various tasks",
+   "since": ""
+  },
+  {
+   "subject": "attention mechanisms",
+   "relation": "allowing modeling of",
+   "object": "dependencies without regard to their distance in the input or output sequences",
+   "since": ""
+  },
+  {
+   "subject": "attention mechanisms",
+   "relation": "are used in conjunction with",
+   "object": "a recurrent network",
+   "since": ""
+  }
+ ],
+ "2649eef85b8628e157d10f654a51ba7e4997265905be113c86514466a6e0b472": [
+  {
+   "subject": "Transformer",
+   "relation": "eschews",
+   "object": "recurrence",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "relies entirely on",
+   "object": "attention mechanism",
+   "since": ""
+  },
+  {
+   "subject": "attention mechanism",
+   "relation": "draws",
+   "object": "global dependencies between input and output",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "allows for",
+   "object": "significantly more parallelization",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "can reach",
+   "object": "a new state of the art in translation quality",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "trained for",
+   "object": "as little as twelve hours",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "trained on",
+   "object": "eight P100 GPUs",
+   "since": ""
+  }
+ ],
+ "564cbae17677d0dc8c6800122ec065ab45feda1cd64eb1cdf0e920c5c595cc34": [
+  {
+   "subject": "Extended Neural GPU",
+   "relation": "has goal of",
+   "object": "reducing sequential computation",
+   "since": ""
+  },
+  {
+   "subject": "ByteNet",
+   "relation": "has goal of",
+   "object": "reducing sequential computation",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S",
+   "relation": "has goal of",
+   "object": "reducing sequential computation",
+   "since": ""
+  },
+  {
+   "subject": "Extended Neural GPU",
+   "relation": "uses",
+   "object": "convolutional neural networks as basic building block",
+   "since": ""
+  },
+  {
+   "subject": "ByteNet",
+   "relation": "uses",
+   "object": "convolutional neural networks as basic building block",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S",
+   "relation": "uses",
+   "object": "convolutional neural networks as basic building block",
+   "since": ""
+  },
+  {
+   "subject": "Extended Neural GPU",
+   "relation": "computes",
+   "object": "hidden representations in parallel for all input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "ByteNet",
+   "relation": "computes",
+   "object": "hidden representations in parallel for all input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S",
+   "relation": "computes",
+   "object": "hidden representations in parallel for all input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "number of operations required to relate signals from two arbitrary input or output positions",
+   "relation": "grows in",
+   "object": "the distance between positions",
+   "since": ""
+  },
+  {
+   "subject": "number of operations required to relate signals from two arbitrary input or output positions in ConvS2S",
+   "relation": "grows linearly in",
+   "object": "the distance between positions",
+   "since": ""
+  },
+  {
+   "subject": "number of operations required to relate signals from two arbitrary input or output positions in ByteNet",
+   "relation": "grows logarithmically in",
+   "object": "the distance between positions",
+   "since": ""
+  },
+  {
+   "subject": "growth in number of operations relative to distance between positions",
+   "relation": "makes it more difficult to",
+   "object": "learn dependencies between distant positions",
+   "since": ""
+  }
+ ],
+ "688808c7cba9a918a4af0588e2923d1bb7730c5fc1f34df7939680c06fa44aed": [
+  {
+   "subject": "Transformer",
+   "relation": "reduces to",
+   "object": "constant number of operations",
+   "since": ""
+  },
+  {
+   "subject": "averaging attention-weighted positions",
+   "relation": "causes",
+   "object": "reduced effective resolution",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "counteracts",
+   "object": "reduced effective resolution",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "is described in",
+   "object": "section 3.2",
+   "since": ""
+  }
+ ],
+ "12b3b11e4a8268c775ac68c62309781679322c92a999e8c4504bff75b536d062": [
+  {
+   "subject": "Self-attention",
+   "relation": "is also called",
+   "object": "intra-attention",
+   "since": ""
+  },
+  {
+   "subject": "Self-attention",
+   "relation": "is",
+   "object": "an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence",
+   "since": ""
+  },
+  {
+   "subject": "Self-attention",
+   "relation": "has been used successfully in",
+   "object": "reading comprehension",
+   "since": ""
+  },
+  {
+   "subject": "Self-attention",
+   "relation": "has been used successfully in",
+   "object": "abstractive summarization",
+   "since": ""
+  },
+  {
+   "subject": "Self-attention",
+   "relation": "has been used successfully in",
+   "object": "textual entailment",
+   "since": ""
+  },
+  {
+   "subject": "Self-attention",
+   "relation": "has been used successfully in",
+   "object": "learning task-independent sentence representations",
+   "since": ""
+  },
+  {
+   "subject": "End-to-end memory networks",
+   "relation": "are based on",
+   "object": "a recurrent attention mechanism instead of sequence- aligned recurrence",
+   "since": ""
+  },
+  {
+   "subject": "End-to-end memory networks",
+   "relation": "have been shown to perform well on",
+   "object": "simple-language question answering",
+   "since": ""
+  },
+  {
+   "subject": "End-to-end memory networks",
+   "relation": "have been shown to perform well on",
+   "object": "language modeling tasks",
+   "since": ""
+  },
+  {
+   "subject": "the Transformer",
+   "relation": "is",
+   "object": "the first transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution",
+   "since": ""
+  }
+ ],
+ "9a20f22995af9da2cbf2d5c8bb16a465e064a78f2ccd2bf8c0ac055f13f178b1": [
+  {
+   "subject": "authors",
+   "relation": "will describe",
+   "object": "Transformer",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "will motivate",
+   "object": "self-attention",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "will discuss advantages of",
+   "object": "self-attention",
+   "since": ""
+  },
+  {
+   "subject": "self-attention",
+   "relation": "has advantages over",
+   "object": "models such as [17, 18] and [9]",
+   "since": ""
+  }
+ ],
+ "d320306d4e8ab23d684c613dff05e06758cc6dcc33b1ef4f7bccb14b5458bc79": [
+  {
+   "subject": "most competitive neural sequence transduction models",
+   "relation": "have",
+   "object": "an encoder-decoder structure",
+   "since": ""
+  },
+  {
+   "subject": "the encoder",
+   "relation": "maps",
+   "object": "an input sequence of symbol representations (x1, ..., xn) to a sequence of continuous representations z = (z1, ..., zn)",
+   "since": ""
+  },
+  {
+   "subject": "the decoder",
+   "relation": "generates",
+   "object": "an output sequence (y1, ..., ym) of symbols one element at a time",
+   "since": ""
+  },
+  {
+   "subject": "the model",
+   "relation": "is",
+   "object": "auto-regressive",
+   "since": ""
+  },
+  {
+   "subject": "the model",
+   "relation": "consumes",
+   "object": "the previously generated symbols as additional input when generating the next",
+   "since": ""
+  }
+ ],
+ "1305100cedaca153803431c3359c2d22e18d714573a5b3f03c99128018c50616": [
+  {
+   "subject": "The Transformer",
+   "relation": "follows",
+   "object": "overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder",
+   "since": ""
+  },
+  {
+   "subject": "encoder",
+   "relation": "shown in",
+   "object": "left half of Figure 1",
+   "since": ""
+  },
+  {
+   "subject": "decoder",
+   "relation": "shown in",
+   "object": "right half of Figure 1",
+   "since": ""
+  },
+  {
+   "subject": "encoder",
+   "relation": "uses",
+   "object": "stacked self-attention and point-wise, fully connected layers",
+   "since": ""
+  },
+  {
+   "subject": "decoder",
+   "relation": "uses",
+   "object": "stacked self-attention and point-wise, fully connected layers",
+   "since": ""
+  }
+ ],
+ "cabfcdf5bca9d51d9bf4db9f30be548db2d7941444a9db256c0496d862fe8c7a": [
+  {
+   "subject": "encoder",
+   "relation": "is composed of",
+   "object": "a stack of N = 6 identical layers",
+   "since": ""
+  },
+  {
+   "subject": "encoder layer",
+   "relation": "has",
+   "object": "two sub-layers",
+   "since": ""
+  },
+  {
+   "subject": "first sub-layer",
+   "relation": "is",
+   "object": "multi-head self-attention mechanism",
+   "since": ""
+  },
+  {
+   "subject": "second sub-layer",
+   "relation": "is",
+   "object": "simple, position-wise fully connected feed-forward network",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "employ",
+   "object": "residual connection around each of the two sub-layers",
+   "since": ""
+  },
+  {
+   "subject": "residual connection",
+   "relation": "followed by",
+   "object": "layer normalization",
+   "since": ""
+  },
+  {
+   "subject": "output of each sub-layer",
+   "relation": "is",
+   "object": "LayerNorm(x + Sublayer(x))",
+   "since": ""
+  },
+  {
+   "subject": "all sub-layers in the model",
+   "relation": "produce outputs of dimension",
+   "object": "dmodel = 512",
+   "since": ""
+  },
+  {
+   "subject": "embedding layers",
+   "relation": "produce outputs of dimension",
+   "object": "dmodel = 512",
+   "since": ""
+  },
+  {
+   "subject": "decoder",
+   "relation": "is composed of",
+   "object": "a stack of N = 6 identical layers",
+   "since": ""
+  },
+  {
+   "subject": "decoder",
+   "relation": "inserts",
+   "object": "a third sub-layer",
+   "since": ""
+  },
+  {
+   "subject": "third sub-layer",
+   "relation": "performs",
+   "object": "multi-head attention over the output of the encoder stack",
+   "since": ""
+  }
+ ],
+ "83a48d69b7e5cd6581b2e1d22ecabe288e6db82249683ca91368d3693f90a04f": [
+  {
+   "subject": "decoder",
+   "relation": "employs",
+   "object": "residual connections around each of the sub-layers",
+   "since": ""
+  },
+  {
+   "subject": "residual connections around each of the sub-layers",
+   "relation": "followed by",
+   "object": "layer normalization",
+   "since": ""
+  },
+  {
+   "subject": "self-attention sub-layer in the decoder stack",
+   "relation": "is modified to",
+   "object": "prevent positions from attending to subsequent positions",
+   "since": ""
+  },
+  {
+   "subject": "masking",
+   "relation": "combined with",
+   "object": "fact that the output embeddings are offset by one position",
+   "since": ""
+  },
+  {
+   "subject": "masking, combined with fact that the output embeddings are offset by one position",
+   "relation": "ensures",
+   "object": "predictions for position i can depend only on the known outputs at positions less than i",
+   "since": ""
+  }
+ ],
+ "d39b4c42e90e701baa8c62382299f269556e7482f3ac4d39b8913549ff1fe72f": [
+  {
+   "subject": "attention function",
+   "relation": "maps",
+   "object": "query and a set of key-value pairs to an output",
+   "since": ""
+  },
+  {
+   "subject": "query",
+   "relation": "is",
+   "object": "vector",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "are",
+   "object": "vectors",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "are",
+   "object": "vectors",
+   "since": ""
+  },
+  {
+   "subject": "output",
+   "relation": "is",
+   "object": "vector",
+   "since": ""
+  },
+  {
+   "subject": "output",
+   "relation": "is computed as",
+   "object": "weighted sum",
+   "since": ""
+  }
+ ],
+ "c650bea2efcbef5ff8cd39d1d759d856fea022bc450da2160d02112617ed45b0": [
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "is shown in",
+   "object": "Figure 2 (left)",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "is shown in",
+   "object": "Figure 2 (right)",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "consists of",
+   "object": "several attention layers running in parallel",
+   "since": ""
+  },
+  {
+   "subject": "weight assigned to each value",
+   "relation": "is computed by",
+   "object": "a compatibility function of the query with the corresponding key",
+   "since": ""
+  }
+ ],
+ "35f44de4d00ea2a7658985ec88c3cfcc43ee93c836293e266cd92d18bdd4cdac": [
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "has input",
+   "object": "queries",
+   "since": ""
+  },
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "has input",
+   "object": "keys",
+   "since": ""
+  },
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "has input",
+   "object": "values",
+   "since": ""
+  },
+  {
+   "subject": "queries",
+   "relation": "has dimension",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "has dimension",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "has dimension",
+   "object": "dv",
+   "since": ""
+  },
+  {
+   "subject": "queries",
+   "relation": "packed into",
+   "object": "matrix Q",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "packed into",
+   "object": "matrix K",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "packed into",
+   "object": "matrix V",
+   "since": ""
+  },
+  {
+   "subject": "matrix of outputs",
+   "relation": "computed as",
+   "object": "Attention(Q, K, V ) = softmax(QKT \u221adk )V",
+   "since": ""
+  }
+ ],
+ "e756f6dc1470257f513a43620b6312deea47c4374bb007c97a7bef06def8ef78": [
+  {
+   "subject": "additive attention [2]",
+   "relation": "is",
+   "object": "one of the two most commonly used attention functions",
+   "since": ""
+  },
+  {
+   "subject": "dot-product (multi- plicative) attention",
+   "relation": "is",
+   "object": "one of the two most commonly used attention functions",
+   "since": ""
+  },
+  {
+   "subject": "Dot-product attention",
+   "relation": "is identical to",
+   "object": "our algorithm, except for the scaling factor of 1 \u221adk",
+   "since": ""
+  },
+  {
+   "subject": "Additive attention",
+   "relation": "computes",
+   "object": "the compatibility function using a feed-forward network with a single hidden layer",
+   "since": ""
+  },
+  {
+   "subject": "dot-product attention",
+   "relation": "is similar in theoretical complexity to",
+   "object": "additive attention",
+   "since": ""
+  },
+  {
+   "subject": "dot-product attention",
+   "relation": "is",
+   "object": "much faster in practice",
+   "since": ""
+  },
+  {
+   "subject": "dot-product attention",
+   "relation": "is",
+   "object": "more space-efficient in practice",
+   "since": ""
+  },
+  {
+   "subject": "dot-product attention",
+   "relation": "can be implemented using",
+   "object": "highly optimized matrix multiplication code",
+   "since": ""
+  },
+  {
+   "subject": "additive attention",
+   "relation": "performs similarly to",
+   "object": "dot-product attention for small values of dk",
+   "since": ""
+  },
+  {
+   "subject": "additive attention",
+   "relation": "outperforms",
+   "object": "dot product attention without scaling for larger values of dk [3]",
+   "since": ""
+  },
+  {
+   "subject": "the dot products",
+   "relation": "grow large in magnitude for",
+   "object": "large values of dk",
+   "since": ""
+  },
+  {
+   "subject": "large dot products",
+   "relation": "push",
+   "object": "the softmax function into regions where it has extremely small gradients",
+   "since": ""
+  }
+ ],
+ "346b2b7f630173ba595dc627cbcea5e149c450daa75aa731dfaec6bf59195bc9": [
+  {
+   "subject": "we",
+   "relation": "scale",
+   "object": "the dot products",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "scale by",
+   "object": "1 \u221adk",
+   "since": ""
+  }
+ ],
+ "838d78add122044e45562eb9dbacf4e00a93609d5c563a93e20328709ffa2bfc": [
+  {
+   "subject": "queries",
+   "relation": "linearly projected",
+   "object": "h times",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "linearly projected",
+   "object": "h times",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "linearly projected",
+   "object": "h times",
+   "since": ""
+  },
+  {
+   "subject": "queries",
+   "relation": "projected to dimension",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "projected to dimension",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "projected to dimension",
+   "object": "dv",
+   "since": ""
+  },
+  {
+   "subject": "linear projections",
+   "relation": "are",
+   "object": "learned",
+   "since": ""
+  },
+  {
+   "subject": "attention function",
+   "relation": "performed on",
+   "object": "projected versions of queries, keys and values",
+   "since": ""
+  },
+  {
+   "subject": "attention function",
+   "relation": "performed in",
+   "object": "parallel",
+   "since": ""
+  },
+  {
+   "subject": "attention function",
+   "relation": "yields dimension",
+   "object": "dv",
+   "since": ""
+  },
+  {
+   "subject": "components of q and k",
+   "relation": "assumed to be",
+   "object": "independent random variables",
+   "since": ""
+  },
+  {
+   "subject": "components of q and k",
+   "relation": "have mean",
+   "object": "0",
+   "since": ""
+  },
+  {
+   "subject": "components of q and k",
+   "relation": "have variance",
+   "object": "1",
+   "since": ""
+  },
+  {
+   "subject": "dot product q \u00b7 k",
+   "relation": "has mean",
+   "object": "0",
+   "since": ""
+  },
+  {
+   "subject": "dot product q \u00b7 k",
+   "relation": "has variance",
+   "object": "dk",
+   "since": ""
+  }
+ ],
+ "3f1413a4087277193b3744222f4b2bcf189ad70a7075137aa035e053cef671ad": [
+  {
+   "subject": "output values",
+   "relation": "are",
+   "object": "concatenated",
+   "since": ""
+  },
+  {
+   "subject": "output values",
+   "relation": "are",
+   "object": "projected",
+   "since": ""
+  },
+  {
+   "subject": "Multi-head attention",
+   "relation": "allows model to jointly attend to",
+   "object": "information from different representation subspaces at different positions",
+   "since": ""
+  },
+  {
+   "subject": "averaging",
+   "relation": "inhibits",
+   "object": "jointly attending to information from different representation subspaces at different positions",
+   "since": ""
+  },
+  {
+   "subject": "single attention head",
+   "relation": "has",
+   "object": "averaging",
+   "since": ""
+  }
+ ],
+ "672dc80540d2a9ad309b56b6a82859dc221eeb64ed0e2b8ade83fefc7d072079": [
+  {
+   "subject": "MultiHead(Q, K, V )",
+   "relation": "equals",
+   "object": "Concat(head1, ..., headh)W O",
+   "since": ""
+  },
+  {
+   "subject": "headi",
+   "relation": "equals",
+   "object": "Attention(QW Q i , KW K i , V W V i )",
+   "since": ""
+  }
+ ],
+ "22dccdd14c5dc7a29f897fb5bc9a66ff3019818e321a777bae1172914ce1b584": [
+  {
+   "subject": "In this work",
+   "relation": "employs",
+   "object": "h = 8 parallel attention layers, or heads",
+   "since": ""
+  },
+  {
+   "subject": "h",
+   "relation": "equals",
+   "object": "8",
+   "since": ""
+  },
+  {
+   "subject": "parallel attention layers",
+   "relation": "also referred to as",
+   "object": "heads",
+   "since": ""
+  },
+  {
+   "subject": "each head",
+   "relation": "uses",
+   "object": "dk = dv = dmodel/h = 64",
+   "since": ""
+  },
+  {
+   "subject": "dk",
+   "relation": "equals",
+   "object": "64",
+   "since": ""
+  },
+  {
+   "subject": "dv",
+   "relation": "equals",
+   "object": "64",
+   "since": ""
+  },
+  {
+   "subject": "dmodel/h",
+   "relation": "equals",
+   "object": "64",
+   "since": ""
+  }
+ ],
+ "b1d457b9160af6c50bbb6620b99a87f0d03a5a3213eda1e79871e934395b8752": [
+  {
+   "subject": "total computational cost of multi-head attention",
+   "relation": "is similar to",
+   "object": "total computational cost of single-head attention with full dimensionality",
+   "since": ""
+  }
+ ],
+ "6ebf76550c222d192a30fd1914860dc39429a4d3c27efbcdb097c55a9c107376": [
+  {
+   "subject": "Transformer",
+   "relation": "uses",
+   "object": "multi-head attention",
+   "since": ""
+  },
+  {
+   "subject": "queries",
+   "relation": "come from",
+   "object": "previous decoder layer",
+   "since": ""
+  },
+  {
+   "subject": "memory keys and values",
+   "relation": "come from",
+   "object": "output of the encoder",
+   "since": ""
+  },
+  {
+   "subject": "every position in the decoder",
+   "relation": "attends over",
+   "object": "all positions in the input sequence",
+   "since": ""
+  },
+  {
+   "subject": "encoder-decoder attention",
+   "relation": "mimics",
+   "object": "typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [38, 2, 9]",
+   "since": ""
+  },
+  {
+   "subject": "encoder",
+   "relation": "contains",
+   "object": "self-attention layers",
+   "since": ""
+  },
+  {
+   "subject": "keys, values and queries",
+   "relation": "come from",
+   "object": "output of the previous layer in the encoder",
+   "since": ""
+  },
+  {
+   "subject": "each position in the encoder",
+   "relation": "attends to",
+   "object": "all positions in the previous layer of the encoder",
+   "since": ""
+  }
+ ],
+ "4d007d0f635b079f84d8a0e5d0c00e41e865a35edd6ef14f08c8685cafa8bb69": [
+  {
+   "subject": "self-attention layers in the decoder",
+   "relation": "allow",
+   "object": "each position in the decoder to attend to all positions in the decoder up to and including that position",
+   "since": ""
+  },
+  {
+   "subject": "preventing leftward information flow in the decoder",
+   "relation": "preserves",
+   "object": "auto-regressive property",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "implement",
+   "object": "preventing leftward information flow in the decoder inside of scaled dot-product attention",
+   "since": ""
+  },
+  {
+   "subject": "masking out (setting to \u2212\u221e) all values in the input of the softmax which correspond to illegal connections",
+   "relation": "is part of",
+   "object": "scaled dot-product attention",
+   "since": ""
+  }
+ ],
+ "ef0892c5adfc1f6bb96f16b72038eb8934b7a8cc7f93d6a89dc715d9ad2c4265": [
+  {
+   "subject": "each of the layers in our encoder",
+   "relation": "contains",
+   "object": "a fully connected feed-forward network",
+   "since": ""
+  },
+  {
+   "subject": "each of the layers in our decoder",
+   "relation": "contains",
+   "object": "a fully connected feed-forward network",
+   "since": ""
+  },
+  {
+   "subject": "each of the layers in our encoder",
+   "relation": "contains",
+   "object": "attention sub-layers",
+   "since": ""
+  },
+  {
+   "subject": "each of the layers in our decoder",
+   "relation": "contains",
+   "object": "attention sub-layers",
+   "since": ""
+  },
+  {
+   "subject": "fully connected feed-forward network",
+   "relation": "is applied to",
+   "object": "each position separately and identically",
+   "since": ""
+  },
+  {
+   "subject": "fully connected feed-forward network",
+   "relation": "consists of",
+   "object": "two linear transformations with a ReLU activation in between",
+   "since": ""
+  },
+  {
+   "subject": "FFN(x)",
+   "relation": "is defined as",
+   "object": "max(0, xW1 + b1)W2 + b2",
+   "since": ""
+  }
+ ],
+ "47370d48b4dd2ba544858e25ef734a545cd2b1552363e125bc5a732d1d8f6fc9": [
+  {
+   "subject": "linear transformations",
+   "relation": "are",
+   "object": "same across different positions",
+   "since": ""
+  },
+  {
+   "subject": "linear transformations",
+   "relation": "use",
+   "object": "different parameters from layer to layer",
+   "since": ""
+  },
+  {
+   "subject": "linear transformations",
+   "relation": "is described as",
+   "object": "two convolutions with kernel size 1",
+   "since": ""
+  },
+  {
+   "subject": "dimensionality of input and output",
+   "relation": "is",
+   "object": "dmodel = 512",
+   "since": ""
+  },
+  {
+   "subject": "inner-layer",
+   "relation": "has dimensionality",
+   "object": "dff = 2048",
+   "since": ""
+  }
+ ],
+ "19c15234ff3c4354231b93d0eca99d712cd79c25d8886e02cd035b52195666a9": [
+  {
+   "subject": "we",
+   "relation": "use",
+   "object": "learned embeddings",
+   "since": ""
+  },
+  {
+   "subject": "learned embeddings",
+   "relation": "convert",
+   "object": "input tokens to vectors of dimension dmodel",
+   "since": ""
+  },
+  {
+   "subject": "learned embeddings",
+   "relation": "convert",
+   "object": "output tokens to vectors of dimension dmodel",
+   "since": ""
+  },
+  {
+   "subject": "other sequence transduction models",
+   "relation": "use",
+   "object": "learned embeddings",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "use",
+   "object": "learned linear transformation",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "use",
+   "object": "softmax function",
+   "since": ""
+  },
+  {
+   "subject": "learned linear transformation and softmax function",
+   "relation": "convert",
+   "object": "decoder output to predicted next-token probabilities",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "shares weight matrix between",
+   "object": "two embedding layers and the pre-softmax linear transformation",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "multiply weights in",
+   "object": "embedding layers by \u221admodel",
+   "since": ""
+  }
+ ],
+ "20e616a571c774cebb04a60029ed00576e79cb63888cdc239b957104a9b29d6d": [
+  {
+   "subject": "n",
+   "relation": "is",
+   "object": "sequence length",
+   "since": ""
+  },
+  {
+   "subject": "d",
+   "relation": "is",
+   "object": "representation dimension",
+   "since": ""
+  },
+  {
+   "subject": "k",
+   "relation": "is",
+   "object": "kernel size of convolutions",
+   "since": ""
+  },
+  {
+   "subject": "r",
+   "relation": "is",
+   "object": "size of the neighborhood in restricted self-attention",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention",
+   "relation": "has complexity per layer",
+   "object": "O(n2 \u00b7 d)",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention",
+   "relation": "has sequential operations",
+   "object": "O(1)",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention",
+   "relation": "has maximum path length",
+   "object": "O(1)",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent",
+   "relation": "has complexity per layer",
+   "object": "O(n \u00b7 d2)",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent",
+   "relation": "has sequential operations",
+   "object": "O(n)",
+   "since": ""
+  },
+  {
+   "subject": "Recurrent",
+   "relation": "has maximum path length",
+   "object": "O(n)",
+   "since": ""
+  },
+  {
+   "subject": "Convolutional",
+   "relation": "has complexity per layer",
+   "object": "O(k \u00b7 n \u00b7 d2)",
+   "since": ""
+  },
+  {
+   "subject": "Convolutional",
+   "relation": "has sequential operations",
+   "object": "O(1)",
+   "since": ""
+  },
+  {
+   "subject": "Convolutional",
+   "relation": "has maximum path length",
+   "object": "O(logk(n))",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention (restricted)",
+   "relation": "has complexity per layer",
+   "object": "O(r \u00b7 n \u00b7 d)",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention (restricted)",
+   "relation": "has sequential operations",
+   "object": "O(1)",
+   "since": ""
+  },
+  {
+   "subject": "Self-Attention (restricted)",
+   "relation": "has maximum path length",
+   "object": "O(n/r)",
+   "since": ""
+  }
+ ],
+ "e842440f6b79c18a75f8c8beb61433db338fd1b6d3f23317894bb5a373cc2cd3": [
+  {
+   "subject": "our model",
+   "relation": "contains no",
+   "object": "recurrence",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "contains no",
+   "object": "convolution",
+   "since": ""
+  },
+  {
+   "subject": "positional encodings",
+   "relation": "are added to",
+   "object": "input embeddings",
+   "since": ""
+  },
+  {
+   "subject": "positional encodings",
+   "relation": "have dimension",
+   "object": "dmodel",
+   "since": ""
+  },
+  {
+   "subject": "embeddings",
+   "relation": "have dimension",
+   "object": "dmodel",
+   "since": ""
+  },
+  {
+   "subject": "positional encodings",
+   "relation": "are added at bottom of",
+   "object": "encoder stack",
+   "since": ""
+  },
+  {
+   "subject": "positional encodings",
+   "relation": "are added at bottom of",
+   "object": "decoder stack",
+   "since": ""
+  },
+  {
+   "subject": "this work",
+   "relation": "uses",
+   "object": "sine and cosine functions of different frequencies",
+   "since": ""
+  },
+  {
+   "subject": "each dimension of the positional encoding",
+   "relation": "corresponds to",
+   "object": "a sinusoid",
+   "since": ""
+  },
+  {
+   "subject": "the wavelengths",
+   "relation": "form",
+   "object": "a geometric progression from 2\u03c0 to 10000 \u00b7 2\u03c0",
+   "since": ""
+  }
+ ],
+ "5acfb4ea749fb747da01e4c9ac69e3033c1e1b4930fd8a979a640cb691ea25b7": [
+  {
+   "subject": "authors",
+   "relation": "hypothesized",
+   "object": "sinusoidal function would allow the model to easily learn to attend by relative positions",
+   "since": ""
+  },
+  {
+   "subject": "PEpos+k",
+   "relation": "can be represented as",
+   "object": "a linear function of PEpos for any fixed offset k",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "experimented with",
+   "object": "learned positional embeddings [9]",
+   "since": ""
+  },
+  {
+   "subject": "two versions",
+   "relation": "produced",
+   "object": "nearly identical results",
+   "since": ""
+  },
+  {
+   "subject": "results",
+   "relation": "shown in",
+   "object": "Table 3 row (E)",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "chose",
+   "object": "the sinusoidal version",
+   "since": ""
+  },
+  {
+   "subject": "sinusoidal version",
+   "relation": "may allow",
+   "object": "the model to extrapolate to sequence lengths longer than the ones encountered during training",
+   "since": ""
+  }
+ ],
+ "87fe51073c8f5300f5c72c75c97d438ae1ea8535d7d14f7166831c8cb03f68ab": [
+  {
+   "subject": "self-attention layers",
+   "relation": "compared to",
+   "object": "recurrent layers",
+   "since": ""
+  },
+  {
+   "subject": "self-attention layers",
+   "relation": "compared to",
+   "object": "convolutional layers",
+   "since": ""
+  },
+  {
+   "subject": "recurrent layers",
+   "relation": "commonly used for",
+   "object": "mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn)",
+   "since": ""
+  },
+  {
+   "subject": "convolutional layers",
+   "relation": "commonly used for",
+   "object": "mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn)",
+   "since": ""
+  },
+  {
+   "subject": "hidden layer in a typical sequence transduction encoder or decoder",
+   "relation": "is an example of",
+   "object": "mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn)",
+   "since": ""
+  }
+ ],
+ "7e2467e594c10dff6762c10108d9ec0bc3fc88018d940d209fce7a09dfa47dc7": [
+  {
+   "subject": "use of self-attention",
+   "relation": "motivated by",
+   "object": "three desiderata",
+   "since": ""
+  },
+  {
+   "subject": "first desideratum",
+   "relation": "is",
+   "object": "total computational complexity per layer",
+   "since": ""
+  },
+  {
+   "subject": "another desideratum",
+   "relation": "is",
+   "object": "amount of computation that can be parallelized",
+   "since": ""
+  },
+  {
+   "subject": "amount of computation that can be parallelized",
+   "relation": "measured by",
+   "object": "minimum number of sequential operations required",
+   "since": ""
+  }
+ ],
+ "be9e80b570f048b9c7e588fbbc5d60775e60813c7fd95c74e3b4994acee703b6": [
+  {
+   "subject": "learning long-range dependencies",
+   "relation": "is",
+   "object": "a key challenge in many sequence transduction tasks",
+   "since": ""
+  },
+  {
+   "subject": "length of the paths forward and backward signals have to traverse in the network",
+   "relation": "is",
+   "object": "One key factor affecting the ability to learn such dependencies",
+   "since": ""
+  },
+  {
+   "subject": "a self-attention layer",
+   "relation": "connects",
+   "object": "all positions with a constant number of sequentially executed operations",
+   "since": ""
+  },
+  {
+   "subject": "a recurrent layer",
+   "relation": "requires",
+   "object": "O(n) sequential operations",
+   "since": ""
+  }
+ ],
+ "853500f2ae3126e475891e0e4ff0c9fb6dbbcc143052aec7bd87c36215c60d00": [
+  {
+   "subject": "self-attention layers",
+   "relation": "are faster than",
+   "object": "recurrent layers",
+   "since": ""
+  }
+ ],
+ "aed5d989b6b2bbec10ffecaf5f969662ab81ea008faa58ea59c8ac88ea3420d1": [
+  {
+   "subject": "sentence representations used by state-of-the-art models in machine translations",
+   "relation": "has",
+   "object": "representation dimensionality d",
+   "since": ""
+  },
+  {
+   "subject": "word-piece",
+   "relation": "is example of",
+   "object": "sentence representations used by state-of-the-art models in machine translations",
+   "since": ""
+  },
+  {
+   "subject": "byte-pair",
+   "relation": "is example of",
+   "object": "sentence representations used by state-of-the-art models in machine translations",
+   "since": ""
+  },
+  {
+   "subject": "sequence length n",
+   "relation": "is smaller than",
+   "object": "representation dimensionality d",
+   "since": ""
+  },
+  {
+   "subject": "self-attention restricted to a neighborhood of size r",
+   "relation": "increases maximum path length to",
+   "object": "O(n/r)",
+   "since": ""
+  },
+  {
+   "subject": "authors",
+   "relation": "plan to investigate in future work",
+   "object": "self-attention restricted to considering only a neighborhood of size r",
+   "since": ""
+  }
+ ],
+ "46a24edb35922cc116959c981f57699ae7d472ee73a5d50cf1a72d75e870d8fc": [
+  {
+   "subject": "single convolutional layer with kernel width k < n",
+   "relation": "does not connect",
+   "object": "all pairs of input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "stack of O(n/k) convolutional layers in the case of contiguous kernels",
+   "relation": "requires",
+   "object": "stack of convolutional layers to connect all pairs of input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "stack of O(logk(n)) convolutional layers in the case of dilated convolutions",
+   "relation": "requires",
+   "object": "stack of convolutional layers to connect all pairs of input and output positions",
+   "since": ""
+  },
+  {
+   "subject": "stack of O(n/k) convolutional layers in the case of contiguous kernels",
+   "relation": "increases",
+   "object": "the length of the longest paths between any two positions in the network",
+   "since": ""
+  },
+  {
+   "subject": "stack of O(logk(n)) convolutional layers in the case of dilated convolutions",
+   "relation": "increases",
+   "object": "the length of the longest paths between any two positions in the network",
+   "since": ""
+  },
+  {
+   "subject": "convolutional layers",
+   "relation": "are more expensive than",
+   "object": "recurrent layers",
+   "since": ""
+  },
+  {
+   "subject": "convolutional layers",
+   "relation": "are more expensive by factor of",
+   "object": "k",
+   "since": ""
+  },
+  {
+   "subject": "separable convolutions",
+   "relation": "decrease",
+   "object": "complexity considerably",
+   "since": ""
+  },
+  {
+   "subject": "separable convolutions",
+   "relation": "decrease complexity to",
+   "object": "O(k \u00b7 n \u00b7 d + n \u00b7 d2)",
+   "since": ""
+  },
+  {
+   "subject": "complexity of a separable convolution with k = n",
+   "relation": "is equal to",
+   "object": "the combination of a self-attention layer and a point-wise feed-forward layer",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "uses",
+   "object": "the combination of a self-attention layer and a point-wise feed-forward layer",
+   "since": ""
+  },
+  {
+   "subject": "self-attention",
+   "relation": "could yield",
+   "object": "more interpretable models",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "inspect",
+   "object": "attention distributions from our models",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "present and discuss",
+   "object": "examples in the appendix",
+   "since": ""
+  }
+ ],
+ "d9650122c760e2749508b02e8f82c8749859e2b868adc3ae35141455f323bbc4": [
+  {
+   "subject": "individual attention heads",
+   "relation": "learn to perform",
+   "object": "different tasks",
+   "since": ""
+  },
+  {
+   "subject": "many attention heads",
+   "relation": "exhibit behavior related to",
+   "object": "syntactic and semantic structure of the sentences",
+   "since": ""
+  }
+ ],
+ "edee51890407ba961723005fb53a85ef91c4dab773db80058e034ea7fc6354c1": [
+  {
+   "subject": "5 Training",
+   "relation": "describes",
+   "object": "training regime for our models",
+   "since": ""
+  }
+ ],
+ "a8f0eb87db9742b4b32a8a31ec54942e4f1230a507e59e5caa13683fc23bbf1d": [
+  {
+   "subject": "We",
+   "relation": "trained on",
+   "object": "standard WMT 2014 English-German dataset",
+   "since": ""
+  },
+  {
+   "subject": "standard WMT 2014 English-German dataset",
+   "relation": "consisting of",
+   "object": "about 4.5 million sentence pairs",
+   "since": ""
+  },
+  {
+   "subject": "Sentences",
+   "relation": "were encoded using",
+   "object": "byte-pair encoding",
+   "since": ""
+  },
+  {
+   "subject": "byte-pair encoding",
+   "relation": "has",
+   "object": "shared source- target vocabulary of about 37000 tokens",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "used for",
+   "object": "English-French",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "used",
+   "object": "WMT 2014 English-French dataset",
+   "since": ""
+  },
+  {
+   "subject": "WMT 2014 English-French dataset",
+   "relation": "is",
+   "object": "significantly larger",
+   "since": ""
+  },
+  {
+   "subject": "WMT 2014 English-French dataset",
+   "relation": "consisting of",
+   "object": "36M sentences",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "split tokens into",
+   "object": "32000 word-piece vocabulary",
+   "since": ""
+  },
+  {
+   "subject": "Sentence pairs",
+   "relation": "were batched together by",
+   "object": "approximate sequence length",
+   "since": ""
+  },
+  {
+   "subject": "Each training batch",
+   "relation": "contained",
+   "object": "set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens",
+   "since": ""
+  }
+ ],
+ "b6c3ad59c9873cc6215ecd4ca09cec6b05c7e373e593ffa6ef92cf685581fd3f": [
+  {
+   "subject": "We",
+   "relation": "trained",
+   "object": "our models",
+   "since": ""
+  },
+  {
+   "subject": "our models",
+   "relation": "trained on",
+   "object": "one machine with 8 NVIDIA P100 GPUs",
+   "since": ""
+  },
+  {
+   "subject": "each training step",
+   "relation": "took about",
+   "object": "0.4 seconds",
+   "since": ""
+  },
+  {
+   "subject": "base models",
+   "relation": "uses",
+   "object": "hyperparameters described throughout the paper",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "trained",
+   "object": "the base models",
+   "since": ""
+  },
+  {
+   "subject": "the base models",
+   "relation": "trained for a total of",
+   "object": "100,000 steps",
+   "since": ""
+  },
+  {
+   "subject": "the base models",
+   "relation": "trained for a total of",
+   "object": "12 hours",
+   "since": ""
+  },
+  {
+   "subject": "our big models",
+   "relation": "described on",
+   "object": "the bottom line of table 3",
+   "since": ""
+  },
+  {
+   "subject": "step time",
+   "relation": "was",
+   "object": "1.0 seconds",
+   "since": ""
+  },
+  {
+   "subject": "The big models",
+   "relation": "were trained for",
+   "object": "300,000 steps",
+   "since": ""
+  },
+  {
+   "subject": "The big models",
+   "relation": "were trained for",
+   "object": "3.5 days",
+   "since": ""
+  }
+ ],
+ "5dc53836e477312df4916ddb20ed6e6046f68aa160b2c0dabff2d22fecf564ca": [
+  {
+   "subject": "We",
+   "relation": "used",
+   "object": "Adam optimizer",
+   "since": ""
+  },
+  {
+   "subject": "Adam optimizer",
+   "relation": "has \u03b21",
+   "object": "0.9",
+   "since": ""
+  },
+  {
+   "subject": "Adam optimizer",
+   "relation": "has \u03b22",
+   "object": "0.98",
+   "since": ""
+  },
+  {
+   "subject": "Adam optimizer",
+   "relation": "has \u03f5",
+   "object": "10\u22129",
+   "since": ""
+  },
+  {
+   "subject": "learning rate",
+   "relation": "varied according to",
+   "object": "lrate = d\u22120.5 model \u00b7 min(step_num\u22120.5, step_num \u00b7 warmup_steps\u22121.5)",
+   "since": ""
+  },
+  {
+   "subject": "formula (3)",
+   "relation": "corresponds to",
+   "object": "increasing the learning rate linearly for the first warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number",
+   "since": ""
+  },
+  {
+   "subject": "warmup_steps",
+   "relation": "equals",
+   "object": "4000",
+   "since": ""
+  }
+ ],
+ "e33814dcfd39d1bfabfffee071a5f183bc21ba4f341853c027cda3f35b0767ac": [
+  {
+   "subject": "We",
+   "relation": "employ during training",
+   "object": "three types of regularization",
+   "since": ""
+  }
+ ],
+ "8815219175820ce7a7856ab4d0d3bde9cdd7b46c3f985fadb993b09265ec1651": [
+  {
+   "subject": "Transformer",
+   "relation": "achieves better",
+   "object": "BLEU scores",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "achieves better BLEU scores than",
+   "object": "previous state-of-the-art models",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "evaluated on",
+   "object": "English-to-German newstest2014 test",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "evaluated on",
+   "object": "English-to-French newstest2014 test",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "achieves BLEU scores at a fraction of",
+   "object": "training cost",
+   "since": ""
+  }
+ ],
+ "cb5e61643023578a1fbb672fdcf7d829915799f55dfdbc365a2d37458e7babc7": [
+  {
+   "subject": "ByteNet [18]",
+   "relation": "scores EN-DE",
+   "object": "23.75",
+   "since": ""
+  },
+  {
+   "subject": "Deep-Att + PosUnk [39]",
+   "relation": "scores EN-FR",
+   "object": "39.2",
+   "since": ""
+  },
+  {
+   "subject": "Deep-Att + PosUnk [39]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.0 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL [38]",
+   "relation": "scores EN-DE",
+   "object": "24.6",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL [38]",
+   "relation": "scores EN-FR",
+   "object": "39.92",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL [38]",
+   "relation": "uses FLOPs (EN-DE)",
+   "object": "2.3 \u00b7 1019",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL [38]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.4 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S [9]",
+   "relation": "scores EN-DE",
+   "object": "25.16",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S [9]",
+   "relation": "scores EN-FR",
+   "object": "40.46",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S [9]",
+   "relation": "uses FLOPs (EN-DE)",
+   "object": "9.6 \u00b7 1018",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S [9]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.5 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "MoE [32]",
+   "relation": "scores EN-DE",
+   "object": "26.03",
+   "since": ""
+  },
+  {
+   "subject": "MoE [32]",
+   "relation": "scores EN-FR",
+   "object": "40.56",
+   "since": ""
+  },
+  {
+   "subject": "MoE [32]",
+   "relation": "uses FLOPs (EN-DE)",
+   "object": "2.0 \u00b7 1019",
+   "since": ""
+  },
+  {
+   "subject": "MoE [32]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.2 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "Deep-Att + PosUnk Ensemble [39]",
+   "relation": "scores EN-FR",
+   "object": "40.4",
+   "since": ""
+  },
+  {
+   "subject": "Deep-Att + PosUnk Ensemble [39]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "8.0 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL Ensemble [38]",
+   "relation": "scores EN-DE",
+   "object": "26.30",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL Ensemble [38]",
+   "relation": "scores EN-FR",
+   "object": "41.16",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL Ensemble [38]",
+   "relation": "uses FLOPs (EN-DE)",
+   "object": "1.8 \u00b7 1020",
+   "since": ""
+  },
+  {
+   "subject": "GNMT + RL Ensemble [38]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.1 \u00b7 1021",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S Ensemble [9]",
+   "relation": "scores EN-DE",
+   "object": "26.36",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S Ensemble [9]",
+   "relation": "scores EN-FR",
+   "object": "41.29",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S Ensemble [9]",
+   "relation": "uses FLOPs (EN-DE)",
+   "object": "7.7 \u00b7 1019",
+   "since": ""
+  },
+  {
+   "subject": "ConvS2S Ensemble [9]",
+   "relation": "uses FLOPs (EN-FR)",
+   "object": "1.2 \u00b7 1021",
+   "since": ""
+  }
+ ],
+ "50f64f79ae29d4121efbfa474c58730d2f82e40d70f91ce75d3576ebf21b3b51": [
+  {
+   "subject": "Transformer (base model)",
+   "relation": "has score",
+   "object": "27.3",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (base model)",
+   "relation": "has score",
+   "object": "38.1",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (base model)",
+   "relation": "has score",
+   "object": "3.3",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has score",
+   "object": "28.4",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has score",
+   "object": "41.8",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has score",
+   "object": "2.3",
+   "since": ""
+  },
+  {
+   "subject": "dropout",
+   "relation": "applied to",
+   "object": "the output of each sub-layer",
+   "since": ""
+  },
+  {
+   "subject": "output of each sub-layer",
+   "relation": "is added to",
+   "object": "the sub-layer input",
+   "since": ""
+  },
+  {
+   "subject": "output of each sub-layer",
+   "relation": "is",
+   "object": "normalized",
+   "since": ""
+  },
+  {
+   "subject": "dropout",
+   "relation": "applied to",
+   "object": "the sums of the embeddings and the positional encodings in both the encoder and decoder stacks",
+   "since": ""
+  },
+  {
+   "subject": "encoder stack",
+   "relation": "has",
+   "object": "sums of the embeddings and the positional encodings",
+   "since": ""
+  },
+  {
+   "subject": "decoder stack",
+   "relation": "has",
+   "object": "sums of the embeddings and the positional encodings",
+   "since": ""
+  },
+  {
+   "subject": "base model",
+   "relation": "uses rate of",
+   "object": "Pdrop = 0.1",
+   "since": ""
+  },
+  {
+   "subject": "label smoothing",
+   "relation": "employed during",
+   "object": "training",
+   "since": ""
+  },
+  {
+   "subject": "label smoothing",
+   "relation": "has value of",
+   "object": "\u03f5ls = 0.1",
+   "since": ""
+  },
+  {
+   "subject": "label smoothing",
+   "relation": "hurts",
+   "object": "perplexity",
+   "since": ""
+  },
+  {
+   "subject": "label smoothing",
+   "relation": "improves",
+   "object": "accuracy",
+   "since": ""
+  },
+  {
+   "subject": "label smoothing",
+   "relation": "improves",
+   "object": "BLEU score",
+   "since": ""
+  },
+  {
+   "subject": "the model",
+   "relation": "learns to be",
+   "object": "more unsure",
+   "since": ""
+  }
+ ],
+ "05f407555918d60ee039bb963d96448305d80f134354ef2ccd8db324121c6d5a": [
+  {
+   "subject": "Transformer (big)",
+   "relation": "evaluated on",
+   "object": "WMT 2014 English-to-German translation task",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "outperforms",
+   "object": "best previously reported models (including ensembles)",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "outperforms by",
+   "object": "more than 2.0 BLEU",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "establishes state-of-the-art BLEU score of",
+   "object": "28.4",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "is listed in",
+   "object": "Table 2",
+   "since": ""
+  }
+ ],
+ "a331478871d34996b00cc5172fe37a3f9406a0666cc1eca682719e266bfb4398": [
+  {
+   "subject": "The configuration of this model",
+   "relation": "is listed in",
+   "object": "the bottom line of Table 3",
+   "since": ""
+  },
+  {
+   "subject": "Training",
+   "relation": "took",
+   "object": "3.5 days",
+   "since": ""
+  },
+  {
+   "subject": "Training",
+   "relation": "used",
+   "object": "8 P100 GPUs",
+   "since": ""
+  },
+  {
+   "subject": "our base model",
+   "relation": "surpasses",
+   "object": "all previously published models and ensembles",
+   "since": ""
+  },
+  {
+   "subject": "our big model",
+   "relation": "achieves",
+   "object": "a BLEU score of 41.0",
+   "since": ""
+  },
+  {
+   "subject": "our big model",
+   "relation": "outperforms",
+   "object": "all of the previously published single models",
+   "since": ""
+  },
+  {
+   "subject": "The Transformer (big) model trained for English-to-French",
+   "relation": "used",
+   "object": "dropout rate Pdrop = 0.1, instead of 0.3",
+   "since": ""
+  }
+ ],
+ "5963989a02b183c9389b40034cec57027a2e5a81f66ea70161b7fdff7a79eaad": [
+  {
+   "subject": "base models",
+   "relation": "used",
+   "object": "single model obtained by averaging the last 5 checkpoints",
+   "since": ""
+  },
+  {
+   "subject": "last 5 checkpoints",
+   "relation": "were written at",
+   "object": "10-minute intervals",
+   "since": ""
+  },
+  {
+   "subject": "big models",
+   "relation": "averaged",
+   "object": "last 20 checkpoints",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "used",
+   "object": "beam search",
+   "since": ""
+  },
+  {
+   "subject": "beam search",
+   "relation": "has beam size of",
+   "object": "4",
+   "since": ""
+  },
+  {
+   "subject": "beam search",
+   "relation": "has length penalty \u03b1 of",
+   "object": "0.6",
+   "since": ""
+  },
+  {
+   "subject": "hyperparameters",
+   "relation": "were chosen after",
+   "object": "experimentation on the development set",
+   "since": ""
+  },
+  {
+   "subject": "maximum output length during inference",
+   "relation": "was set to",
+   "object": "input length + 50",
+   "since": ""
+  }
+ ],
+ "75e5f978e0b190cf45cc0dd50324c0e0a06e85563c8018320af81d1589573ab9": [
+  {
+   "subject": "Table 2",
+   "relation": "summarizes",
+   "object": "our results",
+   "since": ""
+  },
+  {
+   "subject": "Table 2",
+   "relation": "compares",
+   "object": "our translation quality",
+   "since": ""
+  },
+  {
+   "subject": "Table 2",
+   "relation": "compares",
+   "object": "training costs",
+   "since": ""
+  }
+ ],
+ "dd73d32ec3c0408569cfeb73498063fdb3522f98f2ea9d5cd3210adfc9ca9fc8": [
+  {
+   "subject": "we",
+   "relation": "varied",
+   "object": "base model",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "evaluated",
+   "object": "importance of different components of the Transformer",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "measured",
+   "object": "change in performance on English-to-German translation",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "used value for",
+   "object": "K80",
+   "since": ""
+  },
+  {
+   "subject": "K80",
+   "relation": "has TFLOPS value of",
+   "object": "2.8",
+   "since": ""
+  },
+  {
+   "subject": "K40",
+   "relation": "has TFLOPS value of",
+   "object": "3.7",
+   "since": ""
+  },
+  {
+   "subject": "M40",
+   "relation": "has TFLOPS value of",
+   "object": "6.0",
+   "since": ""
+  },
+  {
+   "subject": "P100",
+   "relation": "has TFLOPS value of",
+   "object": "9.5",
+   "since": ""
+  }
+ ],
+ "d4c33c6e3a9d8f8f618527f15fd0927ed0ff63bcece15b7b93d6936d327eed8e": [
+  {
+   "subject": "Table 3",
+   "relation": "shows",
+   "object": "Variations on the Transformer architecture",
+   "since": ""
+  },
+  {
+   "subject": "Unlisted values",
+   "relation": "are identical to",
+   "object": "those of the base model",
+   "since": ""
+  },
+  {
+   "subject": "All metrics",
+   "relation": "are on",
+   "object": "English-to-German translation development set, newstest2013",
+   "since": ""
+  },
+  {
+   "subject": "Listed perplexities",
+   "relation": "are",
+   "object": "per-wordpiece",
+   "since": ""
+  },
+  {
+   "subject": "Listed perplexities",
+   "relation": "are according to",
+   "object": "our byte-pair encoding",
+   "since": ""
+  },
+  {
+   "subject": "Listed perplexities",
+   "relation": "should not be compared to",
+   "object": "per-word perplexities",
+   "since": ""
+  }
+ ],
+ "8e0aee0a008536fe68fbd47ceaabe3fa756835c3fbbadddc8a607b0107a34991": [
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "N of 6",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "dmodel of 512",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "dff of 2048",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "h of 8",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "dk of 64",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "dv of 64",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "Pdrop of 0.1",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "\u03f5ls of 0.1",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "train steps of 100K",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "PPL (dev) of 4.92",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "BLEU (dev) of 25.8",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has",
+   "object": "params \u00d7106 of 65",
+   "since": ""
+  }
+ ],
+ "683cab6451930880a648494643fd820ec032fc772c5414e444de465d9c0ec1dc": [
+  {
+   "subject": "Model Variations (A) row 1",
+   "relation": "has h",
+   "object": "1",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 1",
+   "relation": "has dk",
+   "object": "512",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 1",
+   "relation": "has dv",
+   "object": "512",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 1",
+   "relation": "has PPL (dev)",
+   "object": "5.29",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 1",
+   "relation": "has BLEU (dev)",
+   "object": "24.9",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 2",
+   "relation": "has h",
+   "object": "4",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 2",
+   "relation": "has dk",
+   "object": "128",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 2",
+   "relation": "has dv",
+   "object": "128",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 2",
+   "relation": "has PPL (dev)",
+   "object": "5.00",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 2",
+   "relation": "has BLEU (dev)",
+   "object": "25.5",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 3",
+   "relation": "has h",
+   "object": "16",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 3",
+   "relation": "has dk",
+   "object": "32",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 3",
+   "relation": "has dv",
+   "object": "32",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 3",
+   "relation": "has PPL (dev)",
+   "object": "4.91",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 3",
+   "relation": "has BLEU (dev)",
+   "object": "25.8",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 4",
+   "relation": "has h",
+   "object": "32",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 4",
+   "relation": "has dk",
+   "object": "16",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 4",
+   "relation": "has dv",
+   "object": "16",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 4",
+   "relation": "has PPL (dev)",
+   "object": "5.01",
+   "since": ""
+  },
+  {
+   "subject": "Model Variations (A) row 4",
+   "relation": "has BLEU (dev)",
+   "object": "25.4",
+   "since": ""
+  }
+ ],
+ "f64a11adf08ce800fa699cbc8e1fbff45b2d44a17106d60c1e9b363d45f27a8b": [
+  {
+   "subject": "Model (B) variation 1",
+   "relation": "has h",
+   "object": "16",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 1",
+   "relation": "has PPL (dev)",
+   "object": "5.16",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 1",
+   "relation": "has BLEU (dev)",
+   "object": "25.1",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 1",
+   "relation": "has params \u00d7106",
+   "object": "58",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 2",
+   "relation": "has h",
+   "object": "32",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 2",
+   "relation": "has PPL (dev)",
+   "object": "5.01",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 2",
+   "relation": "has BLEU (dev)",
+   "object": "25.4",
+   "since": ""
+  },
+  {
+   "subject": "Model (B) variation 2",
+   "relation": "has params \u00d7106",
+   "object": "60",
+   "since": ""
+  }
+ ],
+ "f8bda193def233d0d5056d43610ebd4f2a74c54d359f0950d80f2838c01f6d84": [
+  {
+   "subject": "Attention Is All You Need",
+   "relation": "has section",
+   "object": "6 Results / 6.2 Model Variations",
+   "since": ""
+  },
+  {
+   "subject": "6 Results / 6.2 Model Variations",
+   "relation": "is part of",
+   "object": "Attention Is All You Need",
+   "since": ""
+  }
+ ],
+ "1f328cf6db981994f8d2ec238354eec86f93ac02aa2cffe51fe35f5d6e62dbb4": [
+  {
+   "subject": "Model Variations",
+   "relation": "is section of",
+   "object": "6 Results",
+   "since": ""
+  },
+  {
+   "subject": "6 Results / 6.2 Model Variations",
+   "relation": "is part of",
+   "object": "Attention Is All You Need",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has Pdrop",
+   "object": "0.0",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has Pdrop",
+   "object": "0.2",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has \u03f5ls",
+   "object": "0.0",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has \u03f5ls",
+   "object": "0.2",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has PPL (dev)",
+   "object": "5.77",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has BLEU (dev)",
+   "object": "24.6",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has PPL (dev)",
+   "object": "4.95",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has BLEU (dev)",
+   "object": "25.5",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has PPL (dev)",
+   "object": "4.67",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has BLEU (dev)",
+   "object": "25.3",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has PPL (dev)",
+   "object": "5.47",
+   "since": ""
+  },
+  {
+   "subject": "row (D)",
+   "relation": "has BLEU (dev)",
+   "object": "25.7",
+   "since": ""
+  }
+ ],
+ "65dc92577a0ebf166bb3f9e108c31357df5d6acdfd20d309bcf55d592bcb5e3c": [
+  {
+   "subject": "Variation (E)",
+   "relation": "uses",
+   "object": "positional embedding instead of sinusoids",
+   "since": ""
+  },
+  {
+   "subject": "Variation (E)",
+   "relation": "has dev PPL",
+   "object": "4.92",
+   "since": ""
+  },
+  {
+   "subject": "Variation (E)",
+   "relation": "has dev BLEU",
+   "object": "25.7",
+   "since": ""
+  }
+ ],
+ "2552a0bcfe1677c2873078ebf46a0e66fe8ad43735d50ea80bca8baf12fb443e": [
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "N of 6",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "dmodel of 1024",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "dff of 4096",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "h of 16",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "Pdrop of 0.3",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "uses",
+   "object": "300K train steps",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "scores",
+   "object": "4.33 PPL (dev)",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "scores",
+   "object": "26.4 BLEU (dev)",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (big)",
+   "relation": "has",
+   "object": "213 \u00d7106 params",
+   "since": ""
+  }
+ ],
+ "a0cd687930ae114e91fe3fae7fdf29f03101aeaef360c8bddadc6499df2ce5e0": [
+  {
+   "subject": "results",
+   "relation": "presented in",
+   "object": "Table 3",
+   "since": ""
+  },
+  {
+   "subject": "Table 3 rows (A)",
+   "relation": "vary",
+   "object": "number of attention heads",
+   "since": ""
+  },
+  {
+   "subject": "Table 3 rows (A)",
+   "relation": "vary",
+   "object": "attention key and value dimensions",
+   "since": ""
+  },
+  {
+   "subject": "Table 3 rows (A)",
+   "relation": "keep constant",
+   "object": "amount of computation",
+   "since": ""
+  },
+  {
+   "subject": "Table 3 rows (A)",
+   "relation": "described in",
+   "object": "Section 3.2.2",
+   "since": ""
+  }
+ ],
+ "4f842ed7ba1178131870175af317231716669a201687821525dd5af8244f808b": [
+  {
+   "subject": "single-head attention",
+   "relation": "is worse than",
+   "object": "the best setting",
+   "since": ""
+  },
+  {
+   "subject": "single-head attention",
+   "relation": "is worse by",
+   "object": "0.9 BLEU",
+   "since": ""
+  },
+  {
+   "subject": "quality",
+   "relation": "drops off with",
+   "object": "too many heads",
+   "since": ""
+  },
+  {
+   "subject": "reducing the attention key size dk",
+   "relation": "hurts",
+   "object": "model quality",
+   "since": ""
+  },
+  {
+   "subject": "Table 3 rows (B)",
+   "relation": "shows",
+   "object": "reducing the attention key size dk hurts model quality",
+   "since": ""
+  },
+  {
+   "subject": "determining compatibility",
+   "relation": "is not",
+   "object": "easy",
+   "since": ""
+  },
+  {
+   "subject": "a more sophisticated compatibility function than dot product",
+   "relation": "may be",
+   "object": "beneficial",
+   "since": ""
+  }
+ ],
+ "9e91c0f3ddaf2754f765c284b57b964dd0726ef85fd8f64967de5f37046f5843": [
+  {
+   "subject": "bigger models",
+   "relation": "are",
+   "object": "better",
+   "since": ""
+  },
+  {
+   "subject": "dropout",
+   "relation": "is helpful in",
+   "object": "avoiding over-fitting",
+   "since": ""
+  },
+  {
+   "subject": "sinusoidal positional encoding",
+   "relation": "replaced with",
+   "object": "learned positional embeddings",
+   "since": ""
+  },
+  {
+   "subject": "learned positional embeddings",
+   "relation": "yields results nearly identical to",
+   "object": "base model",
+   "since": ""
+  }
+ ],
+ "faa7280775294594304afb00d8eb77ec832c391d06874414b27972b30a6dbae3": [
+  {
+   "subject": "Transformer",
+   "relation": "evaluated on",
+   "object": "English constituency parsing",
+   "since": ""
+  },
+  {
+   "subject": "English constituency parsing",
+   "relation": "presents specific challenge",
+   "object": "output is subject to strong structural constraints",
+   "since": ""
+  },
+  {
+   "subject": "English constituency parsing",
+   "relation": "presents specific challenge",
+   "object": "output is significantly longer than the input",
+   "since": ""
+  },
+  {
+   "subject": "RNN sequence-to-sequence models",
+   "relation": "have not been able to attain",
+   "object": "state-of-the-art results in small-data regimes [37]",
+   "since": ""
+  }
+ ],
+ "6c8709c37fdfa487a440a3f73ccd854c516ea9f99453ab468c32a07e3f119a04": [
+  {
+   "subject": "we",
+   "relation": "trained",
+   "object": "4-layer transformer",
+   "since": ""
+  },
+  {
+   "subject": "4-layer transformer",
+   "relation": "has",
+   "object": "dmodel = 1024",
+   "since": ""
+  },
+  {
+   "subject": "4-layer transformer",
+   "relation": "trained on",
+   "object": "Wall Street Journal (WSJ) portion of the Penn Treebank",
+   "since": ""
+  },
+  {
+   "subject": "Wall Street Journal (WSJ) portion of the Penn Treebank",
+   "relation": "has",
+   "object": "about 40K training sentences",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "trained in",
+   "object": "semi-supervised setting",
+   "since": ""
+  },
+  {
+   "subject": "semi-supervised setting",
+   "relation": "uses",
+   "object": "larger high-confidence and BerkleyParser corpora",
+   "since": ""
+  },
+  {
+   "subject": "larger high-confidence and BerkleyParser corpora",
+   "relation": "has",
+   "object": "approximately 17M sentences",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "used",
+   "object": "vocabulary of 16K tokens for the WSJ only setting",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "used",
+   "object": "vocabulary of 32K tokens for the semi-supervised setting",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "performed",
+   "object": "small number of experiments",
+   "since": ""
+  },
+  {
+   "subject": "small number of experiments",
+   "relation": "selects",
+   "object": "dropout",
+   "since": ""
+  },
+  {
+   "subject": "small number of experiments",
+   "relation": "selects",
+   "object": "learning rates",
+   "since": ""
+  },
+  {
+   "subject": "small number of experiments",
+   "relation": "selects",
+   "object": "beam size",
+   "since": ""
+  },
+  {
+   "subject": "dropout",
+   "relation": "includes",
+   "object": "attention dropout",
+   "since": ""
+  },
+  {
+   "subject": "dropout",
+   "relation": "includes",
+   "object": "residual dropout",
+   "since": ""
+  },
+  {
+   "subject": "small number of experiments",
+   "relation": "performed on",
+   "object": "Section 22 development set",
+   "since": ""
+  },
+  {
+   "subject": "all other parameters",
+   "relation": "remained unchanged from",
+   "object": "English-to-German base translation model",
+   "since": ""
+  }
+ ],
+ "541a3b5c172d8b181267b0ae48369f0b819e282321714fade501d98db793903f": [
+  {
+   "subject": "Transformer",
+   "relation": "generalizes well to",
+   "object": "English constituency parsing",
+   "since": ""
+  },
+  {
+   "subject": "Results",
+   "relation": "are on",
+   "object": "Section 23 of WSJ",
+   "since": ""
+  }
+ ],
+ "eea0a12764d47ccf5618195d79078d4b1a8e6c3041e6920995893da36451b46c": [
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Petrov et al. (2006) [29]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "trained on",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Petrov et al. (2006) [29]",
+   "relation": "trained on",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "trained on",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "trained on",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "scores",
+   "object": "88.3 WSJ 23 F1",
+   "since": ""
+  },
+  {
+   "subject": "Petrov et al. (2006) [29]",
+   "relation": "scores",
+   "object": "90.4 WSJ 23 F1",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "scores",
+   "object": "90.4 WSJ 23 F1",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "scores",
+   "object": "91.7 WSJ 23 F1",
+   "since": ""
+  }
+ ],
+ "4eda62923e3c9ba6dae1c659facf9623d97c0af6c0007d3b009eab519022c184": [
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "is",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "trained on",
+   "object": "WSJ only",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "uses training setting",
+   "object": "discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "scores WSJ 23 F1",
+   "object": "91.3",
+   "since": ""
+  }
+ ],
+ "5d9d3c94eddd73c80eb2e0d9886954e25a70c617a44bac0b1f0f420a4557c283": [
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "uses training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "has WSJ 23 F1",
+   "object": "91.3",
+   "since": ""
+  },
+  {
+   "subject": "Huang & Harper (2009) [14]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Huang & Harper (2009) [14]",
+   "relation": "uses training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Huang & Harper (2009) [14]",
+   "relation": "has WSJ 23 F1",
+   "object": "91.3",
+   "since": ""
+  },
+  {
+   "subject": "McClosky et al. (2006) [26]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "McClosky et al. (2006) [26]",
+   "relation": "uses training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "McClosky et al. (2006) [26]",
+   "relation": "has WSJ 23 F1",
+   "object": "92.1",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "is a",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "uses training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "has WSJ 23 F1",
+   "object": "92.1",
+   "since": ""
+  }
+ ],
+ "d211036e83a305b8ba831542536d904a8246503ff1a12d928f813b919ac15489": [
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "is",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "trained with",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "has WSJ 23 F1",
+   "object": "92.7",
+   "since": ""
+  }
+ ],
+ "d1c15526ab0cbc0fd1e59a6d75bb21f36e96ad3aaa74fbf75ef64a7b4cb4f85d": [
+  {
+   "subject": "Luong et al. (2015) [23]",
+   "relation": "is",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "is",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "Luong et al. (2015) [23]",
+   "relation": "trained on",
+   "object": "multi-task generative",
+   "since": ""
+  },
+  {
+   "subject": "Luong et al. (2015) [23]",
+   "relation": "scores",
+   "object": "93.0 WSJ 23 F1",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "scores",
+   "object": "93.3 WSJ 23 F1",
+   "since": ""
+  }
+ ],
+ "baab638339fed230d10226be8327df06ab93a5a4e9de2d33a281da1796227540": [
+  {
+   "subject": "maximum output length",
+   "relation": "increased to",
+   "object": "input length + 300",
+   "since": ""
+  },
+  {
+   "subject": "beam size",
+   "relation": "is",
+   "object": "21",
+   "since": ""
+  },
+  {
+   "subject": "\u03b1",
+   "relation": "is",
+   "object": "0.3",
+   "since": ""
+  },
+  {
+   "subject": "beam size of 21 and \u03b1 = 0.3",
+   "relation": "used for",
+   "object": "WSJ only",
+   "since": ""
+  },
+  {
+   "subject": "beam size of 21 and \u03b1 = 0.3",
+   "relation": "used for",
+   "object": "semi-supervised setting",
+   "since": ""
+  },
+  {
+   "subject": "results",
+   "relation": "shown in",
+   "object": "Table 4",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "lacks",
+   "object": "task-specific tuning",
+   "since": ""
+  },
+  {
+   "subject": "our model",
+   "relation": "yields better results than",
+   "object": "all previously reported models with the exception of the Recurrent Neural Network Grammar [8]",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "outperforms",
+   "object": "BerkeleyParser [29]",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "trained on",
+   "object": "WSJ training set of 40K sentences",
+   "since": ""
+  }
+ ],
+ "276ac28e8c21fb6ec4c3f3a91d81ba18a32b6cb7aa393e48a38a6a19ed8ef5b5": [
+  {
+   "subject": "Transformer",
+   "relation": "is",
+   "object": "sequence transduction model",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "is based entirely on",
+   "object": "attention",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "replaces",
+   "object": "recurrent layers",
+   "since": ""
+  },
+  {
+   "subject": "recurrent layers",
+   "relation": "commonly used in",
+   "object": "encoder-decoder architectures",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "uses",
+   "object": "multi-headed self-attention",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "trained faster than",
+   "object": "architectures based on recurrent or convolutional layers",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "used for",
+   "object": "translation tasks",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "achieves new state of the art on",
+   "object": "WMT 2014 English-to-German translation task",
+   "since": ""
+  },
+  {
+   "subject": "Transformer",
+   "relation": "achieves new state of the art on",
+   "object": "WMT 2014 English-to-French translation task",
+   "since": ""
+  }
+ ],
+ "4f916a65b48462e20d040df815f5dd754019f5f34564621c081a91fcf831d7fa": [
+  {
+   "subject": "our best model",
+   "relation": "outperforms",
+   "object": "all previously reported ensembles",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "plan to apply",
+   "object": "attention-based models to other tasks",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "plan to extend",
+   "object": "the Transformer to problems involving input and output modalities other than text",
+   "since": ""
+  },
+  {
+   "subject": "we",
+   "relation": "plan to investigate",
+   "object": "local, restricted attention mechanisms",
+   "since": ""
+  },
+  {
+   "subject": "local, restricted attention mechanisms",
+   "relation": "efficiently handle",
+   "object": "large inputs and outputs such as images, audio and video",
+   "since": ""
+  },
+  {
+   "subject": "making generation less sequential",
+   "relation": "is",
+   "object": "another research goals of ours",
+   "since": ""
+  }
+ ],
+ "335257a685fde3e9b0cadb01c99298b0b8a2536eb1675da12b43bc6adc14c250": [
+  {
+   "subject": "The code we used to train and evaluate our models",
+   "relation": "is available at",
+   "object": "https://github.com/ tensorflow/tensor2tensor",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "are grateful to",
+   "object": "Nal Kalchbrenner",
+   "since": ""
+  },
+  {
+   "subject": "We",
+   "relation": "are grateful to",
+   "object": "Stephan Gouws",
+   "since": ""
+  },
+  {
+   "subject": "Nal Kalchbrenner",
+   "relation": "provided",
+   "object": "fruitful comments, corrections and inspiration",
+   "since": ""
+  },
+  {
+   "subject": "Stephan Gouws",
+   "relation": "provided",
+   "object": "fruitful comments, corrections and inspiration",
+   "since": ""
+  }
+ ],
+ "0afa89e572d86b5c4ddaf666d55a0493b922d6e796736b3c1470ad914ba016af": [
+  {
+   "subject": "Inputs",
+   "relation": "flow into",
+   "object": "Input Embedding",
+   "since": ""
+  },
+  {
+   "subject": "Input Embedding",
+   "relation": "combines via element-wise addition (+) with",
+   "object": "Positional Encoding",
+   "since": ""
+  },
+  {
+   "subject": "combined vector",
+   "relation": "flows into",
+   "object": "Encoder block",
+   "since": ""
+  },
+  {
+   "subject": "Encoder block",
+   "relation": "is repeated",
+   "object": "N times (Nx)",
+   "since": ""
+  },
+  {
+   "subject": "input",
+   "relation": "splits into",
+   "object": "three paths entering Multi-Head Attention",
+   "since": ""
+  },
+  {
+   "subject": "three paths entering Multi-Head Attention",
+   "relation": "representing",
+   "object": "Query, Key, and Value vectors",
+   "since": ""
+  },
+  {
+   "subject": "input",
+   "relation": "bypasses",
+   "object": "Multi-Head Attention via a residual shortcut connection",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention output and the residual shortcut",
+   "relation": "connect into",
+   "object": "Add & Norm",
+   "since": ""
+  },
+  {
+   "subject": "output from the first Add & Norm",
+   "relation": "splits into",
+   "object": "two paths",
+   "since": ""
+  },
+  {
+   "subject": "one path",
+   "relation": "enters",
+   "object": "Feed Forward layer",
+   "since": ""
+  },
+  {
+   "subject": "the other path",
+   "relation": "bypasses",
+   "object": "Feed Forward layer as a residual shortcut connection",
+   "since": ""
+  },
+  {
+   "subject": "Feed Forward output and the residual shortcut",
+   "relation": "connect into",
+   "object": "second Add & Norm layer",
+   "since": ""
+  },
+  {
+   "subject": "output of the top Add & Norm in the Encoder stack",
+   "relation": "flows out to",
+   "object": "Decoder stack",
+   "since": ""
+  },
+  {
+   "subject": "Outputs (shifted right)",
+   "relation": "flow into",
+   "object": "Output Embedding",
+   "since": ""
+  },
+  {
+   "subject": "Output Embedding",
+   "relation": "combines via element-wise addition (+) with",
+   "object": "Positional Encoding",
+   "since": ""
+  },
+  {
+   "subject": "combined vector",
+   "relation": "flows into",
+   "object": "Decoder block",
+   "since": ""
+  },
+  {
+   "subject": "Decoder block",
+   "relation": "is repeated",
+   "object": "N times (Nx)",
+   "since": ""
+  },
+  {
+   "subject": "input",
+   "relation": "splits into",
+   "object": "three paths entering Masked Multi-Head Attention",
+   "since": ""
+  },
+  {
+   "subject": "input",
+   "relation": "bypasses",
+   "object": "Masked Multi-Head Attention via a residual shortcut connection",
+   "since": ""
+  },
+  {
+   "subject": "Masked Multi-Head Attention output and the residual shortcut",
+   "relation": "connect into",
+   "object": "first Add & Norm layer",
+   "since": ""
+  },
+  {
+   "subject": "one path from first Add & Norm",
+   "relation": "forms",
+   "object": "Query input for the middle Multi-Head Attention layer",
+   "since": ""
+  },
+  {
+   "subject": "another path from first Add & Norm",
+   "relation": "bypasses",
+   "object": "middle Multi-Head Attention layer via a residual shortcut connection",
+   "since": ""
+  },
+  {
+   "subject": "output from the Encoder stack",
+   "relation": "provides",
+   "object": "Key and Value inputs to the middle Multi-Head Attention layer in the Decoder",
+   "since": ""
+  },
+  {
+   "subject": "output from the middle Multi-Head Attention and its residual shortcut",
+   "relation": "connect into",
+   "object": "second Add & Norm layer",
+   "since": ""
+  },
+  {
+   "subject": "output from the second Add & Norm",
+   "relation": "splits into",
+   "object": "two paths",
+   "since": ""
+  },
+  {
+   "subject": "one path from second Add & Norm",
+   "relation": "enters",
+   "object": "Feed Forward layer",
+   "since": ""
+  },
+  {
+   "subject": "the other path from second Add & Norm",
+   "relation": "bypasses",
+   "object": "Feed Forward layer as a residual shortcut connection",
+   "since": ""
+  },
+  {
+   "subject": "Feed Forward output and the residual shortcut",
+   "relation": "connect into",
+   "object": "third Add & Norm layer",
+   "since": ""
+  },
+  {
+   "subject": "output from the top Add & Norm layer of the Decoder stack",
+   "relation": "flows into",
+   "object": "Linear layer",
+   "since": ""
+  },
+  {
+   "subject": "Linear layer output",
+   "relation": "flows into",
+   "object": "Softmax layer",
+   "since": ""
+  },
+  {
+   "subject": "Softmax layer",
+   "relation": "outputs",
+   "object": "Output Probabilities",
+   "since": ""
+  }
+ ],
+ "e74d373359da95681a53b75ccc095ad71a9fe61b151a9342c2511ed552af7a34": [
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "is from",
+   "object": "Attention Is All You Need",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "receives main input",
+   "object": "V",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "receives main input",
+   "object": "K",
+   "since": ""
+  },
+  {
+   "subject": "Multi-Head Attention",
+   "relation": "receives main input",
+   "object": "Q",
+   "since": ""
+  },
+  {
+   "subject": "V",
+   "relation": "stands for",
+   "object": "Values",
+   "since": ""
+  },
+  {
+   "subject": "K",
+   "relation": "stands for",
+   "object": "Keys",
+   "since": ""
+  },
+  {
+   "subject": "Q",
+   "relation": "stands for",
+   "object": "Queries",
+   "since": ""
+  },
+  {
+   "subject": "V",
+   "relation": "passes through",
+   "object": "Linear",
+   "since": ""
+  },
+  {
+   "subject": "K",
+   "relation": "passes through",
+   "object": "Linear",
+   "since": ""
+  },
+  {
+   "subject": "Q",
+   "relation": "passes through",
+   "object": "Linear",
+   "since": ""
+  },
+  {
+   "subject": "Linear",
+   "relation": "has parallel projections count",
+   "object": "h",
+   "since": ""
+  },
+  {
+   "subject": "projected outputs for V, K, and Q",
+   "relation": "enter",
+   "object": "Scaled Dot-Product Attention",
+   "since": ""
+  },
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "has parallel attention heads count",
+   "object": "h",
+   "since": ""
+  },
+  {
+   "subject": "output vectors from all h attention heads",
+   "relation": "fed into",
+   "object": "Concat",
+   "since": ""
+  },
+  {
+   "subject": "Concat",
+   "relation": "stands for",
+   "object": "Concatenation",
+   "since": ""
+  },
+  {
+   "subject": "concatenated output",
+   "relation": "passes through",
+   "object": "Linear",
+   "since": ""
+  },
+  {
+   "subject": "final Linear layer",
+   "relation": "produces",
+   "object": "final output vector of the Multi-Head Attention block",
+   "since": ""
+  }
+ ],
+ "86b81ab506908c7c0021cef1e591fc197e49e01aa85380e15e6f8f265bff6801": [
+  {
+   "subject": "image",
+   "relation": "illustrates",
+   "object": "Scaled Dot-Product Attention mechanism",
+   "since": ""
+  },
+  {
+   "subject": "inputs Q (Query) and K (Key)",
+   "relation": "enter from below",
+   "object": "first MatMul block",
+   "since": ""
+  },
+  {
+   "subject": "output of first MatMul block",
+   "relation": "goes upward into",
+   "object": "Scale block",
+   "since": ""
+  },
+  {
+   "subject": "output of Scale block",
+   "relation": "goes upward into",
+   "object": "Mask (opt.) block",
+   "since": ""
+  },
+  {
+   "subject": "output of Mask (opt.) block",
+   "relation": "goes upward into",
+   "object": "SoftMax block",
+   "since": ""
+  },
+  {
+   "subject": "output of SoftMax block",
+   "relation": "enters left side of",
+   "object": "second MatMul block",
+   "since": ""
+  },
+  {
+   "subject": "input V (Value)",
+   "relation": "enters right side of",
+   "object": "second MatMul block",
+   "since": ""
+  },
+  {
+   "subject": "arrow pointing upward out of second MatMul block",
+   "relation": "represents",
+   "object": "final output",
+   "since": ""
+  }
+ ],
+ "abc55cd2dfc5daf403f253ac10d7165c49ef61c575383e0721712aa7d55f2498": [
+  {
+   "subject": "base",
+   "relation": "has N",
+   "object": "6",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has d_model",
+   "object": "512",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has d_ff",
+   "object": "2048",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has h",
+   "object": "8",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has d_k",
+   "object": "64",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has d_v",
+   "object": "64",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has P_drop",
+   "object": "0.1",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has epsilon_ls",
+   "object": "0.1",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has train steps",
+   "object": "100K",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has PPL (dev)",
+   "object": "4.92",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has BLEU (dev)",
+   "object": "25.8",
+   "since": ""
+  },
+  {
+   "subject": "base",
+   "relation": "has params x 10^6",
+   "object": "65",
+   "since": ""
+  },
+  {
+   "subject": "Section (A)",
+   "relation": "explores variations in",
+   "object": "number of attention heads h, d_k, and d_v",
+   "since": ""
+  },
+  {
+   "subject": "Section (B)",
+   "relation": "explores reducing",
+   "object": "key dimension d_k",
+   "since": ""
+  },
+  {
+   "subject": "Section (C)",
+   "relation": "explores variations in",
+   "object": "number of layers N, d_model, d_k, d_v, and d_ff",
+   "since": ""
+  },
+  {
+   "subject": "Section (D)",
+   "relation": "explores variations in",
+   "object": "dropout rate P_drop and label smoothing epsilon_ls",
+   "since": ""
+  },
+  {
+   "subject": "Section (E)",
+   "relation": "tests using",
+   "object": "learned positional embeddings",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has N",
+   "object": "6",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has d_model",
+   "object": "1024",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has d_ff",
+   "object": "4096",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has h",
+   "object": "16",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has P_drop",
+   "object": "0.3",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has train steps",
+   "object": "300K",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has PPL (dev)",
+   "object": "4.33",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has BLEU (dev)",
+   "object": "26.4",
+   "since": ""
+  },
+  {
+   "subject": "big",
+   "relation": "has params x 10^6",
+   "object": "213",
+   "since": ""
+  }
+ ],
+ "367241f60ab33ab1940daaf5f0640400e3ce64432b0b73ca42f17ddb9b6918b3": [
+  {
+   "subject": "performance table",
+   "relation": "is from",
+   "object": "paper \"Attention Is All You Need\"",
+   "since": ""
+  },
+  {
+   "subject": "performance table",
+   "relation": "compares",
+   "object": "constituency parsers on the Wall Street Journal section 23 test set",
+   "since": ""
+  },
+  {
+   "subject": "performance table",
+   "relation": "has column header",
+   "object": "Parser",
+   "since": ""
+  },
+  {
+   "subject": "performance table",
+   "relation": "has column header",
+   "object": "Training",
+   "since": ""
+  },
+  {
+   "subject": "performance table",
+   "relation": "has column header",
+   "object": "WSJ 23 F1",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "has training",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "88.3",
+   "since": ""
+  },
+  {
+   "subject": "Petrov et al. (2006) [29]",
+   "relation": "has training",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Petrov et al. (2006) [29]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "90.4",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "has training",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "90.4",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "has training",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "91.7",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "has training",
+   "object": "WSJ only, discriminative",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "has WSJ 23 F1 score",
+   "object": "91.3",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "has training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Zhu et al. (2013) [40]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "91.3",
+   "since": ""
+  },
+  {
+   "subject": "Huang & Harper (2009) [14]",
+   "relation": "has training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Huang & Harper (2009) [14]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "91.3",
+   "since": ""
+  },
+  {
+   "subject": "McClosky et al. (2006) [26]",
+   "relation": "has training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "McClosky et al. (2006) [26]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "92.1",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "has training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Vinyals & Kaiser el al. (2014) [37]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "92.1",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "has training",
+   "object": "semi-supervised",
+   "since": ""
+  },
+  {
+   "subject": "Transformer (4 layers)",
+   "relation": "has WSJ 23 F1 score",
+   "object": "92.7",
+   "since": ""
+  },
+  {
+   "subject": "Luong et al. (2015) [23]",
+   "relation": "has training",
+   "object": "multi-task",
+   "since": ""
+  },
+  {
+   "subject": "Luong et al. (2015) [23]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "93.0",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "has training",
+   "object": "generative",
+   "since": ""
+  },
+  {
+   "subject": "Dyer et al. (2016) [8]",
+   "relation": "has WSJ 23 F1 score",
+   "object": "93.3",
+   "since": ""
+  }
+ ],
+ "9683ddbf548b403ede8a2d03005668d5c33f5deadeb646277f77c090d1ff4de9": [
+  {
+   "subject": "passage",
+   "relation": "is",
+   "object": "attention visualization diagram",
+   "since": ""
+  },
+  {
+   "subject": "attention visualization diagram",
+   "relation": "shows",
+   "object": "self-attention connections between words in an example sentence",
+   "since": ""
+  },
+  {
+   "subject": "top sequence",
+   "relation": "has words",
+   "object": "It, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>",
+   "since": ""
+  },
+  {
+   "subject": "bottom sequence",
+   "relation": "has words",
+   "object": "It, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>",
+   "since": ""
+  },
+  {
+   "subject": "word \"making\" in the top sequence",
+   "relation": "is highlighted with",
+   "object": "grey bar",
+   "since": ""
+  },
+  {
+   "subject": "word \"making\" in the top sequence",
+   "relation": "connects via",
+   "object": "several colored lines to words in the bottom sequence",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "2009 via light pink line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "making via pink line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "more via dark grey line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "difficult via dark brown line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "<EOS> via light purple line",
+   "since": ""
+  },
+  {
+   "subject": "colored heat map blocks",
+   "relation": "are located",
+   "object": "below the bottom text sequence",
+   "since": ""
+  },
+  {
+   "subject": "colored heat map blocks",
+   "relation": "are arranged under",
+   "object": "specific tokens",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "making",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "more",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "difficult",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "<EOS>",
+   "since": ""
+  }
+ ],
+ "6ac6bd3bd1a7fd4c4b998d23c6f71b3cedd2e61a7a279853c24eb8f85b532d65": [
+  {
+   "subject": "This image",
+   "relation": "is",
+   "object": "a composite diagram",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "features",
+   "object": "two attention visualization plots",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "features",
+   "object": "a partial text caption at the bottom",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "illustrates",
+   "object": "anaphora resolution in a Transformer model",
+   "since": ""
+  },
+  {
+   "subject": "word \"its\" in the upper row",
+   "relation": "is highlighted with",
+   "object": "a grey rectangular box",
+   "since": ""
+  },
+  {
+   "subject": "word \"Law\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "a purple rectangular box at the top",
+   "since": ""
+  },
+  {
+   "subject": "word \"Law\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "a light brown box below it",
+   "since": ""
+  },
+  {
+   "subject": "word \"application\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "a light brown rectangular box",
+   "since": ""
+  },
+  {
+   "subject": "A purple line",
+   "relation": "connects",
+   "object": "the upper word \"its\" to the lower word \"Law\"",
+   "since": ""
+  },
+  {
+   "subject": "A light brown line",
+   "relation": "connects",
+   "object": "the upper word \"its\" to the lower word \"application\"",
+   "since": ""
+  },
+  {
+   "subject": "Two attention heads",
+   "relation": "are in",
+   "object": "layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "Two attention heads",
+   "relation": "are involved in",
+   "object": "anaphora resolution",
+   "since": ""
+  },
+  {
+   "subject": "Top plot",
+   "relation": "shows",
+   "object": "all pairwise attention connections",
+   "since": ""
+  },
+  {
+   "subject": "Bottom plot",
+   "relation": "isolates",
+   "object": "the attention from the specific token \"its\"",
+   "since": ""
+  },
+  {
+   "subject": "purple line",
+   "relation": "points to",
+   "object": "Law",
+   "since": ""
+  },
+  {
+   "subject": "purple line",
+   "relation": "resolves",
+   "object": "the pronoun \"its\" to its antecedent",
+   "since": ""
+  },
+  {
+   "subject": "light brown line",
+   "relation": "points to",
+   "object": "application",
+   "since": ""
+  },
+  {
+   "subject": "light brown line",
+   "relation": "connects",
+   "object": "the possessive pronoun to the noun it modifies",
+   "since": ""
+  }
+ ],
+ "6467bcdb59e2124852caba0ce396821cb449431337f798cb9e7e0f4b1fef0f58": [
+  {
+   "subject": "attention visualization diagram",
+   "relation": "consists of",
+   "object": "two bipartite graphs",
+   "since": ""
+  },
+  {
+   "subject": "two bipartite graphs",
+   "relation": "show",
+   "object": "token-to-token attention weights for two different attention heads",
+   "since": ""
+  },
+  {
+   "subject": "Figure 5",
+   "relation": "shows",
+   "object": "examples from two different heads from the encoder self_attention",
+   "since": ""
+  },
+  {
+   "subject": "many of the attention heads",
+   "relation": "exhibit",
+   "object": "behaviour that seems related to the structure of the sentence",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word The",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word Law",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word will",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word never",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word be",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word perfect",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word comma",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word but",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word its",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word application",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word should",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word be",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word just",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word hyphen",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word this",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word is",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word what",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word we",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word are",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word missing",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word comma",
+   "relation": "connects to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word in",
+   "relation": "connects to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word my",
+   "relation": "connects to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word opinion",
+   "relation": "connects to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word period",
+   "relation": "connects to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word <EOS>",
+   "relation": "connects to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram top word <pad>",
+   "relation": "connects to",
+   "object": "bottom word <pad>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word The",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word Law",
+   "relation": "connects to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word will",
+   "relation": "connects to",
+   "object": "bottom word never",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word never",
+   "relation": "connects to",
+   "object": "bottom word be",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word be",
+   "relation": "connects to",
+   "object": "bottom word perfect",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word perfect",
+   "relation": "connects to",
+   "object": "bottom word perfect",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word comma",
+   "relation": "connects to",
+   "object": "bottom word but",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word but",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word its",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word application",
+   "relation": "connects to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word should",
+   "relation": "connects to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word be",
+   "relation": "connects to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word just",
+   "relation": "connects to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word hyphen",
+   "relation": "connects to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word this",
+   "relation": "connects to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word is",
+   "relation": "connects to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word what",
+   "relation": "connects to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word we",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word are",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word missing",
+   "relation": "connects to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word comma",
+   "relation": "connects to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word in",
+   "relation": "connects to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word my",
+   "relation": "connects to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word opinion",
+   "relation": "connects to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word period",
+   "relation": "connects to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word <EOS>",
+   "relation": "connects to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram top word <pad>",
+   "relation": "connects to",
+   "object": "bottom word <pad>",
+   "since": ""
+  }
+ ],
+ "95b6be043f63c5b4a45ba97d2480d6794cc67aa7716bbe82fde681f3b292c8a4": [
+  {
+   "subject": "Different colors",
+   "relation": "represent",
+   "object": "different heads",
+   "since": ""
+  }
+ ],
+ "056e6fce40e182fa2324d54d5213fa1027d451d23bc3ef27f43af8f266084115": [
+  {
+   "subject": "3.2.3 Applications of Attention in our Model",
+   "relation": "references",
+   "object": "Figure 2",
+   "since": ""
+  }
+ ],
+ "c61a75837b213918ec7a2cbe2cec13f9db09f401c1c255bd33fab72a8d93fb45": [
+  {
+   "subject": "MultiHead(Q, K, V )",
+   "relation": "is equal to",
+   "object": "Concat(head1, ..., headh)W O",
+   "since": ""
+  },
+  {
+   "subject": "headi",
+   "relation": "is equal to",
+   "object": "Attention(QW Q i , KW K i , V W V i )",
+   "since": ""
+  }
+ ],
+ "96884afee414bc1c397599b98c9badf11f3d78c32aa25cc070fd039b50f416a4": [
+  {
+   "subject": "Many of the attention heads",
+   "relation": "exhibit",
+   "object": "behaviour that seems related to the structure of the sentence",
+   "since": ""
+  },
+  {
+   "subject": "encoder self-attention at layer 5 of 6",
+   "relation": "has",
+   "object": "two different heads",
+   "since": ""
+  },
+  {
+   "subject": "two such examples",
+   "relation": "are from",
+   "object": "two different heads from the encoder self-attention at layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "The heads",
+   "relation": "learned to perform",
+   "object": "different tasks",
+   "since": ""
+  }
+ ],
+ "ed3661c6d0e3ad27ea276ba6df54f273af5ad2258950da91eeeda6ee5fd41d3c": [
+  {
+   "subject": "Figure 3",
+   "relation": "shows",
+   "object": "an example of the attention mechanism following long-distance dependencies in the encoder self-attention in layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "encoder self-attention",
+   "relation": "is in",
+   "object": "layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "many of the attention heads",
+   "relation": "attend to",
+   "object": "a distant dependency of the verb \u2018making\u2019",
+   "since": ""
+  },
+  {
+   "subject": "distant dependency of the verb \u2018making\u2019",
+   "relation": "completes",
+   "object": "the phrase \u2018making...more difficult\u2019",
+   "since": ""
+  },
+  {
+   "subject": "attentions here",
+   "relation": "shown only for",
+   "object": "the word \u2018making\u2019",
+   "since": ""
+  }
+ ],
+ "8aa3e3ec8ab036b331b486784ad79fc9894b4dc007f54c950067b6e6b65443a4": [
+  {
+   "subject": "self-attention layers in the decoder",
+   "relation": "allow",
+   "object": "each position in the decoder to attend to all positions in the decoder up to and including that position",
+   "since": ""
+  },
+  {
+   "subject": "leftward information flow in the decoder",
+   "relation": "needs to be prevented to preserve",
+   "object": "auto-regressive property",
+   "since": ""
+  },
+  {
+   "subject": "prevention of leftward information flow in the decoder",
+   "relation": "is implemented inside of",
+   "object": "scaled dot-product attention",
+   "since": ""
+  },
+  {
+   "subject": "prevention of leftward information flow in the decoder",
+   "relation": "is implemented by",
+   "object": "masking out (setting to \u2212\u221e) all values in the input of the softmax which correspond to illegal connections",
+   "since": ""
+  }
+ ],
+ "bf5d8b493fda3c01dc771713147c3d8f344520c9e31a00ff78ff91d9514977ae": [
+  {
+   "subject": "Two attention heads",
+   "relation": "are in",
+   "object": "layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "Two attention heads",
+   "relation": "involved in",
+   "object": "anaphora resolution",
+   "since": ""
+  },
+  {
+   "subject": "Top",
+   "relation": "shows",
+   "object": "Full attentions for head 5",
+   "since": ""
+  },
+  {
+   "subject": "Bottom",
+   "relation": "shows",
+   "object": "Isolated attentions from just the word \u2018its\u2019 for attention heads 5 and 6",
+   "since": ""
+  },
+  {
+   "subject": "the attentions for this word",
+   "relation": "are",
+   "object": "very sharp",
+   "since": ""
+  }
+ ],
+ "0d3448ba467311de698bf36d93c9b4d2f84ef618cdeeba8ef7da9dcba647fe71": [
+  {
+   "subject": "our particular attention",
+   "relation": "is called",
+   "object": "Scaled Dot-Product Attention",
+   "since": ""
+  },
+  {
+   "subject": "Scaled Dot-Product Attention",
+   "relation": "is shown in",
+   "object": "Figure 2",
+   "since": ""
+  },
+  {
+   "subject": "input",
+   "relation": "consists of",
+   "object": "queries and keys of dimension dk, and values of dimension dv",
+   "since": ""
+  },
+  {
+   "subject": "queries",
+   "relation": "have dimension of",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "have dimension of",
+   "object": "dk",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "have dimension of",
+   "object": "dv",
+   "since": ""
+  },
+  {
+   "subject": "set of queries",
+   "relation": "packed together into",
+   "object": "matrix Q",
+   "since": ""
+  },
+  {
+   "subject": "keys",
+   "relation": "packed together into",
+   "object": "matrix K",
+   "since": ""
+  },
+  {
+   "subject": "values",
+   "relation": "packed together into",
+   "object": "matrix V",
+   "since": ""
+  },
+  {
+   "subject": "matrix of outputs",
+   "relation": "computed as",
+   "object": "Attention(Q, K, V ) = softmax(QKT / sqrt(dk))V",
+   "since": ""
+  }
+ ],
+ "dc0cdd50ea0ae4d9b86224134ea1fc97d65f0cb9fbb736a743abc335fcb46b8f": [
+  {
+   "subject": "attention visualization diagram",
+   "relation": "shows",
+   "object": "self-attention connections between words in an example sentence",
+   "since": ""
+  },
+  {
+   "subject": "top sequence",
+   "relation": "has words",
+   "object": "It, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>",
+   "since": ""
+  },
+  {
+   "subject": "bottom sequence",
+   "relation": "has words",
+   "object": "It, is, in, this, spirit, that, a, majority, of, American, governments, have, passed, new, laws, since, 2009, making, the, registration, or, voting, process, more, difficult, ., <EOS>, <pad>, <pad>, <pad>, <pad>, <pad>, <pad>",
+   "since": ""
+  },
+  {
+   "subject": "word \"making\" in the top sequence",
+   "relation": "is highlighted with",
+   "object": "grey bar",
+   "since": ""
+  },
+  {
+   "subject": "word \"making\" in the top sequence",
+   "relation": "connects via",
+   "object": "colored lines to words in the bottom sequence",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "2009 in the bottom sequence via a light pink line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "making in the bottom sequence via a pink line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "more in the bottom sequence via a dark grey line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "difficult in the bottom sequence via a dark brown line",
+   "since": ""
+  },
+  {
+   "subject": "top word \"making\"",
+   "relation": "connects to",
+   "object": "<EOS> in the bottom sequence via a light purple line",
+   "since": ""
+  },
+  {
+   "subject": "colored heat map blocks",
+   "relation": "are located",
+   "object": "below the bottom text sequence",
+   "since": ""
+  },
+  {
+   "subject": "colored heat map blocks",
+   "relation": "are arranged under",
+   "object": "specific tokens",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "making",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "more",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "difficult",
+   "since": ""
+  },
+  {
+   "subject": "colored squares",
+   "relation": "are under",
+   "object": "<EOS>",
+   "since": ""
+  }
+ ],
+ "ae6dc82acd822b847c5b91d5552649a29cf3eadc443b8be264105cf40aef9f71": [
+  {
+   "subject": "This image",
+   "relation": "is",
+   "object": "composite diagram",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "features",
+   "object": "two attention visualization plots",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "features",
+   "object": "a partial text caption at the bottom",
+   "since": ""
+  },
+  {
+   "subject": "This image",
+   "relation": "illustrates",
+   "object": "anaphora resolution in a Transformer model",
+   "since": ""
+  },
+  {
+   "subject": "word \"its\" in the upper row",
+   "relation": "is highlighted with",
+   "object": "grey rectangular box",
+   "since": ""
+  },
+  {
+   "subject": "word \"Law\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "purple rectangular box at the top",
+   "since": ""
+  },
+  {
+   "subject": "word \"Law\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "light brown box below it",
+   "since": ""
+  },
+  {
+   "subject": "word \"application\" in the lower row",
+   "relation": "is highlighted with",
+   "object": "light brown rectangular box",
+   "since": ""
+  },
+  {
+   "subject": "purple line",
+   "relation": "connects",
+   "object": "upper word \"its\" to the lower word \"Law\"",
+   "since": ""
+  },
+  {
+   "subject": "light brown line",
+   "relation": "connects",
+   "object": "upper word \"its\" to the lower word \"application\"",
+   "since": ""
+  },
+  {
+   "subject": "Two attention heads",
+   "relation": "is in",
+   "object": "layer 5 of 6",
+   "since": ""
+  },
+  {
+   "subject": "Two attention heads",
+   "relation": "involved in",
+   "object": "anaphora resolution",
+   "since": ""
+  },
+  {
+   "subject": "Top plot",
+   "relation": "shows",
+   "object": "All attentions for head 5",
+   "since": ""
+  },
+  {
+   "subject": "Bottom plot",
+   "relation": "shows",
+   "object": "Isolated attentions from just the word 'its' for attention heads 5 and 6",
+   "since": ""
+  },
+  {
+   "subject": "attentions for this word",
+   "relation": "are",
+   "object": "very sharp",
+   "since": ""
+  },
+  {
+   "subject": "top plot",
+   "relation": "shows",
+   "object": "all pairwise attention connections between the tokens of the sentence listed on top and the sentence listed below",
+   "since": ""
+  },
+  {
+   "subject": "all pairwise attention connections",
+   "relation": "depicted as",
+   "object": "dense web of semi-transparent purple lines",
+   "since": ""
+  },
+  {
+   "subject": "bottom plot",
+   "relation": "isolates",
+   "object": "attention from the specific token \"its\" in the top sentence",
+   "since": ""
+  },
+  {
+   "subject": "bottom plot",
+   "relation": "draws",
+   "object": "two clear directional lines downward",
+   "since": ""
+  },
+  {
+   "subject": "purple line",
+   "relation": "points to",
+   "object": "Law",
+   "since": ""
+  },
+  {
+   "subject": "purple line pointing to \"Law\"",
+   "relation": "resolves",
+   "object": "pronoun \"its\" to its antecedent",
+   "since": ""
+  },
+  {
+   "subject": "light brown line",
+   "relation": "points to",
+   "object": "application",
+   "since": ""
+  },
+  {
+   "subject": "light brown line pointing to \"application\"",
+   "relation": "connects",
+   "object": "possessive pronoun to the noun it modifies",
+   "since": ""
+  }
+ ],
+ "bbe314e2bd9c17431d36dd9c24cb89878adac16fca6a2c3990e5a5c2cbe0f143": [
+  {
+   "subject": "attention visualization diagram",
+   "relation": "consists of",
+   "object": "two bipartite graphs",
+   "since": ""
+  },
+  {
+   "subject": "two bipartite graphs",
+   "relation": "show",
+   "object": "token-to-token attention weights for two different attention heads",
+   "since": ""
+  },
+  {
+   "subject": "many of the attention heads",
+   "relation": "exhibit",
+   "object": "behaviour that seems related to the structure of the sentence",
+   "since": ""
+  },
+  {
+   "subject": "Figure 5",
+   "relation": "gives",
+   "object": "two examples from two different heads from the encoder self_attention",
+   "since": ""
+  },
+  {
+   "subject": "top diagram words",
+   "relation": "printed",
+   "object": "twice vertically in two aligned rows from left to right",
+   "since": ""
+  },
+  {
+   "subject": "bottom diagram words",
+   "relation": "printed",
+   "object": "twice vertically in two aligned rows from left to right",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word The connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word Law connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word will connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word never connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word be connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word perfect connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word comma connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word but connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word its connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word application connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word should connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word be connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word just connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word hyphen connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word this connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word is connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word what connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word we connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word are connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word missing connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word comma connected to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word in connected to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word my connected to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word opinion connected to",
+   "object": "bottom word opinion",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word period connected to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word <EOS> connected to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "top green diagram",
+   "relation": "has top word <pad> connected to",
+   "object": "bottom word <pad>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word The connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word Law connected to",
+   "object": "bottom word Law",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word will connected to",
+   "object": "bottom word never",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word never connected to",
+   "object": "bottom word be",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word be connected to",
+   "object": "bottom word perfect",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word perfect connected to",
+   "object": "bottom word perfect",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word comma connected to",
+   "object": "bottom word but",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word but connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word its connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word application connected to",
+   "object": "bottom word application",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word should connected to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word be connected to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word just connected to",
+   "object": "bottom word just",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word hyphen connected to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word this connected to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word is connected to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word what connected to",
+   "object": "bottom word what",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word we connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word are connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word missing connected to",
+   "object": "bottom word missing",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word comma connected to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word in connected to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word my connected to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word opinion connected to",
+   "object": "bottom word my",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word period connected to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word <EOS> connected to",
+   "object": "bottom word <EOS>",
+   "since": ""
+  },
+  {
+   "subject": "bottom red diagram",
+   "relation": "has top word <pad> connected to",
+   "object": "bottom word <pad>",
+   "since": ""
+  }
+ ]
+}

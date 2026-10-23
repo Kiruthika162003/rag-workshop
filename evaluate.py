@@ -1,6 +1,6 @@
 """The scorecard: every kind of RAG answers every test question, and we count who got it right.
 
-Run: python evaluate.py                       all kinds, all questions (about 5 minutes)
+Run: python evaluate.py                       all kinds, all questions (about two minutes)
      python evaluate.py --kinds naive text    only some kinds
 """
 
@@ -14,7 +14,8 @@ from core import rag
 from core.agent import ask_agent
 from core.questions import QUESTIONS, correct
 
-KINDS = {"naive": rag.naive, "text": rag.text, "multimodal": rag.multimodal, "graph": rag.graph_rag, "agent": ask_agent}
+KINDS = {"naive": rag.naive, "text": rag.text, "multimodal": rag.multimodal, "graph": rag.graph_rag,
+         "corrective": rag.corrective, "agent": ask_agent}
 
 
 def score(kind: str, question: dict) -> dict:

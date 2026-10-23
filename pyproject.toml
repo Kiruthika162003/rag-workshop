@@ -1,19 +1,21 @@
 [project]
 name = "rag-workshop"
-version = "1.0.0"
-description = "Text, multimodal, graph and agentic RAG over messy company files"
+version = "2.0.0"
+description = "Text, multimodal, graph and agentic RAG over one research paper, with local embeddings"
 requires-python = ">=3.11"
 dependencies = [
     "google-adk",
     "google-genai",
     "pymupdf>=1.26,<2",
     "numpy",
+    "torch",
+    "transformers>=4.45",
+    "pillow",
     "flask",
     "python-dotenv",
 ]
 
 [project.optional-dependencies]
-data = ["matplotlib", "imageio", "imageio-ffmpeg"]
 test = ["pytest"]
 
 [tool.setuptools]

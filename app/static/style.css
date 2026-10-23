@@ -4,6 +4,7 @@
   --red: #d93025; --red-bg: #fce8e6;
   --yellow: #f9ab00; --yellow-bg: #fef7e0;
   --green: #188038; --green-bg: #e6f4ea;
+  --purple: #9334e6; --purple-bg: #f3e8fd;
 }
 * { box-sizing: border-box; margin: 0; }
 body { font-family: "Google Sans", Arial, sans-serif; color: var(--ink); background: #fff; }
@@ -38,6 +39,7 @@ main { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); g
 .text { border-color: var(--blue); background: var(--blue-bg); }
 .multimodal { border-color: var(--yellow); background: var(--yellow-bg); }
 .graph { border-color: var(--green); background: var(--green-bg); }
+.corrective { border-color: var(--purple); background: var(--purple-bg); }
 .agent { border-color: var(--red); background: var(--red-bg); }
 .verdict { font-size: 12px; font-weight: 700; white-space: nowrap; }
 .verdict.right { color: var(--green); } .verdict.wrong { color: var(--red); }

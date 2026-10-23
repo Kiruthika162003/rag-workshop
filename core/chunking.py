@@ -15,7 +15,8 @@ def fixed_chunks(text: str, size: int = 500) -> list[str]:
 
 def semantic_chunks(pieces: list[dict], vectors: list[np.ndarray], max_chars: int = 900) -> list[list[dict]]:
     """A new chunk starts at a heading, at a page break, when a chunk gets too long, or where two
-    neighbouring pieces stop being similar, once the chunk has enough to stand on its own."""
+    neighbouring pieces stop being similar, once the chunk has enough to stand on its own.
+    A table row is a record, like one model in a results table: it is always a chunk of its own."""
     gaps = [float(a @ b) for a, b in zip(vectors, vectors[1:])]
     # "Not similar" is relative to this document: the lowest quarter of its neighbour similarities.
     cut_below = np.percentile(gaps, 25) if gaps else 0
@@ -23,7 +24,8 @@ def semantic_chunks(pieces: list[dict], vectors: list[np.ndarray], max_chars: in
     chunks, current, size = [], [], 0
     for i, piece in enumerate(pieces):
         starts_new = current and (
-            piece["type"] == "heading"
+            piece["type"] in ("heading", "row")
+            or current[-1]["type"] == "row"
             or piece["page"] != current[-1]["page"]
             or (gaps[i - 1] < cut_below and size > 200)
             or size + len(piece["text"]) > max_chars

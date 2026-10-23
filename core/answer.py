@@ -1,51 +1,51 @@
-"""The last step of every RAG: turn what was retrieved into an answer that cites it."""
-
-from datetime import date
+"""The last step of every RAG: turn what was retrieved into an answer that cites it, then check it."""
 
 from google.genai import errors
 
+from core import prompts
 from core.gemini import ask, part
 from core.store import INDEX
 
-RULES = """Today is {today}. Answer the question using only the numbered sources below.
-- Put the source number after every fact you use, like [2]. Pictures, recordings and videos are sources too.
-- When you use a recording or a video, give the time, like [3, 0:12].
-- Sources carry dates. If two sources disagree, trust the most recent one and say the older one is out of date.
-- If the sources do not contain the answer, say you could not find it. Never guess.
-- Be brief: two to four sentences."""
 
-
-def prompt(question: str, sources: list[dict], facts, originals: bool) -> list:
-    parts = [RULES.format(today=date.today().isoformat())]
+def prompt(question: str, sources: list[dict], facts=(), originals: bool = True) -> list:
+    """The exact message the model gets: the rules, each source with its number, page and section,
+    any graph facts, then the question. Figures and tables go in as pictures."""
+    parts = [prompts.ANSWER]
     for n, source in enumerate(sources, start=1):
-        label = f"[{n}] {source['title']}, page {source['page']}, dated {source['date']}"
+        label = f"[{n}] page {source['page']}, section {source['section']}"
         if source["type"] == "text":
             parts.append(f"{label}:\n{source['text']}")
         elif originals:
-            parts += [f"{label}. A {source['type']} from this file:", part((INDEX / source["media"]).read_bytes(), source["mime"])]
+            parts += [f"{label}. A picture of this figure or table:", part((INDEX / source["media"]).read_bytes(), source["mime"])]
         else:
-            parts.append(f"{label}. The {source['type']}, as described when the index was built:\n{source['text']}")
+            parts.append(f"{label}. The figure or table, as described when the index was built:\n{source['text']}")
     if facts:
         parts.append("Facts from the knowledge graph, with the source each was read from:\n" + "\n".join(
-            f"- {f['subject']} | {f['relation']} | {f['object']}{' | since ' + f['since'] if f['since'] else ''} | [{f['n']}]"
-            for f in facts))
+            f"- {f['subject']} | {f['relation']} | {f['object']} | [{f['n']}]" for f in facts))
     parts.append(f"Question: {question}")
     return parts
 
 
 def answer(question: str, sources: list[dict], facts=()) -> dict:
     try:
-        reply = ask(prompt(question, sources, facts, originals=True))
+        reply = ask(prompt(question, sources, facts))
     except errors.APIError:
         if all(source["type"] == "text" for source in sources):
             raise
-        # Sending a recording or a video is the slowest request there is. If it fails,
-        # answer from its transcript or description instead: still grounded, still citable.
+        # A request with pictures is the biggest one there is. If it fails, answer from the
+        # descriptions written when the index was built instead: still grounded, still citable.
         reply = ask(prompt(question, sources, facts, originals=False))
     return {"answer": reply, "sources": [shown(s) for s in sources]}
 
 
+def grounded(reply: str, sources: list[dict]) -> list[dict]:
+    """Faithfulness: split the answer into claims and check each against the sources, the way RAG
+    evaluation tools such as Ragas and the Vertex AI evaluation service do."""
+    listed = "\n\n".join(f"[{n}] {s['text']}" for n, s in enumerate(sources, start=1))
+    return ask(prompts.GROUNDED.format(sources=listed, answer=reply), schema=prompts.GROUNDED_REPLY)
+
+
 def shown(source: dict) -> dict:
     """What the terminal and the page need to show a source."""
-    keep = ("id", "doc", "title", "kind", "date", "page", "type", "text", "score", "rerank", "find", "box", "media")
+    keep = ("id", "doc", "title", "section", "page", "type", "text", "score", "rerank", "find", "box", "media")
     return {k: source[k] for k in keep if k in source}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Collar City Docs</title>
+<title>Paper Search</title>
 <link rel="icon" href="{{ url_for('static', filename='dots.svg') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,13 +14,13 @@
   <div class="brand">
     <span class="dots"><i class="b"></i><i class="r"></i><i class="y"></i><i class="g"></i></span>
     <div>
-      <p class="kicker">RAG THAT SEES CHARTS AND CONNECTS DOCUMENTS</p>
-      <h1>Ask ten messy files. Watch five kinds of RAG answer.</h1>
+      <p class="kicker">RAG THAT READS TEXT, TABLES AND FIGURES</p>
+      <h1>Ask a research paper. Watch six kinds of RAG answer.</h1>
     </div>
   </div>
   <form id="ask">
-    <input id="question" autocomplete="off" placeholder="Ask anything about Collar City Bikes" value="{{ questions[0].ask }}">
-    <button type="submit">Ask all five</button>
+    <input id="question" autocomplete="off" placeholder="Ask anything about Attention Is All You Need" value="{{ questions[0].ask }}">
+    <button type="submit">Ask all six</button>
   </form>
   <div class="chips" id="examples">
     {% for q in questions %}

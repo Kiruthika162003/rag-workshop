@@ -36,7 +36,7 @@ ok("The packages are installed")
 
 if not (HERE / ".env").exists():
     stop("There is no .env file.", "Copy .env.example to .env and put your Project ID in it.")
-from core.gemini import CHAT_MODEL, EMBED_MODEL, ask, embed  # reads .env
+from core.gemini import CHAT_MODEL, ask  # reads .env
 
 if os.getenv("GOOGLE_CLOUD_PROJECT", "your-project-id") == "your-project-id":
     stop(".env still has the placeholder project.", "Open .env and set GOOGLE_CLOUD_PROJECT to your Project ID.")
@@ -69,11 +69,18 @@ except Exception as problem:
     stop("Gemini did not answer.", text.splitlines()[0][:200])
 ok(f"Gemini answered: {reply}   ({CHAT_MODEL})")
 
-vector = embed("a bike share in Troy, New York")
-ok(f"Embeddings work: {len(vector)} numbers per passage   ({EMBED_MODEL})")
+from core.embeddings import PICTURE_MODEL, TEXT_MODEL, embed_query, embed_query_for_pictures
+
+print("          Loading the embedding models. The first time, this downloads about 730 MB once.")
+ok(f"Text embeddings work on this computer: {len(embed_query('attention'))} numbers   ({TEXT_MODEL})")
+ok(f"Picture embeddings work on this computer: {len(embed_query_for_pictures('a diagram'))} numbers   ({PICTURE_MODEL})")
+
+if not (HERE / "data" / "docs" / "attention-is-all-you-need.pdf").exists():
+    stop("The paper is not downloaded yet.", "Run: python data/get_paper.py")
+ok("The paper is here")
 
 if not (HERE / "index" / "graph.json").exists():
-    stop("The index has not been built yet.", "Run: python build_index.py   (about four minutes)")
+    stop("The index has not been built yet.", "Run: python build_index.py")
 ok("The index is built")
 
-print("\nEverything works. Start with: python learn/1_read_the_files.py\n")
+print("\nEverything works. Start with: python learn/1_foundations/01_read_the_files.py\n")

@@ -11,4 +11,4 @@ guide/*.html
 guide/img/
 guide/make_pdf.py
 demo-commands.txt
-data/pictures/
+data/docs/*.pdf

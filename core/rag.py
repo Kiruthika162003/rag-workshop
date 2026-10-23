@@ -1,110 +1,50 @@
-"""The four kinds of RAG in this workshop, built from small steps you can call one at a time.
+"""Every kind of RAG in this workshop, each one a few lines put together from the steps in
+search.py, query.py, rerank.py and answer.py.
 
     naive        fixed chunks, top 3 by similarity, answer
-    text         careful chunks, metadata filters, reranking, answers that cite page numbers
-    multimodal   text plus pictures, recordings and videos, searched by meaning and shown to Gemini
-    graph        a vector search finds where to start, the knowledge graph connects the rest
+    text         hybrid search, metadata filters, reranking, neighbours, answers that cite pages
+    multimodal   text plus figures and tables, shown to Gemini as pictures
+    graph        a search finds where to start, the knowledge graph connects the rest
+    corrective   grade what came back; if it is weak, ask again in other words and look wider
 """
 
-from functools import cache
-
-import numpy as np
-from google.genai import types
-
+from core import prompts
 from core.answer import answer, shown
-from core.gemini import ask, embed
-from core.graph import Graph
-from core.store import Store
-
-
-@cache
-def store(name: str) -> Store:
-    return Store(name)
-
-
-@cache
-def graph() -> Graph:
-    return Graph()
-
-
-# ------------------------------------------------------------------ naive
-
-NAIVE_PROMPT = "Answer the question using the context.\n\nContext:\n{context}\n\nQuestion: {question}"
+from core.gemini import ask
+from core.graph import graph
+from core.query import rewrites
+from core.rerank import rerank
+from core.search import by_meaning, fuse, hybrid, pictures, with_neighbours
+from core.store import store
 
 
 def naive(question: str) -> dict:
     """The tutorial version: chop text every 500 characters, take the 3 most similar, answer."""
-    found = store("naive").search(embed(question), k=3)
+    found = by_meaning(question, k=3, index="naive")
     context = "\n\n".join(chunk["text"] for chunk in found)
-    return {"answer": ask(NAIVE_PROMPT.format(context=context, question=question)), "sources": [shown(c) for c in found]}
+    return {"answer": ask(prompts.NAIVE.format(context=context, question=question)), "sources": [shown(c) for c in found]}
 
 
-# ------------------------------------------------------------------ text, done right
-
-def find_text(question: str, k: int = 12, kinds=None, after=None, latest_only=False) -> list[dict]:
-    """Semantic chunks, with the metadata filter applied before ranking."""
-    return store("text").search(embed(question), k=k, kinds=kinds, after=after, latest_only=latest_only)
+def text(question: str, section=None, pages=None) -> dict:
+    best = rerank(question, hybrid(question, section=section, pages=pages))
+    return answer(question, with_neighbours(best))
 
 
-SCORES = types.Schema(type="ARRAY", items=types.Schema(
-    type="OBJECT",
-    properties={"n": types.Schema(type="INTEGER"), "score": types.Schema(type="INTEGER")},
-    required=["n", "score"],
-))
+def multimodal(question: str, section=None, pages=None) -> dict:
+    passages = rerank(question, hybrid(question, section=section, pages=pages), keep=3)
+    return answer(question, with_neighbours(passages) + pictures(question))
 
-RERANK_PROMPT = """For each numbered passage, score from 0 to 10 how well it answers the question.
-10 = it contains the answer. 0 = it is about something else. Similar words are not enough.
-
-Question: {question}
-
-{passages}"""
-
-
-def rerank(question: str, candidates: list[dict], keep: int = 4, cutoff: int = 3) -> list[dict]:
-    """Similarity finds passages that look like the question. A reranker reads each one and asks:
-    does this actually answer it? One Gemini call scores all candidates; weak ones are dropped."""
-    passages = "\n\n".join(f"[{n}] {c['text']}" for n, c in enumerate(candidates))
-    scores = {s["n"]: s["score"] for s in ask(RERANK_PROMPT.format(question=question, passages=passages), schema=SCORES)}
-    ranked = [{**candidates[n], "rerank": scores.get(n, 0)} for n in sorted(range(len(candidates)), key=lambda n: -scores.get(n, 0))]
-    return [c for c in ranked[:keep] if c["rerank"] >= cutoff] or ranked[:1]
-
-
-def text(question: str, kinds=None, after=None, latest_only=True) -> dict:
-    candidates = find_text(question, kinds=kinds, after=after, latest_only=latest_only)
-    return answer(question, rerank(question, candidates))
-
-
-# ------------------------------------------------------------------ multimodal
-
-def find_media(question: str, k: int = 2) -> list[dict]:
-    """Each picture, recording and video is scored twice, as itself and by its description, and the
-    better score counts. A sentence compared with a recording is not on the same scale as a sentence
-    compared with a sentence (the "modality gap"), so the description keeps the ranking honest."""
-    vector = embed(question)
-    itself, described = store("media"), store("media-descriptions")
-    scores = np.maximum(itself.vectors @ vector, described.vectors @ vector)
-    return [{**itself.records[i], "score": round(float(scores[i]), 3)} for i in np.argsort(-scores)[:k]]
-
-
-def multimodal(question: str, kinds=None, after=None, latest_only=True) -> dict:
-    passages = rerank(question, find_text(question, kinds=kinds, after=after, latest_only=latest_only), keep=3)
-    return answer(question, passages + find_media(question))
-
-
-# ------------------------------------------------------------------ graph
 
 def graph_facts(question: str) -> tuple[set[str], list[dict]]:
     """Start from the names in the question and in the best two chunks, then walk three hops."""
-    entry = find_text(question, k=2, latest_only=True)
+    entry = hybrid(question, k=2)
     start = graph().named_in(question) | graph().from_chunks({c["id"] for c in entry})
-    # The same metadata filter as text RAG: a fact read from a replaced document does not count.
-    current = {r["id"] for name in ("text", "media") for r in store(name).records if store(name).passes(r, None, None, True)}
-    return start, [fact for fact in graph().walk(start) if fact["source"] in current]
+    return start, graph().walk(start)
 
 
 def graph_rag(question: str) -> dict:
     start, facts = graph_facts(question)
-    by_id = {r["id"]: r for r in store("text").records + store("media").records}
+    by_id = {r["id"]: r for r in store("text").records + store("pictures").records}
     sources = list({f["source"]: by_id[f["source"]] for f in facts if f["source"] in by_id}.values())
     number = {source["id"]: n for n, source in enumerate(sources, start=1)}
     facts = [{**f, "n": number.get(f["source"], 0)} for f in facts]
@@ -113,6 +53,27 @@ def graph_rag(question: str) -> dict:
     return result
 
 
+GOOD_ENOUGH = 7
+
+
+def corrective(question: str) -> dict:
+    """Corrective RAG: check twice before trusting a search. First the grade: the best passage must
+    score at least 7 out of 10. Then the answer: it must not say it could not find the answer, because
+    a grader can be fooled by a passage that only looks right. If either check fails, search again with
+    other phrasings, adding figures and tables, and answer from that."""
+    best = rerank(question, hybrid(question))
+    attempts = [{"search": [question], "best": best[0]["rerank"]}]
+    result = answer(question, best) if best[0]["rerank"] >= GOOD_ENOUGH else None
+    if result is None or "could not find" in result["answer"].lower():
+        searches = rewrites(question)
+        wider = fuse(*(hybrid(s) for s in searches))[:12] + pictures(question, k=3)
+        best = rerank(question, wider)
+        attempts.append({"search": searches, "best": best[0]["rerank"]})
+        result = answer(question, best)
+    result["attempts"] = attempts
+    return result
+
+
 def record(ref: str) -> dict:
-    """Any chunk or media item by its id: n for naive chunks, t for text chunks, m for media."""
-    return next(r for name in ("naive", "text", "media") for r in store(name).records if r["id"] == ref)
+    """Any chunk or figure by its id: n for naive chunks, t for text chunks, p for pictures."""
+    return next(r for name in ("naive", "text", "pictures") for r in store(name).records if r["id"] == ref)
